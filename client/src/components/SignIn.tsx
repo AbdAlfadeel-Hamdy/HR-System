@@ -10,6 +10,9 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, login, RootState } from "../store";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object({
   email: yup
@@ -40,27 +43,25 @@ function Copyright(props: any) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const { loggedInUser, isLoading } = useSelector(
+    (state: RootState) => state.auth
+  );
+  const navigate = useNavigate();
+  if (loggedInUser) navigate("/dashboard");
+  const dispatch = useDispatch<AppDispatch>();
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values, { setSubmitting }) => {
-      const data = new FormData();
-      data.append("email", values.email);
-      data.append("password", values.password);
-      setTimeout(() => {
-        console.log({
-          email: data.get("email"),
-          password: data.get("password"),
-        });
-        setSubmitting(false);
-      }, 4000);
+    onSubmit: (values) => {
+      const { email, password } = values;
+      dispatch(login({ email, password }));
+      console.log(loggedInUser, isLoading);
     },
   });
 
@@ -123,7 +124,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              loading={formik.isSubmitting}
+              loading={isLoading}
             >
               <span>Sign In</span>
             </LoadingButton>
