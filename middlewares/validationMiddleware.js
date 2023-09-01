@@ -1,0 +1,49 @@
+import { body, validationResult } from "express-validator";
+import { BadRequestError } from "../errors/customErrors.js";
+import { EMPLOYEE_STATUS, LICENSE_TYPE } from "../utils/constants.js";
+
+const withValidationErrors = (validateValues) => {
+  return [
+    validateValues,
+    (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        const errorMessages = errors.array().map((err) => err.msg);
+        throw new BadRequestError(errorMessages.join(" "));
+      }
+      next();
+    },
+  ];
+};
+
+export const validateEmployeeInput = withValidationErrors([
+  body("name").notEmpty().withMessage("Name is required."),
+  body("nationality").notEmpty().withMessage("Nationality is required."),
+  body("idNumber").notEmpty().withMessage("ID number is required."),
+  body("idExpirationDate")
+    .notEmpty()
+    .withMessage("ID expiration date is required."),
+  body("passportNumber").notEmpty().withMessage("Passport number is required."),
+  body("passportExpirationDate")
+    .notEmpty()
+    .withMessage("Passport expiration date is required."),
+  body("sponsor").notEmpty().withMessage("Sponsor is required."),
+  body("workIn").notEmpty().withMessage("Work in place is required."),
+  body("agreementExpirationDate")
+    .notEmpty()
+    .withMessage("Agreement expiration date is required."),
+  body("licenseExpirationDate")
+    .notEmpty()
+    .withMessage("License expiration date is required."),
+  body("licenseType")
+    .notEmpty()
+    .withMessage("License type is required.")
+    .isIn(Object.values(LICENSE_TYPE))
+    .withMessage("Invalid license type."),
+
+  body("status")
+    .notEmpty()
+    .withMessage("Status is required.")
+    .isIn(Object.values(EMPLOYEE_STATUS))
+    .withMessage("Invalid employee status."),
+]);
