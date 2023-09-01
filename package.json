@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "setup-project": "npm i && cd client && npm i",
-    "dev": "nodemon server.js"
+    "client": "cd client && npm run dev",
+    "server": "nodemon server.js",
+    "dev": "concurrently \"npm run client\" \"npm run server\""
   },
   "repository": {
     "type": "git",
