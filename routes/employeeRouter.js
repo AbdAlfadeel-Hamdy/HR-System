@@ -1,7 +1,10 @@
 import { Router } from "express";
 import {
-  createEmployee,
   getAllEmployees,
+  createEmployee,
+  getEmployee,
+  updateEmployee,
+  deleteEmployee,
 } from "../controllers/employeeController.js";
 import { validateEmployeeInput } from "../middlewares/validationMiddleware.js";
 
@@ -11,5 +14,11 @@ router
   .route("/")
   .get(getAllEmployees)
   .post(validateEmployeeInput, createEmployee);
+
+router
+  .route("/:id")
+  .get(getEmployee)
+  .patch(updateEmployee)
+  .delete(deleteEmployee);
 
 export default router;

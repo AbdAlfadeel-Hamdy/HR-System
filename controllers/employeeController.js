@@ -12,3 +12,29 @@ export const createEmployee = async (req, res, next) => {
 
   res.status(StatusCodes.CREATED).json({ employee: createdEmployee });
 };
+
+export const getEmployee = async (req, res, next) => {
+  const employee = await Employee.findById(req.params.id);
+
+  res.status(StatusCodes.CREATED).json({ employee });
+};
+
+export const updateEmployee = async (req, res, next) => {
+  const updatedEmployee = await Employee.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+    }
+  );
+  res
+    .status(StatusCodes.OK)
+    .json({ message: "Employee modified.", employee: updatedEmployee });
+};
+
+export const deleteEmployee = async (req, res, next) => {
+  const deletedEmployee = await Employee.findByIdAndDelete(req.params.id);
+  res
+    .status(StatusCodes.OK)
+    .json({ message: "Employee deleted.", employee: deletedEmployee });
+};

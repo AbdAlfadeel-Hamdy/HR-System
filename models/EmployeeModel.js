@@ -24,12 +24,14 @@ const employeeSchema = new Schema(
       enum: Object.values(EMPLOYEE_STATUS),
       default: EMPLOYEE_STATUS.DUTY,
     },
-    vacation: {
-      leavingDate: Date,
-      returnDate: Date,
-      expectedReturnDate: Date,
-      period: Number,
-    },
+    vacations: [
+      {
+        leavingDate: Date,
+        expectedReturnDate: Date,
+        returnDate: Date,
+        period: Number,
+      },
+    ],
     cancellationDate: Date,
   },
   {
