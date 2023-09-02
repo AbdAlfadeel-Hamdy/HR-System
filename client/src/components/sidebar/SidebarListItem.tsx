@@ -1,19 +1,34 @@
 import { ListItem, ListItemPrefix } from "@material-tailwind/react";
-import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { ReactNode } from "react";
+import { NavLink } from "react-router-dom";
 
 interface SidebarListItemProps {
-  children: ReactNode;
+  title: string;
+  icon: ReactNode;
+  href?: string;
+  onClick?: () => void;
 }
 
-const SidebarListItem: React.FC<SidebarListItemProps> = ({ children }) => {
+const SidebarListItem: React.FC<SidebarListItemProps> = ({
+  title,
+  icon,
+  href,
+  onClick,
+}) => {
+  if (!href)
+    return (
+      <ListItem onClick={onClick}>
+        <ListItemPrefix>{icon}</ListItemPrefix>
+        {title}
+      </ListItem>
+    );
   return (
-    <ListItem>
-      <ListItemPrefix>
-        <UserCircleIcon className="h-5 w-5" />
-      </ListItemPrefix>
-      {children}
-    </ListItem>
+    <NavLink to={href}>
+      <ListItem>
+        <ListItemPrefix>{icon}</ListItemPrefix>
+        {title}
+      </ListItem>
+    </NavLink>
   );
 };
 
