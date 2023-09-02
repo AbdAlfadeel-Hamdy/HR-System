@@ -12,7 +12,7 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, login, RootState } from "../store";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object({
   email: yup
@@ -61,7 +61,6 @@ export default function SignIn() {
     onSubmit: (values) => {
       const { email, password } = values;
       dispatch(login({ email, password }));
-      console.log(loggedInUser, isLoading);
     },
   });
 

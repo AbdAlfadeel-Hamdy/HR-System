@@ -11,3 +11,8 @@ export const EMPLOYEE_STATUS = {
 };
 
 export const NATIONALITIES = {};
+
+export const USER_ROLES = {
+  ADMIN: "admin",
+  MODERATOR: "moderator",
+};

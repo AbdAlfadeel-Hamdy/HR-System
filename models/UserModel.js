@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { USER_ROLES } from "../utils/constants.js";
 
 const userSchema = new Schema({
   name: String,
@@ -6,7 +7,7 @@ const userSchema = new Schema({
   password: String,
   role: {
     type: String,
-    enum: ["admin", "moderator"],
+    enum: Object.values(USER_ROLES),
   },
 });
 
