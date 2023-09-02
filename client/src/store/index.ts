@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { employeesApi, Employee } from "./apis/employeesApi";
+// import { authApi } from "./apis/authApi";
 import { authReducer } from "./slices/authSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     [employeesApi.reducerPath]: employeesApi.reducer,
+    // [authApi.reducerPath]: authApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(employeesApi.middleware),

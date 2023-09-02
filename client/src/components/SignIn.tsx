@@ -10,9 +10,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Alert from "@mui/material/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, login, RootState } from "../store";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { authActions } from "../store/slices/authSlice";
 
 const validationSchema = yup.object({
   email: yup
@@ -46,16 +48,19 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const { loggedInUser, isLoading } = useSelector(
+  const { isLoggedIn, isLoading, error } = useSelector(
     (state: RootState) => state.auth
   );
   const navigate = useNavigate();
-  if (loggedInUser) navigate("/dashboard");
+  if (isLoggedIn)
+    navigate("/dashboard", {
+      replace: true,
+    });
   const dispatch = useDispatch<AppDispatch>();
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: "admin@admin.com",
+      password: "test1234",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
@@ -98,7 +103,10 @@ export default function SignIn() {
               autoComplete="email"
               autoFocus
               value={formik.values.email}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.handleChange(e);
+                dispatch(authActions.clearError());
+              }}
               onBlur={formik.handleBlur}
               error={formik.touched.email && Boolean(formik.errors.email)}
               helperText={formik.touched.email && formik.errors.email}
@@ -113,7 +121,10 @@ export default function SignIn() {
               id="password"
               autoComplete="current-password"
               value={formik.values.password}
-              onChange={formik.handleChange}
+              onChange={(e) => {
+                formik.handleChange(e);
+                dispatch(authActions.clearError());
+              }}
               onBlur={formik.handleBlur}
               error={formik.touched.password && Boolean(formik.errors.password)}
               helperText={formik.touched.password && formik.errors.password}
@@ -127,6 +138,7 @@ export default function SignIn() {
             >
               <span>Sign In</span>
             </LoadingButton>
+            {error && !isLoading && <Alert severity="error">{error}</Alert>}
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />

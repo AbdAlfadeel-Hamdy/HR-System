@@ -1,20 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { login } from "../thunks/login";
 
-interface User {
-  name: string;
-  email: string;
-}
+// interface User {
+//   name: string;
+//   email: string;
+// }
 
 interface authState {
   isLoading: boolean;
-  loggedInUser: User | null;
-  error: { [keys: string]: any } | null;
+  isLoggedIn: boolean;
+  error: string | null;
 }
 
 const initialState: authState = {
   isLoading: false,
-  loggedInUser: null,
+  isLoggedIn: false,
   error: null,
 };
 
@@ -23,17 +23,20 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      state.loggedInUser = null;
+      state.isLoggedIn = false;
+    },
+    clearError(state) {
+      state.error = null;
     },
   },
   extraReducers(builder) {
-    builder.addCase(login.fulfilled, (state, action) => {
+    builder.addCase(login.fulfilled, (state) => {
       state.isLoading = false;
-      state.loggedInUser = action.payload;
+      state.isLoggedIn = true;
     });
-    builder.addCase(login.rejected, (state, action) => {
+    builder.addCase(login.rejected, (state) => {
       state.isLoading = false;
-      state.error = action.error;
+      state.error = "Invalid credentials";
     });
     builder.addCase(login.pending, (state) => {
       state.isLoading = true;
@@ -42,3 +45,4 @@ const authSlice = createSlice({
 });
 
 export const authReducer = authSlice.reducer;
+export const authActions = authSlice.actions;
