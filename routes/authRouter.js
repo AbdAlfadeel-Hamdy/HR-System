@@ -1,5 +1,10 @@
 import Router from "express";
-import { login, logout, register } from "../controllers/authController.js";
+import {
+  login,
+  logout,
+  register,
+  getCurrentUser,
+} from "../controllers/authController.js";
 import {
   validateLoginInput,
   validateUserInput,
@@ -20,5 +25,7 @@ router.post(
 );
 router.post("/login", validateLoginInput, login);
 router.get("/logout", logout);
+
+router.get("/current-user", authenticateUser, getCurrentUser);
 
 export default router;

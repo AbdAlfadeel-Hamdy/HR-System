@@ -37,3 +37,9 @@ export const logout = (req, res, next) => {
   });
   res.status(StatusCodes.OK).json({ message: "User logged out." });
 };
+
+export const getCurrentUser = async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+  const userWithoutPassword = user?.toJSON();
+  res.status(StatusCodes.OK).json({ user: userWithoutPassword });
+};

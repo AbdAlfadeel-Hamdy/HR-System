@@ -8,16 +8,20 @@ import {
   AccordionHeader,
   AccordionBody,
 } from "@material-tailwind/react";
-import { PresentationChartBarIcon } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import SidebarListItem from "./SidebarListItem";
 
 interface SidebarAccordionProps {
   title: string;
   list: { title: string; icon: ReactNode; href: string }[];
+  icon: ReactNode;
 }
 
-const SidebarAccordion: React.FC<SidebarAccordionProps> = ({ title, list }) => {
+const SidebarAccordion: React.FC<SidebarAccordionProps> = ({
+  title,
+  list,
+  icon,
+}) => {
   const [open, setOpen] = useState(0);
 
   const handleOpen = (value: any) => {
@@ -40,9 +44,7 @@ const SidebarAccordion: React.FC<SidebarAccordionProps> = ({ title, list }) => {
           onClick={() => handleOpen(1)}
           className="border-b-0 p-3"
         >
-          <ListItemPrefix>
-            <PresentationChartBarIcon className="h-5 w-5" />
-          </ListItemPrefix>
+          <ListItemPrefix>{icon}</ListItemPrefix>
           <Typography color="blue-gray" className="mr-auto font-normal">
             {title}
           </Typography>

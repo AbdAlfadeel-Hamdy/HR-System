@@ -1,101 +1,19 @@
 import * as React from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TableVirtuoso, TableComponents } from "react-virtuoso";
 import { styled } from "@mui/material/styles";
-import TableHeader from "./TableHeader";
 
-interface Data {
-  name: string;
-  nationality: string;
-  idNumber: number;
-  idExpirationDate: string;
-  passportNumber: string;
-  passportExpirationDate: string;
-  sponsor: string;
-  workIn: string;
-  agreementExpirationDate: string;
-  licenseExpirationDate: string;
-  licenseType: string;
-  status: string;
-}
-
-interface ColumnData {
-  dataKey: keyof Data;
+export interface ColumnData {
+  dataKey: any;
   label: string;
-  numeric?: boolean;
   width: number;
 }
-
-const columns: ColumnData[] = [
-  {
-    width: 200,
-    label: "Name",
-    dataKey: "name",
-  },
-  {
-    width: 200,
-    label: "Nationality",
-    dataKey: "nationality",
-  },
-  {
-    width: 200,
-    label: "ID",
-    dataKey: "idNumber",
-    numeric: true,
-  },
-  {
-    width: 200,
-    label: "ID Expiration Date",
-    dataKey: "idExpirationDate",
-    numeric: true,
-  },
-  {
-    width: 200,
-    label: "Passport",
-    dataKey: "passportNumber",
-  },
-  {
-    width: 200,
-    label: "Passport Expiration Date",
-    dataKey: "passportExpirationDate",
-  },
-  {
-    width: 200,
-    label: "Sponsor",
-    dataKey: "sponsor",
-  },
-  {
-    width: 200,
-    label: "Work In",
-    dataKey: "workIn",
-  },
-  {
-    width: 200,
-    label: "Agreement Expiration Date",
-    dataKey: "agreementExpirationDate",
-  },
-  {
-    width: 200,
-    label: "License Expiration Date",
-    dataKey: "licenseExpirationDate",
-  },
-  {
-    width: 200,
-    label: "License Type",
-    dataKey: "licenseType",
-  },
-  {
-    width: 200,
-    label: "Status",
-    dataKey: "status",
-  },
-];
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
@@ -107,7 +25,17 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const VirtuosoTableComponents: TableComponents<Data> = {
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const VirtuosoTableComponents: TableComponents<any> = {
   Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
     <TableContainer component={Paper} {...props} ref={ref} />
   )),
@@ -118,31 +46,52 @@ const VirtuosoTableComponents: TableComponents<Data> = {
     />
   ),
   TableHead,
-  TableRow: ({ item: _item, ...props }) => <StyledTableRow {...props} />,
+  TableRow: ({ ...props }) => <StyledTableRow {...props} />,
   TableBody: React.forwardRef<HTMLTableSectionElement>((props, ref) => (
     <TableBody {...props} ref={ref} />
   )),
 };
 
-function rowContent(_index: number, row: Data) {
-  return (
-    <React.Fragment>
-      {columns.map((column) => (
-        <TableCell key={column.dataKey} align={"left"}>
-          {row[column.dataKey]}
-        </TableCell>
-      ))}
-    </React.Fragment>
-  );
-}
-
 interface ReactVirtualizedTableProps {
   rows: any[];
+  columns: any[];
 }
 
 const ReactVirtualizedTable: React.FC<ReactVirtualizedTableProps> = ({
   rows,
+  columns,
 }) => {
+  const TableHeader = () => {
+    return (
+      <TableRow>
+        {columns.map((column) => (
+          <StyledTableCell
+            key={column.dataKey}
+            variant="head"
+            align={"left"}
+            style={{ width: column.width }}
+            sx={{
+              backgroundColor: "background.paper",
+            }}
+          >
+            {column.label}
+          </StyledTableCell>
+        ))}
+      </TableRow>
+    );
+  };
+  const rowContent = (_index: number, row: any) => {
+    return (
+      <React.Fragment>
+        {columns.map((column) => (
+          <TableCell key={column.dataKey} align={"left"}>
+            {row[column.dataKey]}
+          </TableCell>
+        ))}
+      </React.Fragment>
+    );
+  };
+
   return (
     <Paper>
       <TableVirtuoso
@@ -151,7 +100,6 @@ const ReactVirtualizedTable: React.FC<ReactVirtualizedTableProps> = ({
         fixedHeaderContent={TableHeader}
         itemContent={rowContent}
       />
-      {/* <BasicPagination /> */}
     </Paper>
   );
 };
