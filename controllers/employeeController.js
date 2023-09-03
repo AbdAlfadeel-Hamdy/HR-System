@@ -1,9 +1,18 @@
 import { StatusCodes } from "http-status-codes";
 import Employee from "../models/EmployeeModel.js";
+import APIFeatures from "../utils/apiFeatures.js";
 
 export const getAllEmployees = async (req, res, next) => {
   const employeesCount = await Employee.countDocuments();
-  const employees = await Employee.find();
+  console.log(req.query);
+  // BUILD Query
+  const features = new APIFeatures(Employee.find({}), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  // EXECUTE Query
+  const employees = await features.query;
 
   res.status(StatusCodes.OK).json({ employees, employeesCount });
 };
@@ -38,4 +47,24 @@ export const deleteEmployee = async (req, res, next) => {
   res
     .status(StatusCodes.OK)
     .json({ message: "Employee deleted.", employee: deletedEmployee });
+};
+
+// Special Controllers
+export const getExpiredIds = async (req, res, next) => {
+  const expirationDate = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+  const employees = await Employee.find(
+    {
+      idExpirationDate: { $lt: expirationDate },
+    },
+    {
+      name: 1,
+      idNumber: 1,
+      idExpirationDate: 1,
+      passportExpirationDate: 1,
+      sponsor: 1,
+      workIn: 1,
+      status: 1,
+    }
+  );
+  res.status(StatusCodes.OK).json({ employees });
 };

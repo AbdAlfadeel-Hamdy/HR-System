@@ -5,10 +5,14 @@ import {
   getEmployee,
   updateEmployee,
   deleteEmployee,
+  getExpiredIds,
 } from "../controllers/employeeController.js";
 import { validateEmployeeInput } from "../middlewares/validationMiddleware.js";
 
 const router = Router();
+
+// Special Routes
+router.route("/expired-id").get(getExpiredIds);
 
 router
   .route("/")
