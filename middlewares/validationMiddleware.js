@@ -69,10 +69,6 @@ export const validateUserInput = withValidationErrors([
     .withMessage("Password is required.")
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters long."),
-  body("role")
-    .notEmpty()
-    .withMessage("Role is required.")
-    .isIn(Object.values(USER_ROLES)),
 ]);
 
 export const validateLoginInput = withValidationErrors([

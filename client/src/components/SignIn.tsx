@@ -11,10 +11,6 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Alert from "@mui/material/Alert";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, login, RootState } from "../store";
-import { useNavigate } from "react-router-dom";
-import { authActions } from "../store/slices/authSlice";
 
 const validationSchema = yup.object({
   email: yup
@@ -48,15 +44,6 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const { isLoggedIn, isLoading, error } = useSelector(
-    (state: RootState) => state.auth
-  );
-  const navigate = useNavigate();
-  if (isLoggedIn)
-    navigate("/dashboard", {
-      replace: true,
-    });
-  const dispatch = useDispatch<AppDispatch>();
   const formik = useFormik({
     initialValues: {
       email: "admin@admin.com",
@@ -65,7 +52,7 @@ export default function SignIn() {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const { email, password } = values;
-      dispatch(login({ email, password }));
+      console.log(email, password);
     },
   });
 
@@ -105,7 +92,6 @@ export default function SignIn() {
               value={formik.values.email}
               onChange={(e) => {
                 formik.handleChange(e);
-                dispatch(authActions.clearError());
               }}
               onBlur={formik.handleBlur}
               error={formik.touched.email && Boolean(formik.errors.email)}
@@ -123,7 +109,6 @@ export default function SignIn() {
               value={formik.values.password}
               onChange={(e) => {
                 formik.handleChange(e);
-                dispatch(authActions.clearError());
               }}
               onBlur={formik.handleBlur}
               error={formik.touched.password && Boolean(formik.errors.password)}
@@ -134,11 +119,10 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              loading={isLoading}
             >
               <span>Sign In</span>
             </LoadingButton>
-            {error && !isLoading && <Alert severity="error">{error}</Alert>}
+            {false && <Alert severity="error">Error</Alert>}
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />

@@ -2,9 +2,10 @@ import { StatusCodes } from "http-status-codes";
 import Employee from "../models/EmployeeModel.js";
 
 export const getAllEmployees = async (req, res, next) => {
+  const employeesCount = await Employee.countDocuments();
   const employees = await Employee.find();
 
-  res.status(StatusCodes.OK).json({ employees, result: employees.length });
+  res.status(StatusCodes.OK).json({ employees, employeesCount });
 };
 
 export const createEmployee = async (req, res, next) => {

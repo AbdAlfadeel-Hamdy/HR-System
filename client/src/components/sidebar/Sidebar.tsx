@@ -4,13 +4,10 @@ import { ChevronRightIcon, PowerIcon } from "@heroicons/react/24/outline";
 
 import SidebarListItem from "./SidebarListItem";
 import SidebarAccordion from "./SidebarAccordion";
-import { useDispatch } from "react-redux";
-import { authActions } from "../../store/slices/authSlice";
 
 export default function SidebarWithContentSeparator() {
-  const dispatch = useDispatch();
   return (
-    <Card className="min-h-[calc(100vh)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none">
+    <Card className="min-h-[calc(100vh)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none row-span-2">
       <div className="mb-2 p-4">
         <Typography variant="h5" color="blue-gray">
           Welcome, {"Ahmed"}
@@ -77,7 +74,7 @@ export default function SidebarWithContentSeparator() {
           {
             title: "Log Out",
             icon: <PowerIcon className="h-5 w-5" />,
-            onClick: () => dispatch(authActions.logout()),
+            onClick: () => console.log("a7a"),
           },
         ].map((item) => (
           <SidebarListItem

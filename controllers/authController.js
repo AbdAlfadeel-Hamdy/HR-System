@@ -5,8 +5,8 @@ import { UnauthenticatedError } from "../errors/customErrors.js";
 import { createJWT } from "../utils/tokenUtils.js";
 
 export const register = async (req, res, next) => {
-  console.log("a7a");
   req.body.password = await hashPassword(req.body.password);
+  req.body.role = "moderator";
 
   const user = await User.create(req.body);
   res.status(StatusCodes.CREATED).json({ message: "User created." });

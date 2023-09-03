@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Dashboard,
   Cancelled,
@@ -10,7 +11,10 @@ import {
   PassportReport,
   VacationsReport,
   StatusReport,
+  Employees,
 } from "./pages";
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
@@ -25,6 +29,7 @@ const router = createBrowserRouter([
         path: "dashboard",
         element: <Dashboard />,
         children: [
+          { index: true, element: <Employees /> },
           {
             path: "cancelled",
             element: <Cancelled />,
@@ -48,6 +53,10 @@ const router = createBrowserRouter([
 ]);
 
 const App: React.FC = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 };
 export default App;

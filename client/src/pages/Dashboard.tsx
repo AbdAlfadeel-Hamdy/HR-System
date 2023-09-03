@@ -1,14 +1,9 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { Sidebar } from "../components";
-import { useSelector } from "react-redux";
-import { RootState } from "../store";
 
 const Dashboard: React.FC = () => {
-  const { isLoggedIn } = useSelector((state: RootState) => state.auth);
-  const navigate = useNavigate();
-  if (!isLoggedIn) navigate("/", { replace: true });
   return (
-    <section className="flex">
+    <section className="grid grid-cols-[20rem_1fr] h-screen grid-rows-[94%_6%]">
       <Sidebar />
       <Outlet />
     </section>
