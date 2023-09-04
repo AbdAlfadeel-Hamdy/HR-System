@@ -66,9 +66,9 @@ const ExpiredIdReport = () => {
       idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
         "en-uk"
       ),
-      passportExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
-        "en-uk"
-      ),
+      passportExpirationDate: new Date(
+        row.passportExpirationDate
+      ).toLocaleDateString("en-uk"),
       status:
         row.status === "duty" ? "\uD83D\uDFE2 Duty" : "\uD83D\uDFE1 Vacation",
     };

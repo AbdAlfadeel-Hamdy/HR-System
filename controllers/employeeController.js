@@ -68,3 +68,9 @@ export const getExpiredIds = async (req, res, next) => {
   );
   res.status(StatusCodes.OK).json({ employees });
 };
+
+export const getPassports = async (req, res, next) => {
+  req.query.fields =
+    "name,idNumber,nationality,passportNumber,passportExpirationDate";
+  next();
+};
