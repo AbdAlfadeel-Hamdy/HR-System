@@ -12,6 +12,7 @@ import autoTable from "jspdf-autotable";
 
 const downloadPDF = (title: string, columns: any[], data: any) => {
   const doc = new jsPDF();
+  doc.text(title, 15, 10);
   autoTable(doc, {
     columns: columns.map((col) => ({
       dataKey: col.dataKey,

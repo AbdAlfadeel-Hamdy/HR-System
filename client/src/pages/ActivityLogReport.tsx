@@ -11,6 +11,7 @@ import autoTable from "jspdf-autotable";
 
 const downloadPDF = (title: string, columns: any[], data: any) => {
   const doc = new jsPDF();
+  doc.text(title, 15, 10);
   autoTable(doc, {
     columns: columns.map((col) => ({
       dataKey: col.dataKey,
@@ -73,7 +74,7 @@ const ActivityLogReport = () => {
     <>
       <ReactVirtualizedTable rows={modifiedData} columns={columns} />
       <button
-        onClick={() => downloadPDF("Driver Report", columns, modifiedData)}
+        onClick={() => downloadPDF("Activity Report", columns, modifiedData)}
       >
         Download
       </button>

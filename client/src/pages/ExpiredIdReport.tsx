@@ -1,10 +1,56 @@
 import { useQuery } from "@tanstack/react-query";
+import { NavLink } from "react-router-dom";
+import dayjs from "dayjs";
 import customFetch from "../utils/customFetch";
 import ReactVirtualizedTable from "../components/table/Table";
-// import BasicPagination from "../components/Pagination";
-import { NavLink } from "react-router-dom";
 import { ColumnData } from "../components/table/Table";
-import { downloadPDF } from "../utils/downloadPDF";
+
+// PDF Creator
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
+
+const downloadPDF = (title: string, columns: any[], data: any) => {
+  const doc = new jsPDF();
+  doc.text(title, 15, 10);
+  data.forEach((company: any) => {
+    autoTable(doc, {
+      head: [[company._id]],
+    });
+    autoTable(doc, {
+      columns: columns
+        .filter((col: any) => col.dataKey !== "workIn")
+        .map((col) => ({
+          dataKey: col.dataKey,
+          header: col.label,
+        })),
+      body: company.documents.map((row: any) => ({
+        name: row.name,
+        idNumber: row.idNumber,
+        sponsor: row.sponsor,
+        status: row.status,
+        idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
+          "en-uk"
+        ),
+        passportExpirationDate: new Date(
+          row.passportExpirationDate
+        ).toLocaleDateString("en-uk"),
+      })),
+      foot: [[`Total: ${company.documents.length}`]],
+      showFoot: "lastPage",
+    });
+  });
+  autoTable(doc, {
+    foot: [
+      [
+        dayjs(new Date().toString()).format("dddd"),
+        dayjs(new Date().toString()).format("DD/MM/YYYY"),
+      ],
+    ],
+  });
+
+  doc.save(`${title}.pdf`);
+};
 
 const columns: ColumnData[] = [
   {
@@ -33,11 +79,11 @@ const columns: ColumnData[] = [
     label: "Sponsor",
     dataKey: "sponsor",
   },
-  // {
-  //   width: 200,
-  //   label: "Work In",
-  //   dataKey: "workIn",
-  // },
+  {
+    width: 200,
+    label: "Work In",
+    dataKey: "workIn",
+  },
 
   {
     width: 200,
@@ -59,18 +105,19 @@ const ExpiredIdReport = () => {
   if (isFetching) return <div>Loading</div>;
   if (error) return <div>Error</div>;
 
-  console.log(data.employees);
-  const modifiedData = data.employees.map((row: any) => {
-    return {
-      ...row,
-      idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
-        "en-uk"
-      ),
-      passportExpirationDate: new Date(
-        row.passportExpirationDate
-      ).toLocaleDateString("en-uk"),
-    };
-  });
+  const modifiedData = data.employees
+    .flatMap((company: any) => company.documents)
+    .map((row: any) => {
+      return {
+        ...row,
+        idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
+          "en-uk"
+        ),
+        passportExpirationDate: new Date(
+          row.passportExpirationDate
+        ).toLocaleDateString("en-uk"),
+      };
+    });
 
   return (
     <>
@@ -85,9 +132,10 @@ const ExpiredIdReport = () => {
         }))}
         columns={columns}
       />
-      {/* <BasicPagination count={data.employeesCount} /> */}
       <button
-        onClick={() => downloadPDF("Driver Report", columns, modifiedData)}
+        onClick={() =>
+          downloadPDF("Expired ID Report", columns, data.employees)
+        }
       >
         Download
       </button>
