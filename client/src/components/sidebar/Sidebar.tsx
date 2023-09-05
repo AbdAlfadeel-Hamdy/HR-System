@@ -8,8 +8,21 @@ import { ChevronRightIcon, PowerIcon } from "@heroicons/react/24/outline";
 
 import SidebarListItem from "./SidebarListItem";
 import SidebarAccordion from "./SidebarAccordion";
+import customFetch from "../../utils/customFetch";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function SidebarWithContentSeparator({ user }: { user: any }) {
+  const navigate = useNavigate();
+  const logoutHandler = async () => {
+    try {
+      await customFetch.get("/auth/logout");
+      toast.success("Logged out successfully");
+      navigate("/", { replace: true });
+    } catch (err) {
+      toast.error((err as any)?.response?.data.message);
+    }
+  };
   return (
     <Card className="min-h-[calc(100vh)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none row-span-2">
       <div className="mb-2 p-4">
@@ -76,7 +89,7 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
           {
             title: "Log Out",
             icon: <PowerIcon className="h-5 w-5" />,
-            onClick: () => console.log("a7a"),
+            onClick: logoutHandler,
           },
         ].map((item) => (
           <SidebarListItem

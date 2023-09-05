@@ -4,6 +4,7 @@ import {
   logout,
   register,
   getCurrentUser,
+  getAllActivities,
 } from "../controllers/authController.js";
 import {
   validateLoginInput,
@@ -24,8 +25,10 @@ router.post(
   register
 );
 router.post("/login", validateLoginInput, login);
-router.get("/logout", logout);
+router.get("/logout", authenticateUser, logout);
 
 router.get("/current-user", authenticateUser, getCurrentUser);
+
+router.get("/activities", authenticateUser, getAllActivities);
 
 export default router;

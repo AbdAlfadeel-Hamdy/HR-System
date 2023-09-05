@@ -13,6 +13,7 @@ const LoginPage: React.FC = () => {
       return data;
     },
     retry: false,
+    refetchOnMount: false,
   });
 
   if (isFetching) return <div>Loading...</div>;
