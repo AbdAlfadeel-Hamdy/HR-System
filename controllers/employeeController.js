@@ -52,20 +52,6 @@ export const deleteEmployee = async (req, res, next) => {
 // Special Controllers
 export const getExpiredIds = async (req, res, next) => {
   const expirationDate = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
-  // const employees = await Employee.find(
-  //   {
-  //     idExpirationDate: { $lt: expirationDate },
-  //   },
-  //   {
-  //     name: 1,
-  //     idNumber: 1,
-  //     idExpirationDate: 1,
-  //     passportExpirationDate: 1,
-  //     sponsor: 1,
-  //     workIn: 1,
-  //     status: 1,
-  //   }
-  // ).sort("workIn");
   const employees = await Employee.aggregate([
     {
       $match: {
@@ -99,23 +85,36 @@ export const getExpiredIds = async (req, res, next) => {
 };
 
 export const getPassports = async (req, res, next) => {
-  req.query.fields =
-    "name,idNumber,nationality,passportNumber,passportExpirationDate";
-  next();
+  const employees = await Employee.aggregate([
+    {
+      $project: {
+        idImage: 0,
+        idExpirationDate: 0,
+        passportImage: 0,
+        agreementExpirationDate: 0,
+        licenseExpirationDate: 0,
+        licenseType: 0,
+        cancellationDate: 0,
+        vacations: 0,
+        sponsor: 0,
+        workIn: 0,
+        status: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      },
+    },
+    {
+      $group: {
+        _id: "$nationality",
+        documents: { $push: "$$ROOT" },
+      },
+    },
+  ]);
+  res.status(StatusCodes.OK).json({ employees });
 };
 
 export const getDrivers = async (req, res, next) => {
   req.query.fields = "name,idNumber,licenseType,licenseExpirationDate";
   next();
-  // const data = await Employee.aggregate([
-  //   {
-  //     $project: {
-  //       name: 1,
-  //       idNumber: 1,
-  //       licenseType: 1,
-  //       licenseExpirationDate: 1,
-  //     },
-  //   },
-  // ]);
-  // res.status(StatusCodes.OK).json({ data });
 };
