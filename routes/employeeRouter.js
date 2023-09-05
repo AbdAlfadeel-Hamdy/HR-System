@@ -7,6 +7,7 @@ import {
   deleteEmployee,
   getExpiredIds,
   getPassports,
+  getDrivers,
 } from "../controllers/employeeController.js";
 import { validateEmployeeInput } from "../middlewares/validationMiddleware.js";
 
@@ -15,6 +16,7 @@ const router = Router();
 // Special Routes
 router.route("/expired-id").get(getExpiredIds);
 router.route("/passport").get(getPassports, getAllEmployees);
+router.route("/driver").get(getDrivers, getAllEmployees);
 
 router
   .route("/")

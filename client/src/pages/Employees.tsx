@@ -76,6 +76,7 @@ const Employees = () => {
       const { data } = await customFetch.get("/employees");
       return data;
     },
+    staleTime: 1000 * 60 * 5,
   });
 
   if (isFetching) return <div>Loading</div>;
