@@ -9,3 +9,5 @@ export { default as StatusReport } from "./StatusReport";
 export { default as VacationsReport } from "./VacationsReport";
 export { default as IdReport } from "./IdReport";
 export { default as ExpiredIdReport } from "./ExpiredIdReport";
+export { default as AddEmployee } from "./AddEmployee";
+export { default as AddUser } from "./AddUser";

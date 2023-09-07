@@ -18,7 +18,7 @@ const Dashboard: React.FC = () => {
   if (error) navigate("/", { replace: true });
 
   return (
-    <section className="grid grid-cols-[20rem_1fr] h-screen grid-rows-[94%_6%]">
+    <section className="grid grid-cols-[20rem_1fr] max-h-screen grid-rows-[94%_6%]">
       <Sidebar user={data.user} />
       <Outlet />
     </section>

@@ -12,6 +12,8 @@ import {
   VacationsReport,
   StatusReport,
   Employees,
+  AddEmployee,
+  AddUser,
 } from "./pages";
 
 const queryClient = new QueryClient();
@@ -44,6 +46,13 @@ const router = createBrowserRouter([
               { path: "passport", element: <PassportReport /> },
               { path: "vacations", element: <VacationsReport /> },
               { path: "status", element: <StatusReport /> },
+            ],
+          },
+          {
+            path: "actions",
+            children: [
+              { path: "add-employee", element: <AddEmployee /> },
+              { path: "add-user", element: <AddUser /> },
             ],
           },
         ],

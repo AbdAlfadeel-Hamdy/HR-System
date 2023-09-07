@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import customFetch from "../utils/customFetch";
-import ReactVirtualizedTable from "../components/table/Table";
+import ReactVirtualizedTable from "../components/Table";
 import BasicPagination from "../components/Pagination";
 import { NavLink } from "react-router-dom";
-import { ColumnData } from "../components/table/Table";
+import { ColumnData } from "../components/Table";
 
 const columns: ColumnData[] = [
   {

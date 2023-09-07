@@ -1,6 +1,7 @@
 import { Card, Typography, List } from "@material-tailwind/react";
 import {
   DocumentDuplicateIcon,
+  PencilIcon,
   UserGroupIcon,
   UserIcon,
 } from "@heroicons/react/24/solid";
@@ -24,7 +25,7 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
     }
   };
   return (
-    <Card className="min-h-[calc(100vh)] w-full max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none row-span-2">
+    <Card className=" min-h-screen overflow-y-scroll w-[20rem] max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none row-span-2">
       <div className="mb-2 p-4">
         <Typography variant="h5" color="blue-gray">
           Welcome, {user.name}
@@ -76,6 +77,22 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
               title: "Status",
               icon: <ChevronRightIcon className="h-5 w-5" />,
               href: "reports/status",
+            },
+          ]}
+        />
+        <SidebarAccordion
+          title="Actions"
+          icon={<PencilIcon className="h-5 w-5" />}
+          list={[
+            {
+              title: "Add User",
+              icon: <ChevronRightIcon className="h-5 w-5" />,
+              href: "actions/add-user",
+            },
+            {
+              title: "Add Employee",
+              icon: <ChevronRightIcon className="h-5 w-5" />,
+              href: "actions/add-employee",
             },
           ]}
         />

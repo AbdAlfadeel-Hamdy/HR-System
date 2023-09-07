@@ -22,34 +22,34 @@ const withValidationErrors = (validateValues) => {
 };
 
 export const validateEmployeeInput = withValidationErrors([
-  // body("name").notEmpty().withMessage("Name is required."),
-  // body("nationality").notEmpty().withMessage("Nationality is required."),
-  // body("idNumber").notEmpty().withMessage("ID number is required."),
-  // body("idExpirationDate")
-  //   .notEmpty()
-  //   .withMessage("ID expiration date is required."),
-  // body("passportNumber").notEmpty().withMessage("Passport number is required."),
-  // body("passportExpirationDate")
-  //   .notEmpty()
-  //   .withMessage("Passport expiration date is required."),
-  // body("sponsor").notEmpty().withMessage("Sponsor is required."),
-  // body("workIn").notEmpty().withMessage("Work in place is required."),
-  // body("agreementExpirationDate")
-  //   .notEmpty()
-  //   .withMessage("Agreement expiration date is required."),
-  // body("licenseExpirationDate")
-  //   .notEmpty()
-  //   .withMessage("License expiration date is required."),
-  // body("licenseType")
-  //   .notEmpty()
-  //   .withMessage("License type is required.")
-  //   .isIn(Object.values(LICENSE_TYPE))
-  //   .withMessage("Invalid license type."),
-  // body("status")
-  //   .notEmpty()
-  //   .withMessage("Status is required.")
-  //   .isIn(Object.values(EMPLOYEE_STATUS))
-  //   .withMessage("Invalid employee status."),
+  body("name").notEmpty().withMessage("Name is required."),
+  body("nationality").notEmpty().withMessage("Nationality is required."),
+  body("idNumber").notEmpty().withMessage("ID number is required."),
+  body("idExpirationDate")
+    .notEmpty()
+    .withMessage("ID expiration date is required."),
+  body("passportNumber").notEmpty().withMessage("Passport number is required."),
+  body("passportExpirationDate")
+    .notEmpty()
+    .withMessage("Passport expiration date is required."),
+  body("sponsor").notEmpty().withMessage("Sponsor is required."),
+  body("workIn").notEmpty().withMessage("Work in place is required."),
+  body("agreementExpirationDate")
+    .notEmpty()
+    .withMessage("Agreement expiration date is required."),
+  body("licenseExpirationDate")
+    .notEmpty()
+    .withMessage("License expiration date is required."),
+  body("licenseType")
+    .notEmpty()
+    .withMessage("License type is required.")
+    .isIn(Object.values(LICENSE_TYPE))
+    .withMessage("Invalid license type."),
+  body("status")
+    .notEmpty()
+    .withMessage("Status is required.")
+    .isIn(Object.values(EMPLOYEE_STATUS))
+    .withMessage("Invalid employee status."),
 ]);
 
 export const validateUserInput = withValidationErrors([

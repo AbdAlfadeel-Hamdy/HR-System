@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import customFetch from "../utils/customFetch";
-import ReactVirtualizedTable from "../components/table/Table";
-import { ColumnData } from "../components/table/Table";
+import ReactVirtualizedTable from "../components/Table";
+import { ColumnData } from "../components/Table";
 import dayjs from "dayjs";
 
 // PDF Creator

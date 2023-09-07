@@ -8,7 +8,6 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Alert from "@mui/material/Alert";
 import { toast } from "react-toastify";
 import customFetch from "../utils/customFetch";
 import { useNavigate } from "react-router-dom";
@@ -114,7 +113,6 @@ export default function SignIn() {
           >
             <span>Sign In</span>
           </LoadingButton>
-          {false && <Alert severity="error">Error</Alert>}
         </Box>
       </Box>
     </Container>
