@@ -23,7 +23,7 @@ const validationSchema = yup.object({
     .required("Password is required"),
 });
 
-export default function SignIn() {
+const LoginForm = () => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -117,4 +117,6 @@ export default function SignIn() {
       </Box>
     </Container>
   );
-}
+};
+
+export default LoginForm;

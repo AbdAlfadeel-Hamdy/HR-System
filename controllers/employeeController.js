@@ -4,7 +4,6 @@ import APIFeatures from "../utils/apiFeatures.js";
 
 export const getAllEmployees = async (req, res, next) => {
   const employeesCount = await Employee.countDocuments();
-  console.log(req.query);
   // BUILD Query
   const features = new APIFeatures(Employee.find({}), req.query)
     .filter()
@@ -117,4 +116,38 @@ export const getPassports = async (req, res, next) => {
 export const getDrivers = async (req, res, next) => {
   req.query.fields = "name,idNumber,licenseType,licenseExpirationDate";
   next();
+};
+
+export const getStatus = async (req, res, next) => {
+  const { status } = req.query;
+  const employees = await Employee.aggregate([
+    {
+      $match: {
+        status: status,
+      },
+    },
+    {
+      $project: {
+        nationality: 0,
+        idImage: 0,
+        passportNumber: 0,
+        passportImage: 0,
+        agreementExpirationDate: 0,
+        licenseExpirationDate: 0,
+        licenseType: 0,
+        cancellationDate: 0,
+        vacations: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      },
+    },
+    {
+      $group: {
+        _id: "$workIn",
+        documents: { $push: "$$ROOT" },
+      },
+    },
+  ]);
+  res.status(StatusCodes.OK).json({ employees });
 };

@@ -9,7 +9,7 @@ import { ChevronRightIcon, PowerIcon } from "@heroicons/react/24/outline";
 
 import SidebarListItem from "./SidebarListItem";
 import SidebarAccordion from "./SidebarAccordion";
-import customFetch from "../../utils/customFetch";
+import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -74,9 +74,14 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
               href: "reports/vacations",
             },
             {
-              title: "Status",
+              title: "On Duty",
               icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/status",
+              href: "reports/on-duty",
+            },
+            {
+              title: "On Vacation",
+              icon: <ChevronRightIcon className="h-5 w-5" />,
+              href: "reports/on-vacation",
             },
           ]}
         />

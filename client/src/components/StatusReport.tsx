@@ -9,6 +9,7 @@ import { ColumnData } from "../components/Table";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
+import React from "react";
 
 const downloadPDF = (title: string, columns: any[], data: any) => {
   const doc = new jsPDF();
@@ -19,18 +20,19 @@ const downloadPDF = (title: string, columns: any[], data: any) => {
     });
     autoTable(doc, {
       columns: columns
-        .filter((col: any) => col.dataKey !== "nationality")
+        .filter((col: any) => col.dataKey !== "workIn")
         .map((col) => ({
           dataKey: col.dataKey,
           header: col.label,
         })),
       body: company.documents.map((row: any) => ({
-        name: row.name,
         idNumber: row.idNumber,
-        passportNumber: row.passportNumber,
-        passportExpirationDate: new Date(
-          row.passportExpirationDate
-        ).toLocaleDateString("en-uk"),
+        name: row.name,
+        idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
+          "en-uk"
+        ),
+        sponsor: row.sponsor,
+        note: row.note,
       })),
       foot: [[`Total: ${company.documents.length}`]],
       showFoot: "lastPage",
@@ -59,28 +61,43 @@ const columns: ColumnData[] = [
     label: "Name",
     dataKey: "name",
   },
+
   {
     width: 200,
-    label: "Nationality",
-    dataKey: "nationality",
+    label: "ID Expiration",
+    dataKey: "idExpirationDate",
   },
   {
     width: 200,
-    label: "Passport",
-    dataKey: "passportNumber",
+    label: "Sponsor",
+    dataKey: "sponsor",
   },
   {
     width: 200,
-    label: "Passport Expiration",
-    dataKey: "passportExpirationDate",
+    label: "Work In",
+    dataKey: "workIn",
+  },
+
+  {
+    width: 200,
+    label: "Note",
+    dataKey: "note",
   },
 ];
 
-const ExpiredIdReport = () => {
+interface StatusReportProps {
+  status: string;
+}
+
+const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
   const { isFetching, data, error } = useQuery({
     queryKey: ["employees"],
     queryFn: async () => {
-      const { data } = await customFetch.get("/employees/passport");
+      const { data } = await customFetch.get("/employees/status", {
+        params: {
+          status,
+        },
+      });
       return data;
     },
     staleTime: 1000 * 60 * 3,
@@ -89,16 +106,14 @@ const ExpiredIdReport = () => {
   if (isFetching) return <div>Loading</div>;
   if (error) return <div>Error</div>;
 
-  console.log(data);
-
   const modifiedData = data.employees
     .flatMap((company: any) => company.documents)
     .map((row: any) => {
       return {
         ...row,
-        passportExpirationDate: new Date(
-          row.passportExpirationDate
-        ).toLocaleDateString("en-uk"),
+        idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
+          "en-uk"
+        ),
       };
     });
 
@@ -112,7 +127,7 @@ const ExpiredIdReport = () => {
         columns={columns}
       />
       <button
-        onClick={() => downloadPDF("Passport Report", columns, data.employees)}
+        onClick={() => downloadPDF(`${status} Report`, columns, data.employees)}
       >
         Download
       </button>
@@ -120,4 +135,4 @@ const ExpiredIdReport = () => {
   );
 };
 
-export default ExpiredIdReport;
+export default StatusReport;

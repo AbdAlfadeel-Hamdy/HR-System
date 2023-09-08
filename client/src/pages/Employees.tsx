@@ -4,6 +4,8 @@ import ReactVirtualizedTable from "../components/Table";
 import BasicPagination from "../components/Pagination";
 import { NavLink } from "react-router-dom";
 import { ColumnData } from "../components/Table";
+import { CircularProgress } from "@mui/material";
+import Box from "@mui/material/Box";
 
 const columns: ColumnData[] = [
   {
@@ -79,7 +81,14 @@ const Employees = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isFetching) return <div>Loading</div>;
+  if (isFetching)
+    return (
+      <section className="grid place-content-center h-screen">
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      </section>
+    );
   if (error) return <div>Error</div>;
 
   const modifiedData = data.employees.map((row: any) => {

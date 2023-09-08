@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { CircularProgress } from "@mui/material";
+import Box from "@mui/material/Box";
 import customFetch from "../utils/customFetch";
-import SignIn from "../components/SignIn";
+import SignIn from "../components/LoginForm";
 
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
 
   const { isFetching, data } = useQuery({
@@ -16,9 +18,16 @@ const LoginPage: React.FC = () => {
     refetchOnMount: false,
   });
 
-  if (isFetching) return <div>Loading...</div>;
+  if (isFetching)
+    return (
+      <section className="grid place-content-center h-screen">
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress />
+        </Box>
+      </section>
+    );
   if (data?.user) navigate("/dashboard", { replace: true });
-  return <SignIn />;
+  if (!data) return <SignIn />;
 };
 
 export default LoginPage;
