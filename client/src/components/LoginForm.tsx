@@ -23,7 +23,7 @@ const validationSchema = yup.object({
     .required("Password is required"),
 });
 
-const LoginForm = () => {
+const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -110,6 +110,7 @@ const LoginForm = () => {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
             disabled={formik.isSubmitting}
+            loading={formik.isSubmitting}
           >
             <span>Sign In</span>
           </LoadingButton>

@@ -3,21 +3,19 @@ import { useQuery } from "@tanstack/react-query";
 import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
 import customFetch from "../utils/customFetch";
-import SignIn from "../components/LoginForm";
-
+import { LoginForm } from "../components";
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  const { isFetching, data } = useQuery({
+  const { isFetching, isSuccess, isError } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const { data } = await customFetch.get("/auth/current-user");
       return data;
     },
     retry: false,
-    refetchOnMount: false,
+    refetchOnMount: true,
   });
-
   if (isFetching)
     return (
       <section className="grid place-content-center h-screen">
@@ -26,8 +24,8 @@ const LoginPage = () => {
         </Box>
       </section>
     );
-  if (data?.user) navigate("/dashboard", { replace: true });
-  if (!data) return <SignIn />;
+  else if (isSuccess) navigate("/dashboard", { replace: true });
+  else if (isError) return <LoginForm />;
 };
 
 export default LoginPage;

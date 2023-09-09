@@ -12,18 +12,24 @@ import SidebarAccordion from "./SidebarAccordion";
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 export default function SidebarWithContentSeparator({ user }: { user: any }) {
   const navigate = useNavigate();
-  const logoutHandler = async () => {
-    try {
+  const { isLoading, mutate } = useMutation({
+    mutationKey: ["user"],
+    mutationFn: async () => {
       await customFetch.get("/auth/logout");
+    },
+    onSuccess: () => {
       toast.success("Logged out successfully");
       navigate("/", { replace: true });
-    } catch (err) {
+    },
+    onError: (err) => {
       toast.error((err as any)?.response?.data.message);
-    }
-  };
+    },
+  });
+
   return (
     <Card className=" min-h-screen overflow-y-scroll w-[20rem] max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none row-span-2">
       <div className="mb-2 p-4">
@@ -111,7 +117,7 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
           {
             title: "Log Out",
             icon: <PowerIcon className="h-5 w-5" />,
-            onClick: logoutHandler,
+            onClick: mutate,
           },
         ].map((item) => (
           <SidebarListItem

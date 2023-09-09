@@ -12,3 +12,4 @@ export { default as OnDutyReport } from "./OnDutyReport";
 export { default as OnVacationReport } from "./OnVacationReport";
 export { default as AddEmployee } from "./AddEmployee";
 export { default as AddUser } from "./AddUser";
+export { default as EmployeeDetails } from "./EmployeeDetails";

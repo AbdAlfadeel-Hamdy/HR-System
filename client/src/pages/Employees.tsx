@@ -94,7 +94,7 @@ const Employees = () => {
   const modifiedData = data.employees.map((row: any) => {
     return {
       ...row,
-      name: <NavLink to={row._id}>{row.name}</NavLink>,
+      name: <NavLink to={`employees/${row._id}`}>{row.name}</NavLink>,
       idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
         "en-uk"
       ),

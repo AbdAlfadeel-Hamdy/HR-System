@@ -15,6 +15,7 @@ import {
   Employees,
   AddEmployee,
   AddUser,
+  EmployeeDetails,
 } from "./pages";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
           {
             path: "cancelled",
             element: <Cancelled />,
+          },
+          {
+            path: "employees/:id",
+            element: <EmployeeDetails />,
           },
           {
             path: "reports",
