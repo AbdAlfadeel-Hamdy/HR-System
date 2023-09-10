@@ -16,7 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 
 export default function SidebarWithContentSeparator({ user }: { user: any }) {
   const navigate = useNavigate();
-  const { isLoading, mutate } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ["user"],
     mutationFn: async () => {
       await customFetch.get("/auth/logout");
