@@ -30,6 +30,10 @@ const EmployeeInfoTable: React.FC<EmployeeInfoTableProps> = ({ employee }) => {
     createData("Work In", employee.workIn),
     createData("Sponsor", employee.sponsor),
     createData("License", employee.licenseType),
+    createData(
+      "Agreement Expiration",
+      new Date(employee.agreementExpirationDate).toLocaleDateString("en-uk")
+    ),
   ];
   return (
     <Table aria-label="simple table">

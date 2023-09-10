@@ -1,10 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { CircularProgress } from "@mui/material";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import { CircularProgress, Box, Paper } from "@mui/material";
+import dayjs from "dayjs";
 import customFetch from "../utils/customFetch";
-import { EmployeeInfoTable, VacationsHistoryTable } from "../components";
+import {
+  EmployeeForm as EditEmployeeForm,
+  EmployeeInfoTable,
+  Modal,
+  VacationsHistoryTable,
+} from "../components";
 
 const EmployeeDetails: React.FC = () => {
   const { id } = useParams();
@@ -12,7 +16,9 @@ const EmployeeDetails: React.FC = () => {
     isFetching,
     isError,
     data: employee,
+    refetch,
   } = useQuery({
+    queryKey: ["employee"],
     queryFn: async () => {
       const { data } = await customFetch(`/employees/${id}`);
       return data.employee;
@@ -27,6 +33,21 @@ const EmployeeDetails: React.FC = () => {
       </section>
     );
   if (isError) return <div>err</div>;
+
+  const initialValues = {
+    idNumber: employee.idNumber,
+    idExpirationDate: dayjs(employee.idExpirationDate),
+    name: employee.name,
+    nationality: employee.nationality,
+    passportNumber: employee.passportNumber,
+    passportExpirationDate: dayjs(employee.passportExpirationDate),
+    sponsor: employee.sponsor,
+    workIn: employee.workIn,
+    agreementExpirationDate: dayjs(employee.agreementExpirationDate),
+    status: employee.status,
+    licenseExpirationDate: dayjs(employee.licenseExpirationDate),
+    licenseType: employee.licenseType,
+  };
 
   const vacations = [
     {
@@ -57,6 +78,16 @@ const EmployeeDetails: React.FC = () => {
       <Paper className="py-2">
         <h2 className="text-center text-2xl font-thin mb-4">Employee Info</h2>
         <EmployeeInfoTable employee={employee} />
+        <div className="flex justify-center mt-4">
+          <Modal>
+            <EditEmployeeForm
+              url={`/employees/${employee._id}`}
+              method="PATCH"
+              initialValues={initialValues}
+              successFn={refetch}
+            />
+          </Modal>
+        </div>
       </Paper>
       <Paper className="py-2">
         <h2 className="text-center text-2xl font-thin mb-4">
@@ -64,7 +95,6 @@ const EmployeeDetails: React.FC = () => {
         </h2>
         <VacationsHistoryTable vacations={vacations} />
       </Paper>
-      <div>Images</div>
     </section>
   );
 };

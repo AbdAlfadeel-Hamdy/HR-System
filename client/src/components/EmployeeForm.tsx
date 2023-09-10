@@ -13,8 +13,8 @@ import { useMutation } from "@tanstack/react-query";
 import { DatePicker } from "@mui/x-date-pickers";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import dayjs from "dayjs";
 import { ReactNode } from "react";
+import { Dayjs } from "dayjs";
 
 const validationSchema = yup.object({
   idNumber: yup.string().required("ID Number is required"),
@@ -46,28 +46,45 @@ const validationSchema = yup.object({
     .required("License Type is required"),
 });
 
-export const AddEmployeeForm = () => {
+interface AddEmployeeFormProps {
+  initialValues: {
+    idNumber: string;
+    idExpirationDate: Dayjs;
+    name: string;
+    nationality: string;
+    passportNumber: string;
+    passportExpirationDate: Dayjs;
+    sponsor: string;
+    workIn: string;
+    agreementExpirationDate: Dayjs;
+    status: "duty" | "vacation" | "cancelled";
+    licenseExpirationDate: Dayjs;
+    licenseType: "Car" | "Truck" | "Car&Truck";
+  };
+  method: "POST" | "PATCH";
+  url: string;
+  successFn?: () => void;
+}
+
+export const AddEmployeeForm: React.FC<AddEmployeeFormProps> = ({
+  initialValues,
+  method,
+  url,
+  successFn,
+}) => {
   const { mutateAsync } = useMutation({
+    mutationKey: ["employee"],
     mutationFn: async (employee: any) => {
-      await customFetch.post("/employees", employee);
+      await customFetch(url, {
+        method,
+        data: employee,
+      });
     },
+    onSuccess: successFn,
   });
 
   const formik = useFormik({
-    initialValues: {
-      idNumber: "",
-      idExpirationDate: dayjs(),
-      name: "",
-      nationality: "",
-      passportNumber: "",
-      passportExpirationDate: dayjs(),
-      sponsor: "",
-      workIn: "",
-      agreementExpirationDate: dayjs(),
-      status: "duty",
-      licenseExpirationDate: dayjs(),
-      licenseType: "Car",
-    },
+    initialValues,
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
@@ -75,7 +92,9 @@ export const AddEmployeeForm = () => {
           ...values,
           idNumber: +values.idNumber,
         });
-        toast.success("Created employee successfully.");
+        toast.success(
+          `${method === "POST" ? "Created" : "Updated"} employee successfully.`
+        );
         resetForm();
       } catch (err) {
         toast.error((err as any)?.response?.data?.message);
