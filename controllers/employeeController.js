@@ -23,7 +23,7 @@ export const createEmployee = async (req, res, next) => {
 };
 
 export const getEmployee = async (req, res, next) => {
-  const employee = await Employee.findById(req.params.id);
+  const employee = await Employee.findById(req.params.id).populate("vacations");
 
   res.status(StatusCodes.CREATED).json({ employee });
 };

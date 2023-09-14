@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 
 // Routers
 import employeeRouter from "./routes/employeeRouter.js";
+import vacationRouter from "./routes/vacationRouter.js";
 import authRouter from "./routes/authRouter.js";
 // Middlewares
 import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware.js";
@@ -23,6 +24,7 @@ app.use(cookieParser());
 
 // app.use("/api/v1/employees", authenticateUser, employeeRouter);
 app.use("/api/v1/employees", employeeRouter);
+app.use("/api/v1/vacations", vacationRouter);
 app.use("/api/v1/auth", authRouter);
 
 app.use("*", (req, res, next) => {

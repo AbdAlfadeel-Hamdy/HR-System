@@ -26,10 +26,8 @@ const employeeSchema = new Schema(
     },
     vacations: [
       {
-        leavingDate: Date,
-        expectedReturnDate: Date,
-        returnDate: Date,
-        period: Number,
+        type: Schema.ObjectId,
+        ref: "Vacation",
       },
     ],
     cancellationDate: Date,

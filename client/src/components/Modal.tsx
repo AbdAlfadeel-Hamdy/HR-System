@@ -3,13 +3,18 @@ import { Box, styled, Theme } from "@mui/system";
 import { Modal } from "@mui/base/Modal";
 import Fade from "@mui/material/Fade";
 import { Button } from "@mui/material";
-import { EditNote } from "@mui/icons-material";
 
 interface TransitionsModalProps {
   children: React.ReactNode;
+  btnIcon: React.ReactNode;
+  btnText: string;
 }
 
-const TransitionsModal: React.FC<TransitionsModalProps> = ({ children }) => {
+const TransitionsModal: React.FC<TransitionsModalProps> = ({
+  children,
+  btnIcon,
+  btnText,
+}) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -18,11 +23,11 @@ const TransitionsModal: React.FC<TransitionsModalProps> = ({ children }) => {
     <div>
       <Button
         variant="outlined"
-        startIcon={<EditNote />}
+        startIcon={btnIcon}
         color="inherit"
         onClick={handleOpen}
       >
-        EDIT
+        {btnText}
       </Button>
       <StyledModal
         aria-labelledby="transition-modal-title"

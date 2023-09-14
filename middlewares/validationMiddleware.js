@@ -96,3 +96,12 @@ export const validateUpdateUserInput = withValidationErrors([
         throw new BadRequestError("Email already exists.");
     }),
 ]);
+
+export const validateVacationInput = withValidationErrors([
+  body("idNumber").notEmpty().withMessage("ID number is required."),
+  body("employeeName").notEmpty().withMessage("Employee Name is required."),
+  body("leavingDate").notEmpty().withMessage("Leaving Date is required."),
+  body("expectedReturnDate")
+    .notEmpty()
+    .withMessage("Expected return date is required."),
+]);

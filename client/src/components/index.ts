@@ -1,6 +1,7 @@
 export { default as Sidebar } from "./Sidebar";
 export { default as LoginForm } from "./LoginForm";
 export { default as EmployeeForm } from "./EmployeeForm";
+export { default as VacationForm } from "./VacationForm";
 export { default as AddUserForm } from "./AddUserForm";
 export { default as StatusReport } from "./StatusReport";
 export { default as EmployeeInfoTable } from "./EmployeeInfoTable";

@@ -115,7 +115,7 @@ export const AddEmployeeForm: React.FC<AddEmployeeFormProps> = ({
           }}
         >
           <Typography component="h1" variant="h5">
-            Add Employee
+            {method === "POST" ? "Add" : "Update"} Employee
           </Typography>
           <Box
             component="form"

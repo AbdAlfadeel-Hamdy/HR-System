@@ -14,9 +14,9 @@ function createData(
 interface VacationsHistoryTableProps {
   vacations: {
     leavingDate: Date;
-    expectedReturn: Date;
+    expectedReturnDate: Date;
     period: number;
-    actualReturn: Date;
+    actualReturnDate: Date;
     actualPeriod: number;
   }[];
 }
@@ -27,9 +27,11 @@ const VacationsHistoryTable: React.FC<VacationsHistoryTableProps> = ({
   const rows = vacations.map((vacation) =>
     createData(
       new Date(vacation.leavingDate).toLocaleDateString("en-uk"),
-      new Date(vacation.expectedReturn).toLocaleDateString("en-uk"),
+      new Date(vacation.expectedReturnDate).toLocaleDateString("en-uk"),
       vacation.period,
-      new Date(vacation.actualReturn).toLocaleDateString("en-uk"),
+      vacation.actualReturnDate
+        ? new Date(vacation.actualReturnDate).toLocaleDateString("en-uk")
+        : "",
       vacation.actualPeriod
     )
   );
