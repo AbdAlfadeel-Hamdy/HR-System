@@ -1,9 +1,9 @@
 import dayjs from "dayjs";
-import { EmployeeForm as AddEmployeeForm } from "../components";
+import { EmployeeForm } from "../components";
 
 const AddEmployee = () => {
   return (
-    <AddEmployeeForm
+    <EmployeeForm
       url="/employees"
       method="POST"
       initialValues={{

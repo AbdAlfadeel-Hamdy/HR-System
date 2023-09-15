@@ -1,25 +1,14 @@
+import { ReactNode } from "react";
 import { useFormik } from "formik";
-import * as yup from "yup";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { Dayjs } from "dayjs";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { CssBaseline, Box, Typography, Container } from "@mui/material";
-import { toast } from "react-toastify";
-import customFetch from "../utils/customFetch";
-import { useMutation } from "@tanstack/react-query";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { ReactNode } from "react";
-import { Dayjs } from "dayjs";
-
-const validationSchema = yup.object({
-  leavingDate: yup
-    .date()
-    .required("Leaving Date is required")
-    .typeError("Invalid format"),
-  expectedReturnDate: yup
-    .date()
-    .required("Expected Return Date is required")
-    .typeError("Invalid format"),
-});
+import customFetch from "../utils/customFetch";
+import { vacationValidationSchema } from "../utils/validationSchemas";
 
 interface VacationFormProps {
   initialValues: {
@@ -52,7 +41,7 @@ export const VacationForm: React.FC<VacationFormProps> = ({
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
+    validationSchema: vacationValidationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
         await mutateAsync(values);

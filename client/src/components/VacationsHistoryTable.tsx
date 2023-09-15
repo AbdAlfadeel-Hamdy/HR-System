@@ -2,17 +2,9 @@ import * as React from "react";
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
 import { StyledTableCell, StyledTableRow } from ".";
 
-function createData(
-  leavingDate: string,
-  expectedReturn: string,
-  period: number,
-  actualReturn: string,
-  actualPeriod: number
-) {
-  return { leavingDate, expectedReturn, period, actualReturn, actualPeriod };
-}
 interface VacationsHistoryTableProps {
   vacations: {
+    _id: string;
     leavingDate: Date;
     expectedReturnDate: Date;
     period: number;
@@ -26,6 +18,7 @@ const VacationsHistoryTable: React.FC<VacationsHistoryTableProps> = ({
 }) => {
   const rows = vacations.map((vacation) =>
     createData(
+      vacation._id,
       new Date(vacation.leavingDate).toLocaleDateString("en-uk"),
       new Date(vacation.expectedReturnDate).toLocaleDateString("en-uk"),
       vacation.period,
@@ -44,11 +37,12 @@ const VacationsHistoryTable: React.FC<VacationsHistoryTableProps> = ({
           <StyledTableCell>Period</StyledTableCell>
           <StyledTableCell>Actual Return</StyledTableCell>
           <StyledTableCell>Actual Period</StyledTableCell>
+          <StyledTableCell></StyledTableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {rows.map((row) => (
-          <StyledTableRow key={row.leavingDate}>
+        {rows.reverse().map((row) => (
+          <StyledTableRow key={row._id}>
             <StyledTableCell component="th" scope="row">
               {row.leavingDate}
             </StyledTableCell>
@@ -56,6 +50,14 @@ const VacationsHistoryTable: React.FC<VacationsHistoryTableProps> = ({
             <StyledTableCell>{row.period}</StyledTableCell>
             <StyledTableCell>{row.actualReturn}</StyledTableCell>
             <StyledTableCell>{row.actualPeriod}</StyledTableCell>
+            <StyledTableCell>
+              {
+                <div className="flex gap-1">
+                  <button>edit</button>
+                  <button>complete</button>
+                </div>
+              }
+            </StyledTableCell>
           </StyledTableRow>
         ))}
       </TableBody>
@@ -64,3 +66,19 @@ const VacationsHistoryTable: React.FC<VacationsHistoryTableProps> = ({
 };
 
 export default VacationsHistoryTable;
+
+const createData = (
+  _id: string,
+  leavingDate: string,
+  expectedReturn: string,
+  period: number,
+  actualReturn: string,
+  actualPeriod: number
+) => ({
+  _id,
+  leavingDate,
+  expectedReturn,
+  period,
+  actualReturn,
+  actualPeriod,
+});

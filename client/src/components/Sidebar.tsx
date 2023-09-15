@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 import { Card, Typography, List } from "@material-tailwind/react";
 import {
   DocumentDuplicateIcon,
@@ -10,9 +13,6 @@ import { ChevronRightIcon, PowerIcon } from "@heroicons/react/24/outline";
 import SidebarListItem from "./SidebarListItem";
 import SidebarAccordion from "./SidebarAccordion";
 import customFetch from "../utils/customFetch";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
 
 export default function SidebarWithContentSeparator({ user }: { user: any }) {
   const navigate = useNavigate();

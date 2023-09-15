@@ -2,8 +2,8 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
-import { Sidebar } from "../components";
 import customFetch from "../utils/customFetch";
+import { Sidebar } from "../components";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();

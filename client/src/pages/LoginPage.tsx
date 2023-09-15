@@ -4,6 +4,7 @@ import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
 import customFetch from "../utils/customFetch";
 import { LoginForm } from "../components";
+
 const LoginPage = () => {
   const navigate = useNavigate();
 
@@ -16,6 +17,7 @@ const LoginPage = () => {
     retry: false,
     refetchOnMount: true,
   });
+
   if (isFetching)
     return (
       <section className="grid place-content-center h-screen">

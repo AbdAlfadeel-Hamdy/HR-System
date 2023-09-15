@@ -1,29 +1,16 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
-import LoadingButton from "@mui/lab/LoadingButton";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { toast } from "react-toastify";
-import customFetch from "../utils/customFetch";
 import { useMutation } from "@tanstack/react-query";
-
-const validationSchema = yup.object({
-  name: yup.string().required("Name is required"),
-  email: yup
-    .string()
-    .email("Invalid email format")
-    .required("Name is required"),
-  password: yup
-    .string()
-    .min(8, "Password should be at least 8 characters")
-    .required("Password is required"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password")], "Passwords do not match"),
-});
+import { toast } from "react-toastify";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {
+  CssBaseline,
+  TextField,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+import customFetch from "../utils/customFetch";
+import { userValidationSchema } from "../utils/validationSchemas";
 
 export const AddUserForm = () => {
   const { mutateAsync } = useMutation({
@@ -39,7 +26,7 @@ export const AddUserForm = () => {
       password: "",
       confirmPassword: "",
     },
-    validationSchema,
+    validationSchema: userValidationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
         await mutateAsync(values);

@@ -1,27 +1,18 @@
 import { useFormik } from "formik";
-import * as yup from "yup";
-import Avatar from "@mui/material/Avatar";
-import LoadingButton from "@mui/lab/LoadingButton";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { toast } from "react-toastify";
-import customFetch from "../utils/customFetch";
 import { useNavigate } from "react-router-dom";
-
-const validationSchema = yup.object({
-  email: yup
-    .string()
-    .email("Enter a valid email")
-    .required("Email is required"),
-  password: yup
-    .string()
-    .min(8, "Password should be of minimum 8 characters length")
-    .required("Password is required"),
-});
+import { toast } from "react-toastify";
+import {
+  Avatar,
+  CssBaseline,
+  TextField,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import customFetch from "../utils/customFetch";
+import { loginValidationSchema } from "../utils/validationSchemas";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -30,7 +21,7 @@ const LoginForm: React.FC = () => {
       email: "",
       password: "",
     },
-    validationSchema: validationSchema,
+    validationSchema: loginValidationSchema,
     onSubmit: async (values, { resetForm }) => {
       const { email, password } = values;
       try {

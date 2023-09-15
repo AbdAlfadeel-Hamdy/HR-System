@@ -1,4 +1,5 @@
 import { StatusCodes } from "http-status-codes";
+import dayjs from "dayjs";
 import Employee from "../models/EmployeeModel.js";
 import APIFeatures from "../utils/apiFeatures.js";
 
@@ -24,6 +25,7 @@ export const createEmployee = async (req, res, next) => {
 
 export const getEmployee = async (req, res, next) => {
   const employee = await Employee.findById(req.params.id).populate("vacations");
+  console.log(employee);
 
   res.status(StatusCodes.CREATED).json({ employee });
 };

@@ -1,72 +1,30 @@
-import { useFormik } from "formik";
-import * as yup from "yup";
-import LoadingButton from "@mui/lab/LoadingButton";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { toast } from "react-toastify";
-import customFetch from "../utils/customFetch";
-import { useMutation } from "@tanstack/react-query";
-import { DatePicker } from "@mui/x-date-pickers";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ReactNode } from "react";
-import { Dayjs } from "dayjs";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import LoadingButton from "@mui/lab/LoadingButton";
+import {
+  CssBaseline,
+  TextField,
+  MenuItem,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import customFetch from "../utils/customFetch";
+import { employeeValidationSchema } from "../utils/validationSchemas";
+import { Employee } from "../utils/interfaces";
 
-const validationSchema = yup.object({
-  idNumber: yup.string().required("ID Number is required"),
-  idExpirationDate: yup
-    .date()
-    .required("ID Expiration Date is required")
-    .typeError("Invalid format"),
-  name: yup.string().required("Name is required"),
-  nationality: yup.string().required("Nationality is required"),
-  passportNumber: yup.string().required("Passport Number is required"),
-  passportExpirationDate: yup
-    .date()
-    .required("Expiration Date is required")
-    .typeError("Invalid date format"),
-  sponsor: yup.string().required("Sponsor is required"),
-  workIn: yup.string().required("Work In is required"),
-  agreementExpirationDate: yup
-    .date()
-    .required("Expiration Date is required")
-    .typeError("Invalid format"),
-  status: yup
-    .string()
-    .oneOf(["duty", "vacation", "cancelled"])
-    .required("Status is required"),
-  licenseExpirationDate: yup.date().required("Expiration Date is required"),
-  licenseType: yup
-    .string()
-    .oneOf(["Car", "Truck", "Car&Truck"])
-    .required("License Type is required"),
-});
-
-interface AddEmployeeFormProps {
-  initialValues: {
-    idNumber: string;
-    idExpirationDate: Dayjs;
-    name: string;
-    nationality: string;
-    passportNumber: string;
-    passportExpirationDate: Dayjs;
-    sponsor: string;
-    workIn: string;
-    agreementExpirationDate: Dayjs;
-    status: "duty" | "vacation" | "cancelled";
-    licenseExpirationDate: Dayjs;
-    licenseType: "Car" | "Truck" | "Car&Truck";
-  };
+interface EmployeeFormProps {
+  initialValues: Employee;
   method: "POST" | "PATCH";
   url: string;
   successFn?: () => void;
 }
 
-export const AddEmployeeForm: React.FC<AddEmployeeFormProps> = ({
+export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   initialValues,
   method,
   url,
@@ -85,7 +43,7 @@ export const AddEmployeeForm: React.FC<AddEmployeeFormProps> = ({
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
+    validationSchema: employeeValidationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
         await mutateAsync({
@@ -378,4 +336,4 @@ export const AddEmployeeForm: React.FC<AddEmployeeFormProps> = ({
   );
 };
 
-export default AddEmployeeForm;
+export default EmployeeForm;

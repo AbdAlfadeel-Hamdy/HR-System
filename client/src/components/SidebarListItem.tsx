@@ -1,6 +1,6 @@
-import { ListItem, ListItemPrefix } from "@material-tailwind/react";
 import { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
+import { ListItem, ListItemPrefix } from "@material-tailwind/react";
 
 interface SidebarListItemProps {
   title: string;
