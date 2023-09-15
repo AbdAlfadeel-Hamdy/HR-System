@@ -25,13 +25,10 @@ export const createEmployee = async (req, res, next) => {
 
 export const getEmployee = async (req, res, next) => {
   const employee = await Employee.findById(req.params.id).populate("vacations");
-  console.log(employee);
-
   res.status(StatusCodes.CREATED).json({ employee });
 };
 
 export const updateEmployee = async (req, res, next) => {
-  console.log(req.params.id);
   const updatedEmployee = await Employee.findByIdAndUpdate(
     req.params.id,
     req.body,

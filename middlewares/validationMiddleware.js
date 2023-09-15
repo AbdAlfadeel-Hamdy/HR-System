@@ -105,3 +105,9 @@ export const validateVacationInput = withValidationErrors([
     .notEmpty()
     .withMessage("Expected return date is required."),
 ]);
+export const validateVacationUpdateInput = withValidationErrors([
+  body("leavingDate").notEmpty().withMessage("Leaving Date is required."),
+  body("expectedReturnDate")
+    .notEmpty()
+    .withMessage("Expected return date is required."),
+]);

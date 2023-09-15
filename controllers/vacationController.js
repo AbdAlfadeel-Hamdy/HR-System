@@ -10,7 +10,7 @@ export const getAllVacations = async (req, res, next) => {
 export const createVacation = async (req, res, next) => {
   const createdVacation = await Vacation.create(req.body);
 
-  res.status(StatusCodes.CREATED).json({ Vacation: createdVacation });
+  res.status(StatusCodes.CREATED).json({ vacation: createdVacation });
 };
 
 export const getVacation = async (req, res, next) => {
@@ -20,7 +20,7 @@ export const getVacation = async (req, res, next) => {
 };
 
 export const updateVacation = async (req, res, next) => {
-  const updatedVacation = await Employee.findByIdAndUpdate(
+  const updatedVacation = await Vacation.findByIdAndUpdate(
     req.params.id,
     req.body,
     {

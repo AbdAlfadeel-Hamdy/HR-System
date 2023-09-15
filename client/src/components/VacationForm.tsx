@@ -12,13 +12,15 @@ import { vacationValidationSchema } from "../utils/validationSchemas";
 
 interface VacationFormProps {
   initialValues: {
-    idNumber: number;
-    employeeName: string;
+    idNumber?: number;
+    employeeName?: string;
     leavingDate: Dayjs;
     expectedReturnDate: Dayjs;
   };
   method: "POST" | "PATCH";
   url: string;
+  successMsg: string;
+  formTitle: string;
   successFn?: () => void;
 }
 
@@ -27,7 +29,10 @@ export const VacationForm: React.FC<VacationFormProps> = ({
   method,
   url,
   successFn,
+  successMsg,
+  formTitle,
 }) => {
+  console.log(initialValues);
   const { mutateAsync } = useMutation({
     mutationKey: ["employee"],
     mutationFn: async (employee: any) => {
@@ -45,9 +50,7 @@ export const VacationForm: React.FC<VacationFormProps> = ({
     onSubmit: async (values, { resetForm }) => {
       try {
         await mutateAsync(values);
-        toast.success(
-          `${method === "POST" ? "Created" : "Updated"} vacation  successfully.`
-        );
+        toast.success(successMsg);
         resetForm();
       } catch (err) {
         toast.error((err as any)?.response?.data?.message);
@@ -68,7 +71,7 @@ export const VacationForm: React.FC<VacationFormProps> = ({
           }}
         >
           <Typography component="h1" variant="h5">
-            {method === "POST" ? "Add" : "Update"} Vacation
+            {formTitle}
           </Typography>
           <Box
             component="form"
@@ -109,7 +112,7 @@ export const VacationForm: React.FC<VacationFormProps> = ({
             <DatePicker
               label="Expected Return Date"
               format="DD/MM/YYYY"
-              value={formik.values.leavingDate}
+              value={formik.values.expectedReturnDate}
               onChange={(value) => {
                 formik.setFieldValue("expectedReturnDate", value, true);
               }}

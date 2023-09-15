@@ -25,6 +25,7 @@ vacationSchema.virtual("period").get(function () {
 });
 
 vacationSchema.pre("save", async function () {
+  console.log("a7a");
   await Employee.updateOne(
     { idNumber: this.idNumber },
     {
