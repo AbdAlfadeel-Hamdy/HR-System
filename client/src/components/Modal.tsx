@@ -6,7 +6,7 @@ import { Button } from "@mui/material";
 
 interface TransitionsModalProps {
   children: React.ReactNode;
-  btnIcon: React.ReactNode;
+  btnIcon?: React.ReactNode;
   btnText: string;
 }
 

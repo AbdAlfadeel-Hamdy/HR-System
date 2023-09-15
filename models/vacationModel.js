@@ -23,9 +23,12 @@ const vacationSchema = new Schema(
 vacationSchema.virtual("period").get(function () {
   return dayjs(this.expectedReturnDate).diff(this.leavingDate, "day");
 });
+vacationSchema.virtual("actualPeriod").get(function () {
+  if (!this.actualReturnDate) return;
+  return dayjs(this.actualReturnDate).diff(this.leavingDate, "day");
+});
 
 vacationSchema.pre("save", async function () {
-  console.log("a7a");
   await Employee.updateOne(
     { idNumber: this.idNumber },
     {

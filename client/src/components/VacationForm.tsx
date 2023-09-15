@@ -14,8 +14,9 @@ interface VacationFormProps {
   initialValues: {
     idNumber?: number;
     employeeName?: string;
-    leavingDate: Dayjs;
-    expectedReturnDate: Dayjs;
+    leavingDate?: Dayjs;
+    expectedReturnDate?: Dayjs;
+    actualReturnDate?: Dayjs;
   };
   method: "POST" | "PATCH";
   url: string;
@@ -32,7 +33,6 @@ export const VacationForm: React.FC<VacationFormProps> = ({
   successMsg,
   formTitle,
 }) => {
-  console.log(initialValues);
   const { mutateAsync } = useMutation({
     mutationKey: ["employee"],
     mutationFn: async (employee: any) => {
@@ -44,9 +44,13 @@ export const VacationForm: React.FC<VacationFormProps> = ({
     onSuccess: successFn,
   });
 
+  console.log(initialValues);
+
   const formik = useFormik({
     initialValues,
-    validationSchema: vacationValidationSchema,
+    validationSchema: initialValues.leavingDate
+      ? vacationValidationSchema
+      : null,
     onSubmit: async (values, { resetForm }) => {
       try {
         await mutateAsync(values);
@@ -88,53 +92,81 @@ export const VacationForm: React.FC<VacationFormProps> = ({
               rowGap: 0,
             }}
           >
-            <DatePicker
-              label="Leaving Date"
-              format="DD/MM/YYYY"
-              value={formik.values.leavingDate}
-              onChange={(value) => {
-                formik.setFieldValue("leavingDate", value, true);
-              }}
-              slotProps={{
-                textField: {
-                  margin: "normal",
-                  variant: "outlined",
-                  onBlur: () => formik.setFieldTouched("leavingDate", true),
-                  error:
-                    formik.touched.leavingDate &&
-                    Boolean(formik.errors.leavingDate),
-                  helperText:
-                    formik.touched.leavingDate &&
-                    (formik.errors.leavingDate as ReactNode),
-                },
-              }}
-            />
-            <DatePicker
-              label="Expected Return Date"
-              format="DD/MM/YYYY"
-              value={formik.values.expectedReturnDate}
-              onChange={(value) => {
-                formik.setFieldValue("expectedReturnDate", value, true);
-              }}
-              slotProps={{
-                textField: {
-                  margin: "normal",
-                  variant: "outlined",
-                  onBlur: () =>
-                    formik.setFieldTouched("expectedReturnDate", true),
-                  error:
-                    formik.touched.expectedReturnDate &&
-                    Boolean(formik.errors.expectedReturnDate),
-                  helperText:
-                    formik.touched.expectedReturnDate &&
-                    (formik.errors.expectedReturnDate as ReactNode),
-                },
-              }}
-            />
+            {initialValues.leavingDate && (
+              <DatePicker
+                label="Leaving Date"
+                format="DD/MM/YYYY"
+                value={formik.values.leavingDate}
+                onChange={(value) => {
+                  formik.setFieldValue("leavingDate", value, true);
+                }}
+                slotProps={{
+                  textField: {
+                    margin: "normal",
+                    variant: "outlined",
+                    onBlur: () => formik.setFieldTouched("leavingDate", true),
+                    error:
+                      formik.touched.leavingDate &&
+                      Boolean(formik.errors.leavingDate),
+                    helperText:
+                      formik.touched.leavingDate &&
+                      (formik.errors.leavingDate as ReactNode),
+                  },
+                }}
+              />
+            )}
+            {initialValues.expectedReturnDate && (
+              <DatePicker
+                label="Expected Return Date"
+                format="DD/MM/YYYY"
+                value={formik.values.expectedReturnDate}
+                onChange={(value) => {
+                  formik.setFieldValue("expectedReturnDate", value, true);
+                }}
+                slotProps={{
+                  textField: {
+                    margin: "normal",
+                    variant: "outlined",
+                    onBlur: () =>
+                      formik.setFieldTouched("expectedReturnDate", true),
+                    error:
+                      formik.touched.expectedReturnDate &&
+                      Boolean(formik.errors.expectedReturnDate),
+                    helperText:
+                      formik.touched.expectedReturnDate &&
+                      (formik.errors.expectedReturnDate as ReactNode),
+                  },
+                }}
+              />
+            )}
+            {initialValues.actualReturnDate && (
+              <DatePicker
+                label="Actual Return Date"
+                format="DD/MM/YYYY"
+                value={formik.values.actualReturnDate}
+                onChange={(value) => {
+                  formik.setFieldValue("actualReturnDate", value, true);
+                }}
+                slotProps={{
+                  textField: {
+                    margin: "normal",
+                    variant: "outlined",
+                    onBlur: () =>
+                      formik.setFieldTouched("actualReturnDate", true),
+                    error:
+                      formik.touched.actualReturnDate &&
+                      Boolean(formik.errors.actualReturnDate),
+                    helperText:
+                      formik.touched.actualReturnDate &&
+                      (formik.errors.actualReturnDate as ReactNode),
+                  },
+                }}
+              />
+            )}
             <LoadingButton
               type="submit"
-              fullWidth
               variant="contained"
+              fullWidth
               sx={{ mt: 3, mb: 2 }}
               disabled={formik.isSubmitting}
               loading={formik.isSubmitting}

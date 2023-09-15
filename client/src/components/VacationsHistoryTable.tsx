@@ -3,7 +3,6 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
-import { AddOutlined } from "@mui/icons-material";
 import { StyledTableCell, StyledTableRow, VacationForm, Modal } from ".";
 
 interface VacationsHistoryTableProps {
@@ -48,29 +47,62 @@ const VacationsHistoryTable: React.FC<VacationsHistoryTableProps> = ({
         </TableRow>
       </TableHead>
       <TableBody>
-        {rows.reverse().map((row) => (
+        {rows.reverse().map((row, index) => (
           <StyledTableRow key={row._id}>
             <StyledTableCell component="th" scope="row">
               {row.leavingDate.toString()}
             </StyledTableCell>
-            <StyledTableCell>{row.expectedReturn}</StyledTableCell>
+            <StyledTableCell>{row.expectedReturnDate}</StyledTableCell>
             <StyledTableCell>{row.period}</StyledTableCell>
-            <StyledTableCell>{row.actualReturn}</StyledTableCell>
+            <StyledTableCell>{row.actualReturnDate}</StyledTableCell>
             <StyledTableCell>{row.actualPeriod}</StyledTableCell>
             <StyledTableCell>
-              <Modal btnIcon={<AddOutlined />} btnText="edit">
-                <VacationForm
-                  url={`/vacations/${row._id}`}
-                  method="PATCH"
-                  initialValues={{
-                    leavingDate: dayjs(row.leavingDate, "DD-MM-YYYY"),
-                    expectedReturnDate: dayjs(row.expectedReturn, "DD-MM-YYYY"),
-                  }}
-                  successFn={successFn}
-                  successMsg="Updated vacation Successfully"
-                  formTitle="Update Vacation"
-                />
-              </Modal>
+              <div className="flex gap-1">
+                <Modal btnText="edit">
+                  <VacationForm
+                    url={`/vacations/${row._id}`}
+                    method="PATCH"
+                    initialValues={
+                      row.actualReturnDate
+                        ? {
+                            leavingDate: dayjs(row.leavingDate, "DD-MM-YYYY"),
+                            expectedReturnDate: dayjs(
+                              row.expectedReturnDate,
+                              "DD-MM-YYYY"
+                            ),
+                            actualReturnDate: dayjs(
+                              row.actualReturnDate,
+                              "DD-MM-YYYY"
+                            ),
+                          }
+                        : {
+                            leavingDate: dayjs(row.leavingDate, "DD-MM-YYYY"),
+                            expectedReturnDate: dayjs(
+                              row.expectedReturnDate,
+                              "DD-MM-YYYY"
+                            ),
+                          }
+                    }
+                    successFn={successFn}
+                    successMsg="Updated vacation Successfully"
+                    formTitle="Update Vacation"
+                  />
+                </Modal>
+                {!index && !row.actualReturnDate && (
+                  <Modal btnText="complete">
+                    <VacationForm
+                      url={`/vacations/${row._id}`}
+                      method="PATCH"
+                      initialValues={{
+                        actualReturnDate: dayjs(),
+                      }}
+                      successFn={successFn}
+                      successMsg="Completed vacation Successfully"
+                      formTitle="Complete Vacation"
+                    />
+                  </Modal>
+                )}
+              </div>
             </StyledTableCell>
           </StyledTableRow>
         ))}
@@ -84,15 +116,15 @@ export default VacationsHistoryTable;
 const createData = (
   _id: string,
   leavingDate: string,
-  expectedReturn: string,
+  expectedReturnDate: string,
   period: number,
-  actualReturn: string,
+  actualReturnDate: string,
   actualPeriod: number
 ) => ({
   _id,
   leavingDate,
-  expectedReturn,
+  expectedReturnDate,
   period,
-  actualReturn,
+  actualReturnDate,
   actualPeriod,
 });

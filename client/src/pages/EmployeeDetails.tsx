@@ -60,7 +60,7 @@ const EmployeeDetails: React.FC = () => {
           </Modal>
         </div>
       </Paper>
-      <Paper className="py-2 max-h-screen overflow-y-scroll">
+      <Paper className="py-2 ">
         <h2 className="text-center text-2xl font-thin mb-4">
           Vacations History
         </h2>

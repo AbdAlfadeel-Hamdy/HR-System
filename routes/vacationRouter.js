@@ -6,10 +6,7 @@ import {
   updateVacation,
   deleteVacation,
 } from "../controllers/vacationController.js";
-import {
-  validateVacationInput,
-  validateVacationUpdateInput,
-} from "../middlewares/validationMiddleware.js";
+import { validateVacationInput } from "../middlewares/validationMiddleware.js";
 
 const router = Router();
 
@@ -21,7 +18,7 @@ router
 router
   .route("/:id")
   .get(getVacation)
-  .patch(validateVacationUpdateInput, updateVacation)
+  .patch(updateVacation)
   .delete(deleteVacation);
 
 export default router;
