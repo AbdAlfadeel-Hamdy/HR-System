@@ -45,7 +45,7 @@ export const SponsorForm: React.FC<SponsorFormProps> = ({
         noValidate
         sx={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr 0.5fr",
+          gridTemplateColumns: "3fr 2fr 2fr",
           alignItems: "center",
           columnGap: 3,
           rowGap: 0,

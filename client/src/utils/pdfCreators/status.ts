@@ -25,7 +25,7 @@ export const downloadStatusPDF = (title: string, columns: any[], data: any) => {
           "en-uk"
         ),
         sponsor: row.sponsor,
-        note: row.note,
+        // note: row.note,
       })),
       foot: [[`Total: ${company.documents.length}`]],
       showFoot: "lastPage",
@@ -46,13 +46,13 @@ export const downloadStatusPDF = (title: string, columns: any[], data: any) => {
 export const statusColumns: ColumnData[] = [
   {
     width: 200,
-    label: "ID",
-    dataKey: "idNumber",
+    label: "Name",
+    dataKey: "name",
   },
   {
     width: 200,
-    label: "Name",
-    dataKey: "name",
+    label: "ID",
+    dataKey: "idNumber",
   },
 
   {
@@ -71,9 +71,9 @@ export const statusColumns: ColumnData[] = [
     dataKey: "workIn",
   },
 
-  {
-    width: 200,
-    label: "Note",
-    dataKey: "note",
-  },
+  // {
+  //   width: 200,
+  //   label: "Note",
+  //   dataKey: "note",
+  // },
 ];
