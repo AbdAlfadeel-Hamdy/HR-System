@@ -1,87 +1,10 @@
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import dayjs from "dayjs";
-import ReactVirtualizedTable, { ColumnData } from "../components/Table";
+import ReactVirtualizedTable from "../components/Table";
+import { CircularProgress, Alert } from "@mui/material";
+import { SectionFeedback } from ".";
 import customFetch from "../utils/customFetch";
-
-// PDF Creator
-import jsPDF from "jspdf";
-import "jspdf-autotable";
-import autoTable from "jspdf-autotable";
-
-const downloadPDF = (title: string, columns: any[], data: any) => {
-  const doc = new jsPDF();
-  doc.text(title, 15, 10);
-  data.forEach((company: any) => {
-    autoTable(doc, {
-      head: [[company._id]],
-    });
-    autoTable(doc, {
-      columns: columns
-        .filter((col: any) => col.dataKey !== "workIn")
-        .map((col) => ({
-          dataKey: col.dataKey,
-          header: col.label,
-        })),
-      body: company.documents.map((row: any) => ({
-        idNumber: row.idNumber,
-        name: row.name,
-        idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
-          "en-uk"
-        ),
-        sponsor: row.sponsor,
-        note: row.note,
-      })),
-      foot: [[`Total: ${company.documents.length}`]],
-      showFoot: "lastPage",
-    });
-  });
-  autoTable(doc, {
-    foot: [
-      [
-        dayjs(new Date().toString()).format("dddd"),
-        dayjs(new Date().toString()).format("DD/MM/YYYY"),
-      ],
-    ],
-  });
-
-  doc.save(`${title}.pdf`);
-};
-
-const columns: ColumnData[] = [
-  {
-    width: 200,
-    label: "ID",
-    dataKey: "idNumber",
-  },
-  {
-    width: 200,
-    label: "Name",
-    dataKey: "name",
-  },
-
-  {
-    width: 200,
-    label: "ID Expiration",
-    dataKey: "idExpirationDate",
-  },
-  {
-    width: 200,
-    label: "Sponsor",
-    dataKey: "sponsor",
-  },
-  {
-    width: 200,
-    label: "Work In",
-    dataKey: "workIn",
-  },
-
-  {
-    width: 200,
-    label: "Note",
-    dataKey: "note",
-  },
-];
+import { downloadStatusPDF, statusColumns } from "../utils/pdfCreators/status";
 
 interface StatusReportProps {
   status: string;
@@ -98,11 +21,21 @@ const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
       });
       return data;
     },
-    staleTime: 1000 * 60 * 3,
+    staleTime: 1000 * 60 * 5,
   });
 
-  if (isFetching) return <div>Loading</div>;
-  if (error) return <div>Error</div>;
+  if (isFetching)
+    return (
+      <SectionFeedback>
+        <CircularProgress />
+      </SectionFeedback>
+    );
+  if (error)
+    return (
+      <SectionFeedback>
+        <Alert severity="error">{(error as any).response.data.message}</Alert>
+      </SectionFeedback>
+    );
 
   const modifiedData = data.employees
     .flatMap((company: any) => company.documents)
@@ -122,10 +55,12 @@ const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
           ...row,
           name: <NavLink to={row._id}>{row.name}</NavLink>,
         }))}
-        columns={columns}
+        columns={statusColumns}
       />
       <button
-        onClick={() => downloadPDF(`${status} Report`, columns, data.employees)}
+        onClick={() =>
+          downloadStatusPDF(`${status} Report`, statusColumns, data.employees)
+        }
       >
         Download
       </button>

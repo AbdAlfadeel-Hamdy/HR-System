@@ -1,52 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
+import { Alert, CircularProgress } from "@mui/material";
 import customFetch from "../utils/customFetch";
-import ReactVirtualizedTable, { ColumnData } from "../components/Table";
-
-// PDF Creator
-import jsPDF from "jspdf";
-import "jspdf-autotable";
-import autoTable from "jspdf-autotable";
-import { LoadingSection } from "../components";
-
-const downloadPDF = (title: string, columns: any[], data: any) => {
-  const doc = new jsPDF();
-  doc.text(title, 15, 10);
-  autoTable(doc, {
-    columns: columns.map((col) => ({
-      dataKey: col.dataKey,
-      header: col.label,
-    })),
-    body: data,
-    foot: [
-      [
-        dayjs(new Date().toString()).format("dddd"),
-        dayjs(new Date().toString()).format("DD/MM/YYYY"),
-        `Total: ${data.length}`,
-      ],
-    ],
-    showFoot: "lastPage",
-  });
-  doc.save(`${title}.pdf`);
-};
-
-const columns: ColumnData[] = [
-  {
-    width: 200,
-    label: "User Name",
-    dataKey: "userName",
-  },
-  {
-    width: 200,
-    label: "Activity",
-    dataKey: "activity",
-  },
-  {
-    width: 200,
-    label: "Time Stamp",
-    dataKey: "timeStamp",
-  },
-];
+import {
+  activityLogColumns,
+  downloadActivityLogPDF,
+} from "../utils/pdfCreators/activityLog";
+import ReactVirtualizedTable from "../components/Table";
+import { SectionFeedback } from "../components";
 
 const ActivityLogReport = () => {
   const { isFetching, data, error } = useQuery({
@@ -58,8 +19,18 @@ const ActivityLogReport = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isFetching) return <LoadingSection />;
-  if (error) return <div>Error</div>;
+  if (isFetching)
+    return (
+      <SectionFeedback>
+        <CircularProgress />
+      </SectionFeedback>
+    );
+  if (error)
+    return (
+      <SectionFeedback>
+        <Alert severity="error">{(error as any).response.data.message}</Alert>
+      </SectionFeedback>
+    );
 
   const modifiedData = data.activities.map((row: any) => {
     return {
@@ -72,9 +43,15 @@ const ActivityLogReport = () => {
 
   return (
     <>
-      <ReactVirtualizedTable rows={modifiedData} columns={columns} />
+      <ReactVirtualizedTable rows={modifiedData} columns={activityLogColumns} />
       <button
-        onClick={() => downloadPDF("Activity Report", columns, modifiedData)}
+        onClick={() =>
+          downloadActivityLogPDF(
+            "Activity Report",
+            activityLogColumns,
+            modifiedData
+          )
+        }
       >
         Download
       </button>

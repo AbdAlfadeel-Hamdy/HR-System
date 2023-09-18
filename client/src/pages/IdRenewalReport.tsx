@@ -1,9 +1,9 @@
 import { NavLink } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
-import { Alert } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import ReactVirtualizedTable from "../components/Table";
-import { LoadingSection, IdRenewalForm } from "../components";
+import { SectionFeedback, IdRenewalForm } from "../components";
 import {
   downloadRenewalIdPDF,
   idRenewalColumns,
@@ -21,7 +21,12 @@ const IdRenewalReport = () => {
 
   let content;
 
-  if (isLoading) content = <LoadingSection />;
+  if (isLoading)
+    content = (
+      <SectionFeedback>
+        <CircularProgress />
+      </SectionFeedback>
+    );
   else if (error)
     content = (
       <Alert severity="error" className="mx-8 mt-4">

@@ -1,95 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import dayjs from "dayjs";
+import { CircularProgress, Alert } from "@mui/material";
 import customFetch from "../utils/customFetch";
-import ReactVirtualizedTable, { ColumnData } from "../components/Table";
-
-// PDF Creator
-import jsPDF from "jspdf";
-import "jspdf-autotable";
-import autoTable from "jspdf-autotable";
-
-const downloadPDF = (title: string, columns: any[], data: any) => {
-  const doc = new jsPDF();
-  doc.text(title, 15, 10);
-  data.forEach((company: any) => {
-    autoTable(doc, {
-      head: [[company._id]],
-    });
-    autoTable(doc, {
-      columns: columns
-        .filter((col: any) => col.dataKey !== "workIn")
-        .map((col) => ({
-          dataKey: col.dataKey,
-          header: col.label,
-        })),
-      body: company.documents.map((row: any) => ({
-        name: row.name,
-        idNumber: row.idNumber,
-        sponsor: row.sponsor,
-        status: row.status,
-        idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
-          "en-uk"
-        ),
-        passportExpirationDate: new Date(
-          row.passportExpirationDate
-        ).toLocaleDateString("en-uk"),
-      })),
-      foot: [[`Total: ${company.documents.length}`]],
-      showFoot: "lastPage",
-    });
-  });
-  autoTable(doc, {
-    foot: [
-      [
-        dayjs(new Date().toString()).format("dddd"),
-        dayjs(new Date().toString()).format("DD/MM/YYYY"),
-      ],
-    ],
-  });
-
-  doc.save(`${title}.pdf`);
-};
-
-const columns: ColumnData[] = [
-  {
-    width: 200,
-    label: "Name",
-    dataKey: "name",
-  },
-
-  {
-    width: 200,
-    label: "ID",
-    dataKey: "idNumber",
-  },
-  {
-    width: 200,
-    label: "ID Expiration",
-    dataKey: "idExpirationDate",
-  },
-  {
-    width: 200,
-    label: "Passport Expiration",
-    dataKey: "passportExpirationDate",
-  },
-  {
-    width: 200,
-    label: "Sponsor",
-    dataKey: "sponsor",
-  },
-  {
-    width: 200,
-    label: "Work In",
-    dataKey: "workIn",
-  },
-
-  {
-    width: 200,
-    label: "Status",
-    dataKey: "status",
-  },
-];
+import ReactVirtualizedTable from "../components/Table";
+import { SectionFeedback } from "../components";
+import {
+  downloadExpiredIdPDF,
+  expiredIdColumns,
+} from "../utils/pdfCreators/expiredId";
 
 const ExpiredIdReport = () => {
   const { isFetching, data, error } = useQuery({
@@ -101,8 +19,18 @@ const ExpiredIdReport = () => {
     staleTime: 1000 * 60 * 3,
   });
 
-  if (isFetching) return <div>Loading</div>;
-  if (error) return <div>Error</div>;
+  if (isFetching)
+    return (
+      <SectionFeedback>
+        <CircularProgress />
+      </SectionFeedback>
+    );
+  if (error)
+    return (
+      <SectionFeedback>
+        <Alert severity="error">{(error as any).response.data.message}</Alert>
+      </SectionFeedback>
+    );
 
   const modifiedData = data.employees
     .flatMap((company: any) => company.documents)
@@ -129,11 +57,15 @@ const ExpiredIdReport = () => {
               ? "\uD83D\uDFE2 Duty"
               : "\uD83D\uDFE1 Vacation",
         }))}
-        columns={columns}
+        columns={expiredIdColumns}
       />
       <button
         onClick={() =>
-          downloadPDF("Expired ID Report", columns, data.employees)
+          downloadExpiredIdPDF(
+            "Expired ID Report",
+            expiredIdColumns,
+            data.employees
+          )
         }
       >
         Download

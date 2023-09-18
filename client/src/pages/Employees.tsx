@@ -1,11 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import customFetch from "../utils/customFetch";
-import ReactVirtualizedTable from "../components/Table";
-import BasicPagination from "../components/Pagination";
-import { NavLink } from "react-router-dom";
-import { ColumnData } from "../components/Table";
 import { useEffect, useState } from "react";
-import { LoadingSection } from "../components";
+import { NavLink } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { CircularProgress,Alert } from "@mui/material";
+import customFetch from "../utils/customFetch";
+import ReactVirtualizedTable, { ColumnData } from "../components/Table";
+import BasicPagination from "../components/Pagination";
+import { SectionFeedback } from "../components";
 
 const columns: ColumnData[] = [
   {
@@ -92,8 +92,18 @@ const Employees = () => {
     return () => clearTimeout(timer);
   }, [idNumber, refetch]);
 
-  if (isFetching) return <LoadingSection />;
-  if (error) return <div>Error</div>;
+  if (isFetching)
+  return (
+    <SectionFeedback>
+      <CircularProgress />
+    </SectionFeedback>
+  );
+if (error)
+  return (
+    <SectionFeedback>
+      <Alert severity="error">{(error as any).response.data.message}</Alert>
+    </SectionFeedback>
+  );
 
   const modifiedData = data.employees.map((row: any) => {
     return {
