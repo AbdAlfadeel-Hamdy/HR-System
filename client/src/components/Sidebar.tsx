@@ -65,6 +65,11 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
               href: "reports/id",
             },
             {
+              title: "Sponsor",
+              icon: <ChevronRightIcon className="h-5 w-5" />,
+              href: "reports/sponsor",
+            },
+            {
               title: "Expired ID",
               icon: <ChevronRightIcon className="h-5 w-5" />,
               href: "reports/expired-id",

@@ -9,20 +9,19 @@ import {
   CssBaseline,
 } from "@mui/material";
 
-interface IdRenewalFormProps {
+interface SponsorFormProps {
   queryFn: UseMutateAsyncFunction<any, unknown, any, unknown>;
   groupByHandler: (groupBy: string) => void;
 }
 
-export const IdRenewalForm: React.FC<IdRenewalFormProps> = ({
+export const SponsorForm: React.FC<SponsorFormProps> = ({
   queryFn,
   groupByHandler,
 }) => {
   const formik = useFormik({
     initialValues: {
-      month: new Date().getMonth() + 1,
-      year: new Date().getFullYear(),
-      groupBy: "workIn",
+      sponsor: "AL-SAILIYA TRAILERS MANAF.",
+      groupBy: "nationality",
     },
     onSubmit: async (values) => {
       try {
@@ -61,59 +60,37 @@ export const IdRenewalForm: React.FC<IdRenewalFormProps> = ({
           fullWidth
           size="small"
           select
-          name="month"
-          label="Month"
-          id="month"
-          value={formik.values.month}
+          name="sponsor"
+          label="Sponsor"
+          id="sponsor"
+          value={formik.values.sponsor}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.touched.month && Boolean(formik.errors.month)}
-          helperText={formik.touched.month && formik.errors.month}
+          error={formik.touched.sponsor && Boolean(formik.errors.sponsor)}
+          helperText={formik.touched.sponsor && formik.errors.sponsor}
           className="bg-white"
         >
           {[
-            { value: 1, label: "January" },
-            { value: 2, label: "February" },
-            { value: 3, label: "March" },
-            { value: 4, label: "April" },
-            { value: 5, label: "May" },
-            { value: 6, label: "June" },
-            { value: 7, label: "July" },
-            { value: 8, label: "August" },
-            { value: 9, label: "September" },
-            { value: 10, label: "October" },
-            { value: 11, label: "November" },
-            { value: 12, label: "December" },
-          ].map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          margin="normal"
-          required
-          fullWidth
-          size="small"
-          select
-          name="year"
-          label="Year"
-          id="year"
-          value={formik.values.year}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          error={formik.touched.year && Boolean(formik.errors.year)}
-          helperText={formik.touched.year && formik.errors.year}
-        >
-          {[
-            { value: 2023, label: "2023" },
-            { value: 2024, label: "2024" },
-            { value: 2025, label: "2025" },
-            { value: 2026, label: "2026" },
-            { value: 2027, label: "2027" },
-            { value: 2028, label: "2028" },
-            { value: 2029, label: "2029" },
-            { value: 2030, label: "2030" },
+            {
+              value: "AL-SAILIYA TRAILERS MANAF.",
+              label: "AL-SAILIYA TRAILERS MANAF.",
+            },
+            { value: "DOHA MOTECO", label: "DOHA MOTECO" },
+            { value: "AL-SAILIYA GARAGE", label: "AL-SAILIYA GARAGE" },
+            { value: "M.K COMPANY", label: "M.K COMPANY" },
+            {
+              value: "AL-SAILIYA AGRICULTURE",
+              label: "AL-SAILIYA AGRICULTURE",
+            },
+            {
+              value: "AL-SAILIYA CLEANING SERVICES",
+              label: "AL-SAILIYA CLEANING SERVICES",
+            },
+            { value: "MOHAMMED KAYED", label: "MOHAMMED KAYED" },
+            { value: " KHALIFA KAYED FARM", label: " KHALIFA KAYED FARM" },
+            { value: "MOHAMMED SALMEEN", label: "MOHAMMED SALMEEN" },
+            { value: "KHALIFA KAYED", label: "KHALIFA KAYED" },
+            { value: "QATAR COMPANY", label: "QATAR COMPANY" },
           ].map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
@@ -136,8 +113,8 @@ export const IdRenewalForm: React.FC<IdRenewalFormProps> = ({
           helperText={formik.touched.groupBy && formik.errors.groupBy}
         >
           {[
+            { value: "nationality", label: "nationality" },
             { value: "workIn", label: "Work In" },
-            { value: "sponsor", label: "Sponsor" },
           ].map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
@@ -159,4 +136,4 @@ export const IdRenewalForm: React.FC<IdRenewalFormProps> = ({
   );
 };
 
-export default IdRenewalForm;
+export default SponsorForm;

@@ -16,6 +16,7 @@ import {
   AddUser,
   EmployeeDetails,
   IdRenewalReport,
+  SponsorReport,
 } from "./pages";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ const router = createBrowserRouter([
               { path: "vacations", element: <VacationsReport /> },
               { path: "on-duty", element: <OnDutyReport /> },
               { path: "on-vacation", element: <OnVacationReport /> },
+              { path: "sponsor", element: <SponsorReport /> },
             ],
           },
           {

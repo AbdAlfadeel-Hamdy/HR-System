@@ -13,3 +13,4 @@ export { default as OnVacationReport } from "./OnVacationReport";
 export { default as AddEmployee } from "./AddEmployee";
 export { default as AddUser } from "./AddUser";
 export { default as EmployeeDetails } from "./EmployeeDetails";
+export { default as SponsorReport } from "./SponsorReport";

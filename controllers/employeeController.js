@@ -119,6 +119,38 @@ export const getIdsRenewal = async (req, res, next) => {
   ]);
   res.status(StatusCodes.OK).json({ employees });
 };
+export const getSponsor = async (req, res, next) => {
+  const employees = await Employee.aggregate([
+    {
+      $match: {
+        sponsor: req.body.sponsor,
+      },
+    },
+    {
+      $project: {
+        idImage: 0,
+        passportNumber: 0,
+        passportImage: 0,
+        passportExpirationDate: 0,
+        licenseExpirationDate: 0,
+        licenseType: 0,
+        agreementExpirationDate: 0,
+        cancellationDate: 0,
+        vacations: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      },
+    },
+    {
+      $group: {
+        _id: `$${req.body.groupBy}`,
+        documents: { $push: "$$ROOT" },
+      },
+    },
+  ]);
+  res.status(StatusCodes.OK).json({ employees });
+};
 
 export const getPassports = async (req, res, next) => {
   const employees = await Employee.aggregate([

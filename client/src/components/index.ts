@@ -11,3 +11,4 @@ export { default as Modal } from "./Modal";
 export { default as UploadFileForm } from "./UploadFileForm";
 export { default as SectionFeedback } from "./SectionFeedback";
 export { default as IdRenewalForm } from "./IdRenewalForm";
+export { default as SponsorForm } from "./SponsorForm";
