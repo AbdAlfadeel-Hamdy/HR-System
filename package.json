@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "setup-project": "npm i && cd client && npm i",
+    "setup-production-app": "npm i && cd client && npm i && npm run build",
     "client": "cd client && npm run dev",
     "server": "nodemon server.js",
     "dev": "concurrently \"npm run client\" \"npm run server\""
