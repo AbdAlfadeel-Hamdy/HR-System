@@ -10,7 +10,7 @@ interface IUploadFile {
   errors: FormikErrors<{ image?: File }>;
 }
 
-const UploadFile: React.FC<IUploadFile> = ({ data, setFieldValue, errors }) => {
+const UploadFile: React.FC<IUploadFile> = ({  setFieldValue, errors }) => {
   return (
     <div>
       <input

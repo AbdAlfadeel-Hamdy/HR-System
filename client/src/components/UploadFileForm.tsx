@@ -17,7 +17,6 @@ interface UploadFileFormProps {
 }
 
 export const UploadFileForm: React.FC<UploadFileFormProps> = ({
-  initialValues,
   url,
   successFn,
   successMsg,

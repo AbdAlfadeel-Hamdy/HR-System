@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { CircularProgress,Alert } from "@mui/material";
+import { CircularProgress, Alert } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import ReactVirtualizedTable, { ColumnData } from "../components/Table";
 import BasicPagination from "../components/Pagination";
@@ -93,17 +93,17 @@ const Employees = () => {
   }, [idNumber, refetch]);
 
   if (isFetching)
-  return (
-    <SectionFeedback>
-      <CircularProgress />
-    </SectionFeedback>
-  );
-if (error)
-  return (
-    <SectionFeedback>
-      <Alert severity="error">{(error as any).response.data.message}</Alert>
-    </SectionFeedback>
-  );
+    return (
+      <SectionFeedback>
+        <CircularProgress />
+      </SectionFeedback>
+    );
+  if (error)
+    return (
+      <SectionFeedback>
+        <Alert severity="error">{(error as any).response.data.message}</Alert>
+      </SectionFeedback>
+    );
 
   const modifiedData = data.employees.map((row: any) => {
     return {
@@ -132,7 +132,7 @@ if (error)
         <div className="bg-black h-12 flex justify-center items-center">
           <input
             type="text"
-            className=" py-1 px-3 placeholder-gray-400 placeholder:text-sm caret-black outline-none rounded-full"
+            className=" py-1 px-3 placeholder-gray-400 placeholder:text-sm caret-black outline-none rounded-full mt-2"
             placeholder="Search by ID"
             value={idNumber}
             onChange={(e) => setIdNumber(e.target.value)}

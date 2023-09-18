@@ -11,7 +11,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   id,
   center,
   onChange,
-  errorText,
+  // errorText,
 }) => {
   const filePickerRef = useRef<HTMLInputElement | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | ArrayBuffer | null>(

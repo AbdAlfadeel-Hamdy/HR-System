@@ -31,6 +31,10 @@ app.use("/api/v1/employees", employeeRouter);
 app.use("/api/v1/vacations", vacationRouter);
 app.use("/api/v1/auth", authRouter);
 
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./public", "index.html"));
+});
+
 app.use("*", (req, res, next) => {
   res.status(404).json({ message: "Route not found." });
 });
