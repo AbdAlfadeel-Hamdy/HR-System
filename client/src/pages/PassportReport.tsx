@@ -11,7 +11,8 @@ import { SectionFeedback } from "../components";
 
 const ExpiredIdReport = () => {
   const { isFetching, data, error } = useQuery({
-    queryKey: ["employees"],
+    queryKey: ["passport"],
+
     queryFn: async () => {
       const { data } = await customFetch.get("/employees/passport");
       return data;

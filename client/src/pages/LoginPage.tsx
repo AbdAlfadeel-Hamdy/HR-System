@@ -9,7 +9,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const { isFetching, isSuccess, isError } = useQuery({
-    queryKey: ["user"],
     queryFn: async () => {
       const { data } = await customFetch.get("/auth/current-user");
       return data;

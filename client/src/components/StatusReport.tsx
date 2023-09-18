@@ -12,7 +12,7 @@ interface StatusReportProps {
 
 const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
   const { isFetching, data, error } = useQuery({
-    queryKey: ["employees"],
+    queryKey: [status],
     queryFn: async () => {
       const { data } = await customFetch.get("/employees/status", {
         params: {

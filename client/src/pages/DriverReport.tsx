@@ -8,7 +8,7 @@ import { SectionFeedback } from "../components";
 
 const DriverReport = () => {
   const { isFetching, data, error } = useQuery({
-    queryKey: ["employees"],
+    queryKey: ["drivers"],
     queryFn: async () => {
       const { data } = await customFetch.get("/employees/driver");
       return data;

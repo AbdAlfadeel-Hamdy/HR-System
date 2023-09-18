@@ -11,12 +11,12 @@ import {
 
 const ExpiredIdReport = () => {
   const { isFetching, data, error } = useQuery({
-    queryKey: ["employees"],
+    queryKey: ["expired-id"],
     queryFn: async () => {
       const { data } = await customFetch.get("/employees/expired-id");
       return data;
     },
-    staleTime: 1000 * 60 * 3,
+    staleTime: 1000 * 60 * 5,
   });
 
   if (isFetching)

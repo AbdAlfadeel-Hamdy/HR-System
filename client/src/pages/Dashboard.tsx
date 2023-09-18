@@ -8,7 +8,6 @@ import { Sidebar } from "../components";
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const { isFetching, data, error } = useQuery({
-    queryKey: ["user"],
     queryFn: async () => {
       const { data } = await customFetch.get("/auth/current-user");
       return data;

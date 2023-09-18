@@ -31,7 +31,15 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
   successFn,
 }) => {
   const { mutateAsync } = useMutation({
-    mutationKey: ["employee"],
+    mutationKey: [
+      "employees",
+      "drivers",
+      "passport",
+      "duty",
+      "vacation",
+      "vacations",
+      "expired-id",
+    ],
     mutationFn: async (employee: any) => {
       await customFetch(url, {
         method,
