@@ -16,8 +16,22 @@ const TransitionsModal: React.FC<TransitionsModalProps> = ({
   btnText,
 }) => {
   const [open, setOpen] = React.useState(false);
+  const [fileInputClicked, setFileInputClicked] = React.useState(false);
+
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // const handleClose = () => setOpen(false);
+
+  const handleClose = (event: any, reason: any) => {
+    if (fileInputClicked && reason === "backdropClick") {
+      setFileInputClicked(false); // Reset the flag
+      return; // Don't close the modal
+    }
+    setOpen(false);
+  };
+
+  const handleFileFocus = () => {
+    setFileInputClicked(true);
+  };
 
   return (
     <div>

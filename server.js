@@ -1,6 +1,8 @@
 import "express-async-errors";
 import * as dotenv from "dotenv";
+dotenv.config();
 import express from "express";
+const app = express();
 import morgan from "morgan";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
@@ -9,16 +11,18 @@ import cookieParser from "cookie-parser";
 import employeeRouter from "./routes/employeeRouter.js";
 import vacationRouter from "./routes/vacationRouter.js";
 import authRouter from "./routes/authRouter.js";
+// Public
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
 // Middlewares
 import errorHandlerMiddleware from "./middlewares/errorHandlerMiddleware.js";
 import { authenticateUser } from "./middlewares/authMiddleware.js";
 
-dotenv.config();
-
-const app = express();
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 if (process.env.NODE_ENV === "development") app.use(morgan("dev"));
 
+app.use(express.static(path.resolve(__dirname, "./public")));
 app.use(express.json());
 app.use(cookieParser());
 

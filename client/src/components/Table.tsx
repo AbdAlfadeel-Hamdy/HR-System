@@ -34,7 +34,12 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const VirtuosoTableComponents: TableComponents<any> = {
   Scroller: React.forwardRef<HTMLDivElement>((props, ref) => (
-    <TableContainer component={Paper} {...props} ref={ref} />
+    <TableContainer
+      component={Paper}
+      {...props}
+      ref={ref}
+      sx={{ borderRadius: 0 }}
+    />
   )),
   Table: (props) => (
     <Table
@@ -90,7 +95,7 @@ const ReactVirtualizedTable: React.FC<ReactVirtualizedTableProps> = ({
   };
 
   return (
-    <Paper>
+    <Paper className="h-full">
       <TableVirtuoso
         data={rows}
         components={VirtuosoTableComponents}

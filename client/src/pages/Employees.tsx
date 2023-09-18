@@ -4,8 +4,8 @@ import ReactVirtualizedTable from "../components/Table";
 import BasicPagination from "../components/Pagination";
 import { NavLink } from "react-router-dom";
 import { ColumnData } from "../components/Table";
-import { CircularProgress } from "@mui/material";
-import Box from "@mui/material/Box";
+import { useEffect, useState } from "react";
+import { LoadingSection } from "../components";
 
 const columns: ColumnData[] = [
   {
@@ -72,23 +72,27 @@ const columns: ColumnData[] = [
 ];
 
 const Employees = () => {
-  const { isFetching, data, error } = useQuery({
+  const [idNumber, setIdNumber] = useState("");
+  const { isFetching, data, error, refetch } = useQuery({
     queryKey: ["employees"],
     queryFn: async () => {
-      const { data } = await customFetch.get("/employees");
+      const { data } = await customFetch.get(
+        `/employees${idNumber ? `?idNumber=${idNumber}` : ""}`
+      );
       return data;
     },
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isFetching)
-    return (
-      <section className="grid place-content-center h-screen">
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress />
-        </Box>
-      </section>
-    );
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      refetch();
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [idNumber, refetch]);
+
+  if (isFetching) return <LoadingSection />;
   if (error) return <div>Error</div>;
 
   const modifiedData = data.employees.map((row: any) => {
@@ -114,7 +118,18 @@ const Employees = () => {
 
   return (
     <>
-      <ReactVirtualizedTable rows={modifiedData} columns={columns} />
+      <div className="flex flex-col">
+        <div className="bg-black h-12 flex justify-center items-center">
+          <input
+            type="text"
+            className=" py-1 px-3 placeholder-gray-400 placeholder:text-sm caret-black outline-none rounded-full"
+            placeholder="Search by ID"
+            value={idNumber}
+            onChange={(e) => setIdNumber(e.target.value)}
+          />
+        </div>
+        <ReactVirtualizedTable rows={modifiedData} columns={columns} />
+      </div>
       <BasicPagination count={data.employeesCount} />
     </>
   );

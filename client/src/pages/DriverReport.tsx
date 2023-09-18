@@ -8,6 +8,7 @@ import ReactVirtualizedTable, { ColumnData } from "../components/Table";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
+import { LoadingSection } from "../components";
 
 const downloadPDF = (title: string, columns: any[], data: any) => {
   const doc = new jsPDF();
@@ -63,7 +64,7 @@ const DriverReport = () => {
     staleTime: 1000 * 60 * 5,
   });
 
-  if (isFetching) return <div>Loading</div>;
+  if (isFetching) return <LoadingSection />;
   if (error) return <div>Error</div>;
 
   const modifiedData = data.employees.map((row: any) => {

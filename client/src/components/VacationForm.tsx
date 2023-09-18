@@ -44,8 +44,6 @@ export const VacationForm: React.FC<VacationFormProps> = ({
     onSuccess: successFn,
   });
 
-  console.log(initialValues);
-
   const formik = useFormik({
     initialValues,
     validationSchema: initialValues.leavingDate

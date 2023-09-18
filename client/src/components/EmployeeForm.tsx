@@ -247,6 +247,54 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                 </MenuItem>
               ))}
             </TextField>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              select
+              name="status"
+              label="Status"
+              id="status"
+              value={formik.values.status}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.status && Boolean(formik.errors.status)}
+              helperText={formik.touched.status && formik.errors.status}
+            >
+              {[
+                { value: "duty", label: "On Duty" },
+                { value: "vacation", label: "On Vacation" },
+                { value: "cancelled", label: "Cancelled" },
+              ].map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              select
+              name="status"
+              label="Status"
+              id="status"
+              value={formik.values.status}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.status && Boolean(formik.errors.status)}
+              helperText={formik.touched.status && formik.errors.status}
+            >
+              {[
+                { value: "duty", label: "On Duty" },
+                { value: "vacation", label: "On Vacation" },
+                { value: "cancelled", label: "Cancelled" },
+              ].map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
             <DatePicker
               label="Agreement Expiration Date"
               format="DD/MM/YYYY"

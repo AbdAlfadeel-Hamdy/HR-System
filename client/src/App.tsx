@@ -6,7 +6,6 @@ import {
   LoginPage,
   ActivityLogReport,
   DriverReport,
-  IdReport,
   ExpiredIdReport,
   PassportReport,
   VacationsReport,
@@ -16,6 +15,7 @@ import {
   AddEmployee,
   AddUser,
   EmployeeDetails,
+  IdRenewalReport,
 } from "./pages";
 
 const queryClient = new QueryClient();
@@ -47,7 +47,7 @@ const router = createBrowserRouter([
             children: [
               { path: "activity-log", element: <ActivityLogReport /> },
               { path: "driver", element: <DriverReport /> },
-              { path: "id", element: <IdReport /> },
+              { path: "id", element: <IdRenewalReport /> },
               { path: "expired-id", element: <ExpiredIdReport /> },
               { path: "passport", element: <PassportReport /> },
               { path: "vacations", element: <VacationsReport /> },

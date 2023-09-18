@@ -82,6 +82,43 @@ export const getExpiredIds = async (req, res, next) => {
   ]);
   res.status(StatusCodes.OK).json({ employees });
 };
+export const getIdsRenewal = async (req, res, next) => {
+  const employees = await Employee.aggregate([
+    {
+      $match: {
+        $expr: {
+          $and: [
+            { $eq: [{ $month: "$idExpirationDate" }, req.body.month] },
+            { $eq: [{ $year: "$idExpirationDate" }, req.body.year] },
+          ],
+        },
+      },
+    },
+    {
+      $project: {
+        nationality: 0,
+        idImage: 0,
+        status: 0,
+        passportNumber: 0,
+        passportImage: 0,
+        licenseExpirationDate: 0,
+        licenseType: 0,
+        cancellationDate: 0,
+        vacations: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      },
+    },
+    {
+      $group: {
+        _id: `$${req.body.groupBy}`,
+        documents: { $push: "$$ROOT" },
+      },
+    },
+  ]);
+  res.status(StatusCodes.OK).json({ employees });
+};
 
 export const getPassports = async (req, res, next) => {
   const employees = await Employee.aggregate([

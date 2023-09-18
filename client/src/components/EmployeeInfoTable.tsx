@@ -1,5 +1,6 @@
 import { Table, TableBody } from "@mui/material";
-import { StyledTableCell, StyledTableRow } from ".";
+import { AddOutlined } from "@mui/icons-material";
+import { Modal, StyledTableCell, StyledTableRow, UploadFileForm } from ".";
 
 interface EmployeeInfoTableProps {
   employee: { [key: string]: any };
@@ -46,7 +47,25 @@ const EmployeeInfoTable: React.FC<EmployeeInfoTableProps> = ({ employee }) => {
             <StyledTableCell component="th" scope="row">
               {row.name}
             </StyledTableCell>
-            <StyledTableCell>{row.value}</StyledTableCell>
+            <StyledTableCell>
+              {row.name === "ID" ? (
+                <div className="flex">
+                  <span>{row.value}</span>
+                  <Modal btnIcon={<AddOutlined />} btnText="Add">
+                    <UploadFileForm
+                      initialValues={{ idImage: null }}
+                      url=""
+                      successMsg="Uploaded ID image successfully"
+                      formTitle="Upload ID Image"
+                    />
+                  </Modal>
+                </div>
+              ) : row.name === "Passport" ? (
+                <div>Test</div>
+              ) : (
+                row.value
+              )}
+            </StyledTableCell>
           </StyledTableRow>
         ))}
       </TableBody>

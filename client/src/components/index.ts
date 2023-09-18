@@ -8,3 +8,6 @@ export { default as EmployeeInfoTable } from "./EmployeeInfoTable";
 export { default as VacationsHistoryTable } from "./VacationsHistoryTable";
 export { StyledTableCell, StyledTableRow } from "./StyledTable";
 export { default as Modal } from "./Modal";
+export { default as UploadFileForm } from "./UploadFileForm";
+export { default as LoadingSection } from "./LoadingSection";
+export { default as IdRenewalForm } from "./IdRenewalForm";
