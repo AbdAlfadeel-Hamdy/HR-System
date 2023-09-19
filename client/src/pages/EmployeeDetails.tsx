@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
-import { CircularProgress, Box, Paper } from "@mui/material";
-import { EditNote, AddOutlined, Delete } from "@mui/icons-material";
+import { CircularProgress, Box, Paper, Button } from "@mui/material";
+import { EditNote, AddOutlined, Delete, Download } from "@mui/icons-material";
 import customFetch from "../utils/customFetch";
 import {
   VacationForm,
@@ -12,6 +12,10 @@ import {
   VacationsHistoryTable,
 } from "../components";
 import { toast } from "react-toastify";
+import {
+  downloadVacationsHistoryPDF,
+  vacationsHistoryColumns,
+} from "../utils/pdfCreators/vacationsHistory";
 
 const EmployeeDetails: React.FC = () => {
   const navigate = useNavigate();
@@ -91,7 +95,7 @@ const EmployeeDetails: React.FC = () => {
           vacations={employee.vacations}
           successFn={refetch}
         />
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center gap-4 mt-4">
           <Modal btnIcon={<AddOutlined />} btnText="Add">
             <VacationForm
               url={`/vacations`}
@@ -107,6 +111,23 @@ const EmployeeDetails: React.FC = () => {
               formTitle="Add Vacation"
             />
           </Modal>
+          {employee.vacations.length > 0 && (
+            <Button
+              variant="outlined"
+              startIcon={<Download />}
+              onClick={() =>
+                downloadVacationsHistoryPDF(
+                  "Vacations History Report",
+                  vacationsHistoryColumns,
+                  employee.vacations,
+                  employee.name,
+                  employee.idNumber
+                )
+              }
+            >
+              Download
+            </Button>
+          )}
         </div>
       </Paper>
     </section>
