@@ -9,7 +9,7 @@ export const register = async (req, res, next) => {
   req.body.password = await hashPassword(req.body.password);
   req.body.role = "moderator";
 
-  const user = await User.create(req.body);
+  await User.create(req.body);
   res.status(StatusCodes.CREATED).json({ message: "User created." });
 };
 

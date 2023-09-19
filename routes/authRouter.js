@@ -17,18 +17,16 @@ import {
 
 const router = Router();
 
+router.post("/login", validateLoginInput, login);
+router.use(authenticateUser);
 router.post(
   "/register",
   validateUserInput,
-  authenticateUser,
   authorizePermissions("admin"),
   register
 );
-router.post("/login", validateLoginInput, login);
-router.get("/logout", authenticateUser, logout);
-
-router.get("/current-user", authenticateUser, getCurrentUser);
-
-router.get("/activities", authenticateUser, getAllActivities);
+router.get("/logout", logout);
+router.get("/current-user", getCurrentUser);
+router.get("/activities", getAllActivities);
 
 export default router;

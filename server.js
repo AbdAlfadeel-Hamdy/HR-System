@@ -27,11 +27,11 @@ app.use(express.static(path.resolve(__dirname, "./client/dist")));
 app.use(express.json());
 app.use(cookieParser());
 
-// app.use("/api/v1/employees", authenticateUser, employeeRouter);
+app.use("/api/v1/auth", authRouter);
+app.use(authenticateUser);
 app.use("/api/v1/employees", employeeRouter);
 app.use("/api/v1/vacations", vacationRouter);
 app.use("/api/v1/cancelled", cancelledRouter);
-app.use("/api/v1/auth", authRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "./client/dist", "index.html"));
