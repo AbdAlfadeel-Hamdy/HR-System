@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
 import { CircularProgress, Box, Paper } from "@mui/material";
-import { EditNote, AddOutlined } from "@mui/icons-material";
+import { EditNote, AddOutlined, Delete } from "@mui/icons-material";
 import customFetch from "../utils/customFetch";
 import {
   VacationForm,
@@ -11,8 +11,10 @@ import {
   Modal,
   VacationsHistoryTable,
 } from "../components";
+import { toast } from "react-toastify";
 
 const EmployeeDetails: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const {
     isFetching,
@@ -26,6 +28,18 @@ const EmployeeDetails: React.FC = () => {
       return data.employee;
     },
   });
+
+  const { mutateAsync: deleteEmployeeHandler, isLoading } = useMutation({
+    mutationKey: ["employees"],
+    mutationFn: async () =>
+      await customFetch.delete(`/emloyees/${employee._id}`),
+    onSuccess: () => {
+      toast.success("Deleted employee successfully");
+      navigate("/dashboard", { replace: true });
+    },
+    onError: (err) => toast.error((err as any).response.data.message),
+  });
+
   if (isFetching)
     return (
       <section className="grid place-content-center h-screen">
@@ -49,7 +63,7 @@ const EmployeeDetails: React.FC = () => {
       <Paper className="py-2">
         <h2 className="text-center text-2xl font-thin mb-4">Employee Info</h2>
         <EmployeeInfoTable employee={employee} />
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center gap-4 mt-4">
           <Modal btnIcon={<EditNote />} btnText="Edit">
             <EmployeeForm
               url={`/employees/${employee._id}`}
@@ -58,6 +72,15 @@ const EmployeeDetails: React.FC = () => {
               successFn={refetch}
             />
           </Modal>
+          <Modal
+            btnIcon={<Delete />}
+            btnText="Delete"
+            btnColor="error"
+            feedback
+            feedbackTitle="Are you sure that you want to delete this employee?"
+            feedbackFn={deleteEmployeeHandler}
+            feedbackFnLoading={isLoading}
+          />
         </div>
       </Paper>
       <Paper className="py-2 ">

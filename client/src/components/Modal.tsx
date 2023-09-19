@@ -1,44 +1,57 @@
 import * as React from "react";
+import { UseMutateAsyncFunction } from "@tanstack/react-query";
+import { AxiosResponse } from "axios";
 import { Box, styled, Theme } from "@mui/system";
 import { Modal } from "@mui/base/Modal";
-import Fade from "@mui/material/Fade";
-import { Button } from "@mui/material";
+import { Button, Fade, DialogTitle, DialogActions } from "@mui/material";
 
 interface TransitionsModalProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   btnIcon?: React.ReactNode;
   btnText: string;
+  btnColor?:
+    | "inherit"
+    | "primary"
+    | "secondary"
+    | "success"
+    | "error"
+    | "info"
+    | "warning";
+  feedback?: boolean;
+  feedbackTitle?: string;
+  feedbackFn?: UseMutateAsyncFunction<
+    AxiosResponse<any, any>,
+    unknown,
+    void,
+    unknown
+  >;
+  feedbackFnLoading?: boolean;
 }
 
 const TransitionsModal: React.FC<TransitionsModalProps> = ({
   children,
   btnIcon,
   btnText,
+  btnColor = "inherit",
+  feedback,
+  feedbackTitle,
+  feedbackFn,
+  feedbackFnLoading,
 }) => {
   const [open, setOpen] = React.useState(false);
-  // const [fileInputClicked, setFileInputClicked] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  // const handleClose = (event: any, reason: any) => {
-  //   if (fileInputClicked && reason === "backdropClick") {
-  //     setFileInputClicked(false); // Reset the flag
-  //     return; // Don't close the modal
-  //   }
-  //   setOpen(false);
-  // };
-
-  // const handleFileFocus = () => {
-  //   setFileInputClicked(true);
-  // };
+  const handleConfirm = async () => {
+    if (feedbackFn) await feedbackFn();
+  };
 
   return (
     <div>
       <Button
         variant="outlined"
         startIcon={btnIcon}
-        color="inherit"
+        color={btnColor}
         onClick={handleOpen}
       >
         {btnText}
@@ -52,7 +65,28 @@ const TransitionsModal: React.FC<TransitionsModalProps> = ({
         slots={{ backdrop: StyledBackdrop }}
       >
         <Fade in={open}>
-          <Box sx={style}>{children}</Box>
+          <Box sx={style}>
+            {children}
+            {feedback && (
+              <div>
+                <DialogTitle id="responsive-dialog-title">
+                  {feedbackTitle}
+                </DialogTitle>
+                <DialogActions>
+                  <Button autoFocus onClick={handleClose}>
+                    Disagree
+                  </Button>
+                  <Button
+                    onClick={handleConfirm}
+                    disabled={feedbackFnLoading}
+                    autoFocus
+                  >
+                    Agree
+                  </Button>
+                </DialogActions>
+              </div>
+            )}
+          </Box>
         </Fade>
       </StyledModal>
     </div>
