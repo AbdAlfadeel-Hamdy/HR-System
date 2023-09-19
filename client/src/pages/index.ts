@@ -1,6 +1,6 @@
 export { default as LoginPage } from "./LoginPage";
 export { default as Dashboard } from "./Dashboard";
-export { default as Cancelled } from "./Cancelled";
+export { default as CancelledReport } from "./CancelledReport";
 export { default as ActivityLogReport } from "./ActivityLogReport";
 export { default as DriverReport } from "./DriverReport";
 export { default as Employees } from "./Employees";

@@ -60,7 +60,7 @@ const SponsorReport = () => {
   } else if (data?.employees.length === 0)
     content = (
       <Alert severity="info" className="mx-8 mt-4">
-        No employees found for this sponsor.
+        No employees were found for this sponsor.
       </Alert>
     );
 

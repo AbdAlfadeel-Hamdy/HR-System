@@ -94,6 +94,11 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
               icon: <ChevronRightIcon className="h-5 w-5" />,
               href: "reports/on-vacation",
             },
+            {
+              title: "Cancelled",
+              icon: <ChevronRightIcon className="h-5 w-5" />,
+              href: "reports/cancelled",
+            },
           ]}
         />
         <SidebarAccordion

@@ -2,7 +2,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Dashboard,
-  Cancelled,
   LoginPage,
   ActivityLogReport,
   DriverReport,
@@ -17,6 +16,7 @@ import {
   EmployeeDetails,
   IdRenewalReport,
   SponsorReport,
+  CancelledReport,
 } from "./pages";
 
 const queryClient = new QueryClient();
@@ -36,10 +36,6 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Employees /> },
           {
-            path: "cancelled",
-            element: <Cancelled />,
-          },
-          {
             path: "employees/:id",
             element: <EmployeeDetails />,
           },
@@ -55,6 +51,7 @@ const router = createBrowserRouter([
               { path: "on-duty", element: <OnDutyReport /> },
               { path: "on-vacation", element: <OnVacationReport /> },
               { path: "sponsor", element: <SponsorReport /> },
+              { path: "cancelled", element: <CancelledReport /> },
             ],
           },
           {

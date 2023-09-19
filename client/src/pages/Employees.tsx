@@ -129,7 +129,7 @@ const Employees = () => {
   if (modifiedData.length === 0)
     return (
       <SectionFeedback>
-        <Alert severity="info">No employees found.</Alert>
+        <Alert severity="info">No employees were found.</Alert>
       </SectionFeedback>
     );
 

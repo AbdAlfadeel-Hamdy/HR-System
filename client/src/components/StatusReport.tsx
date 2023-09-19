@@ -51,7 +51,7 @@ const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
   if (modifiedData.length === 0)
     return (
       <SectionFeedback>
-        <Alert severity="info">No employees found with this status.</Alert>
+        <Alert severity="info">No employees were found with this status.</Alert>
       </SectionFeedback>
     );
 

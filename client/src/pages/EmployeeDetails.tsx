@@ -30,7 +30,7 @@ const EmployeeDetails: React.FC = () => {
   });
 
   const { mutateAsync: deleteEmployeeHandler, isLoading } = useMutation({
-    mutationKey: ["employees"],
+    mutationKey: ["employees", "cancelled"],
     mutationFn: async () =>
       await customFetch.delete(`/employees/${employee._id}`),
     onSuccess: () => {

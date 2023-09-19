@@ -1,12 +1,13 @@
 import { Schema, model } from "mongoose";
 
-const cancelledUserSchema = new Schema({
-  name: String,
-  idNumber: Number,
-  idExpirationDate: Date,
-  sponsor: String,
-  workIn: Date,
-  note: String,
-});
+const cancelledSchema = new Schema(
+  {
+    name: String,
+    idNumber: Number,
+  },
+  {
+    timestamps: true,
+  }
+);
 
-export default model("CancelledUser", cancelledUserSchema);
+export default model("Cancelled", cancelledSchema);

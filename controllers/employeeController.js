@@ -1,6 +1,6 @@
 import { StatusCodes } from "http-status-codes";
-import dayjs from "dayjs";
 import Employee from "../models/EmployeeModel.js";
+import Cancelled from "../models/CancelledModel.js";
 import APIFeatures from "../utils/apiFeatures.js";
 
 export const getAllEmployees = async (req, res, next) => {
@@ -43,6 +43,10 @@ export const updateEmployee = async (req, res, next) => {
 
 export const deleteEmployee = async (req, res, next) => {
   const deletedEmployee = await Employee.findByIdAndDelete(req.params.id);
+  await Cancelled.create({
+    name: deletedEmployee.name,
+    idNumber: deletedEmployee.idNumber,
+  });
   res
     .status(StatusCodes.OK)
     .json({ message: "Employee deleted.", employee: deletedEmployee });
