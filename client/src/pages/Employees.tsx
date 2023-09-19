@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CircularProgress, Alert } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import ReactVirtualizedTable, { ColumnData } from "../components/Table";
-import BasicPagination from "../components/Pagination";
+// import BasicPagination from "../components/Pagination";
 import { SectionFeedback } from "../components";
 
 const columns: ColumnData[] = [
@@ -86,7 +86,6 @@ const Employees = () => {
     // staleTime: 1000 * 60 * 5,
   });
 
-  console.log(renderTimes);
   useEffect(() => {
     renderTimes = 0;
   }, []);
@@ -143,7 +142,7 @@ const Employees = () => {
 
   return (
     <>
-      <div className="flex flex-col">
+      <div className="flex flex-col row-span-2">
         <div className="bg-black h-12 flex justify-center items-center">
           <input
             type="text"
@@ -155,7 +154,7 @@ const Employees = () => {
         </div>
         <ReactVirtualizedTable rows={modifiedData} columns={columns} />
       </div>
-      <BasicPagination count={data.employeesCount} />
+      {/* <BasicPagination count={data.employeesCount} /> */}
     </>
   );
 };

@@ -6,7 +6,7 @@ import {
   DocumentDuplicateIcon,
   PencilIcon,
   UserGroupIcon,
-  UserIcon,
+  // UserIcon,
 } from "@heroicons/react/24/solid";
 import { ChevronRightIcon, PowerIcon } from "@heroicons/react/24/outline";
 
@@ -123,11 +123,11 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
         />
         <hr className="my-2 border-blue-gray-50" />
         {[
-          {
-            title: "profile",
-            icon: <UserIcon className="h-5 w-5" />,
-            href: "profile",
-          },
+          // {
+          //   title: "profile",
+          //   icon: <UserIcon className="h-5 w-5" />,
+          //   href: "profile",
+          // },
           {
             title: "Log Out",
             icon: <PowerIcon className="h-5 w-5" />,
@@ -138,7 +138,7 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
             key={item.title}
             title={item.title}
             icon={item.icon}
-            href={item.href}
+            // href={item.href}
             onClick={item.onClick}
           />
         ))}

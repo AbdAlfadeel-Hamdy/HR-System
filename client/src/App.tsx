@@ -17,6 +17,7 @@ import {
   IdRenewalReport,
   SponsorReport,
   CancelledReport,
+  ErrorPage,
 } from "./pages";
 
 const queryClient = new QueryClient();
@@ -24,7 +25,7 @@ const queryClient = new QueryClient();
 const router = createBrowserRouter([
   {
     path: "/",
-    errorElement: <div>Error</div>,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,

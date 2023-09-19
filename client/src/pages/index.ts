@@ -1,4 +1,5 @@
 export { default as LoginPage } from "./LoginPage";
+export { default as ErrorPage } from "./ErrorPage";
 export { default as Dashboard } from "./Dashboard";
 export { default as CancelledReport } from "./CancelledReport";
 export { default as ActivityLogReport } from "./ActivityLogReport";
