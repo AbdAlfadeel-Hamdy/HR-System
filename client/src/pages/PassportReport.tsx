@@ -7,7 +7,7 @@ import {
   passportColumns,
 } from "../utils/pdfCreators/passport";
 import ReactVirtualizedTable from "../components/Table";
-import { SectionFeedback } from "../components";
+import { DownloadButton, SectionFeedback } from "../components";
 
 const ExpiredIdReport = () => {
   const { isFetching, data, error } = useQuery({
@@ -59,7 +59,7 @@ const ExpiredIdReport = () => {
         }))}
         columns={passportColumns}
       />
-      <button
+      <DownloadButton
         onClick={() =>
           downloadPassportPDF(
             "Passport Report",
@@ -67,9 +67,7 @@ const ExpiredIdReport = () => {
             data.employees
           )
         }
-      >
-        Download
-      </button>
+      />
     </>
   );
 };

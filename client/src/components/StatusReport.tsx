@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import ReactVirtualizedTable from "../components/Table";
 import { CircularProgress, Alert } from "@mui/material";
-import { SectionFeedback } from ".";
+import { DownloadButton, SectionFeedback } from ".";
 import customFetch from "../utils/customFetch";
 import { downloadStatusPDF, statusColumns } from "../utils/pdfCreators/status";
 
@@ -64,13 +64,11 @@ const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
         }))}
         columns={statusColumns}
       />
-      <button
+      <DownloadButton
         onClick={() =>
           downloadStatusPDF(`${status} Report`, statusColumns, data.employees)
         }
-      >
-        Download
-      </button>
+      />
     </>
   );
 };

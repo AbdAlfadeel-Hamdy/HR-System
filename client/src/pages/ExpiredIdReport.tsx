@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CircularProgress, Alert } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import ReactVirtualizedTable from "../components/Table";
-import { SectionFeedback } from "../components";
+import { DownloadButton, SectionFeedback } from "../components";
 import {
   downloadExpiredIdPDF,
   expiredIdColumns,
@@ -66,7 +66,7 @@ const ExpiredIdReport = () => {
         }))}
         columns={expiredIdColumns}
       />
-      <button
+      <DownloadButton
         onClick={() =>
           downloadExpiredIdPDF(
             "Expired ID Report",
@@ -74,9 +74,7 @@ const ExpiredIdReport = () => {
             data.employees
           )
         }
-      >
-        Download
-      </button>
+      />
     </>
   );
 };

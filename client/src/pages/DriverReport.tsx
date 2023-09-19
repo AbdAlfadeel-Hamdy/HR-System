@@ -4,7 +4,7 @@ import { Alert, CircularProgress } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import { downloadDriverPDF, driverColumns } from "../utils/pdfCreators/driver";
 import ReactVirtualizedTable from "../components/Table";
-import { SectionFeedback } from "../components";
+import { SectionFeedback, DownloadButton } from "../components";
 
 const DriverReport = () => {
   const { isFetching, data, error } = useQuery({
@@ -54,13 +54,11 @@ const DriverReport = () => {
         }))}
         columns={driverColumns}
       />
-      <button
+      <DownloadButton
         onClick={() =>
           downloadDriverPDF("Driver Report", driverColumns, modifiedData)
         }
-      >
-        Download
-      </button>
+      />
     </>
   );
 };

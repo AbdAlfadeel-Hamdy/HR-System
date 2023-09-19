@@ -7,7 +7,7 @@ import {
   downloadActivityLogPDF,
 } from "../utils/pdfCreators/activityLog";
 import ReactVirtualizedTable from "../components/Table";
-import { SectionFeedback } from "../components";
+import { SectionFeedback, DownloadButton } from "../components";
 
 const ActivityLogReport = () => {
   const { isFetching, data, error } = useQuery({
@@ -44,7 +44,7 @@ const ActivityLogReport = () => {
   return (
     <>
       <ReactVirtualizedTable rows={modifiedData} columns={activityLogColumns} />
-      <button
+      <DownloadButton
         onClick={() =>
           downloadActivityLogPDF(
             "Activity Report",
@@ -52,9 +52,7 @@ const ActivityLogReport = () => {
             modifiedData
           )
         }
-      >
-        Download
-      </button>
+      />
     </>
   );
 };

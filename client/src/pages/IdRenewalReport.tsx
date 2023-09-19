@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Alert, CircularProgress } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import ReactVirtualizedTable from "../components/Table";
-import { SectionFeedback, IdRenewalForm } from "../components";
+import { SectionFeedback, IdRenewalForm, DownloadButton } from "../components";
 import {
   downloadRenewalIdPDF,
   idRenewalColumns,
@@ -75,7 +75,7 @@ const IdRenewalReport = () => {
         {content}
       </div>
       {data?.employees.length > 0 && (
-        <button
+        <DownloadButton
           onClick={() =>
             downloadRenewalIdPDF(
               "ID Renewal Report",
@@ -84,9 +84,7 @@ const IdRenewalReport = () => {
               groupBy
             )
           }
-        >
-          Download
-        </button>
+        />
       )}
     </>
   );

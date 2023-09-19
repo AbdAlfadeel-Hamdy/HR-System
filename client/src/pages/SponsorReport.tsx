@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Alert, CircularProgress } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import ReactVirtualizedTable from "../components/Table";
-import { SectionFeedback, SponsorForm } from "../components";
+import { DownloadButton, SectionFeedback, SponsorForm } from "../components";
 import {
   downloadSponsorPDF,
   sponsorColumns,
@@ -73,7 +73,7 @@ const SponsorReport = () => {
         {content}
       </div>
       {data?.employees.length > 0 && (
-        <button
+        <DownloadButton
           onClick={() =>
             downloadSponsorPDF(
               "Sponsor Report",
@@ -82,9 +82,7 @@ const SponsorReport = () => {
               groupBy
             )
           }
-        >
-          Download
-        </button>
+        />
       )}
     </>
   );

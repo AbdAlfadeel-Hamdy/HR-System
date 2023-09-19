@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Alert, CircularProgress } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import ReactVirtualizedTable from "../components/Table";
-import { SectionFeedback } from "../components";
+import { DownloadButton, SectionFeedback } from "../components";
 import {
   cancelledColumns,
   downloadCancelledPDF,
@@ -48,7 +48,7 @@ const CancelledReport = () => {
   return (
     <>
       <ReactVirtualizedTable rows={modifiedData} columns={cancelledColumns} />
-      <button
+      <DownloadButton
         onClick={() =>
           downloadCancelledPDF(
             "Cancelled Report",
@@ -56,9 +56,7 @@ const CancelledReport = () => {
             modifiedData
           )
         }
-      >
-        Download
-      </button>
+      />
     </>
   );
 };

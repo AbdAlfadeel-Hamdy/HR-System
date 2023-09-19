@@ -7,7 +7,7 @@ import {
   downloadVacationsPDF,
 } from "../utils/pdfCreators/vacations";
 import ReactVirtualizedTable from "../components/Table";
-import { SectionFeedback } from "../components";
+import { DownloadButton, SectionFeedback } from "../components";
 
 const VacationsReport = () => {
   const { isFetching, data, error } = useQuery({
@@ -57,7 +57,7 @@ const VacationsReport = () => {
         }))}
         columns={vacationsColumns}
       />
-      <button
+      <DownloadButton
         onClick={() =>
           downloadVacationsPDF(
             "Vacations Report",
@@ -65,9 +65,7 @@ const VacationsReport = () => {
             modifiedData
           )
         }
-      >
-        Download
-      </button>
+      />
     </>
   );
 };
