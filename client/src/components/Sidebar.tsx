@@ -30,6 +30,21 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
     },
   });
 
+  const actions = [
+    {
+      title: "Add Employee",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "actions/add-employee",
+    },
+  ];
+
+  if (user.role === "admin")
+    actions.push({
+      title: "Add User",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "actions/add-user",
+    });
+
   return (
     <Card className=" min-h-screen overflow-y-scroll w-[20rem] max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none row-span-2">
       <div className="mb-2 p-4">
@@ -104,18 +119,7 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
         <SidebarAccordion
           title="Actions"
           icon={<PencilIcon className="h-5 w-5" />}
-          list={[
-            {
-              title: "Add User",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "actions/add-user",
-            },
-            {
-              title: "Add Employee",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "actions/add-employee",
-            },
-          ]}
+          list={actions}
         />
         <hr className="my-2 border-blue-gray-50" />
         {[

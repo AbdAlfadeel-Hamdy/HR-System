@@ -1,19 +1,12 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
-import customFetch from "../utils/customFetch";
 import { Sidebar } from "../components";
+import useCurrentUser from "../hooks/useCurrentUser";
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { isFetching, data, error } = useQuery({
-    queryFn: async () => {
-      const { data } = await customFetch.get("/auth/current-user");
-      return data;
-    },
-    retry: false,
-  });
+  const { isFetching, user, error } = useCurrentUser();
 
   let content;
 
@@ -29,7 +22,7 @@ const Dashboard: React.FC = () => {
   else
     content = (
       <section className="grid grid-cols-[20rem_1fr] max-h-screen grid-rows-[94%_6%]">
-        <Sidebar user={data.user} />
+        <Sidebar user={user} />
         <Outlet />
       </section>
     );

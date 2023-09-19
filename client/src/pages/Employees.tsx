@@ -71,6 +71,8 @@ const columns: ColumnData[] = [
   },
 ];
 
+let renderTimes = 0;
+
 const Employees = () => {
   const [idNumber, setIdNumber] = useState("");
   const { isFetching, data, error, refetch } = useQuery({
@@ -81,12 +83,18 @@ const Employees = () => {
       );
       return data;
     },
-    staleTime: 1000 * 60 * 5,
+    // staleTime: 1000 * 60 * 5,
   });
 
+  console.log(renderTimes);
   useEffect(() => {
+    renderTimes = 0;
+  }, []);
+
+  useEffect(() => {
+    renderTimes++;
     const timer = setTimeout(() => {
-      refetch();
+      if (renderTimes > 1) refetch();
     }, 3000);
 
     return () => clearTimeout(timer);
