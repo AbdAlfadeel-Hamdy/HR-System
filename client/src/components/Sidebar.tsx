@@ -95,11 +95,6 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
               href: "reports/passport",
             },
             {
-              title: "Vacations",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/vacations",
-            },
-            {
               title: "On Duty",
               icon: <ChevronRightIcon className="h-5 w-5" />,
               href: "reports/on-duty",

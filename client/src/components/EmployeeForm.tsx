@@ -16,6 +16,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import customFetch from "../utils/customFetch";
 import { employeeValidationSchema } from "../utils/validationSchemas";
 import { Employee } from "../utils/interfaces";
+import { companies, countries } from "../utils/constants";
 
 interface EmployeeFormProps {
   initialValues: Employee;
@@ -152,6 +153,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               margin="normal"
               required
               fullWidth
+              select
               id="nationality"
               label="Nationality"
               name="nationality"
@@ -164,7 +166,13 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               helperText={
                 formik.touched.nationality && formik.errors.nationality
               }
-            />
+            >
+              {countries.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </TextField>
             <TextField
               margin="normal"
               required
@@ -209,6 +217,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               margin="normal"
               required
               fullWidth
+              select
               id="sponsor"
               label="Sponsor"
               name="sponsor"
@@ -217,41 +226,10 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               onBlur={formik.handleBlur}
               error={formik.touched.sponsor && Boolean(formik.errors.sponsor)}
               helperText={formik.touched.sponsor && formik.errors.sponsor}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="workIn"
-              label="Work In"
-              name="workIn"
-              value={formik.values.workIn}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.workIn && Boolean(formik.errors.workIn)}
-              helperText={formik.touched.workIn && formik.errors.workIn}
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              select
-              name="status"
-              label="Status"
-              id="status"
-              value={formik.values.status}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.status && Boolean(formik.errors.status)}
-              helperText={formik.touched.status && formik.errors.status}
             >
-              {[
-                { value: "duty", label: "On Duty" },
-                { value: "vacation", label: "On Vacation" },
-                { value: "cancelled", label: "Cancelled" },
-              ].map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+              {companies.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
                 </MenuItem>
               ))}
             </TextField>
@@ -260,22 +238,18 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               required
               fullWidth
               select
-              name="status"
-              label="Status"
-              id="status"
-              value={formik.values.status}
+              id="workIn"
+              label="Work In"
+              name="workIn"
+              value={formik.values.workIn}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.status && Boolean(formik.errors.status)}
-              helperText={formik.touched.status && formik.errors.status}
+              error={formik.touched.workIn && Boolean(formik.errors.workIn)}
+              helperText={formik.touched.workIn && formik.errors.workIn}
             >
-              {[
-                { value: "duty", label: "On Duty" },
-                { value: "vacation", label: "On Vacation" },
-                { value: "cancelled", label: "Cancelled" },
-              ].map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
+              {companies.map((option) => (
+                <MenuItem key={option} value={option}>
+                  {option}
                 </MenuItem>
               ))}
             </TextField>

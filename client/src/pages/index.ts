@@ -6,7 +6,6 @@ export { default as ActivityLogReport } from "./ActivityLogReport";
 export { default as DriverReport } from "./DriverReport";
 export { default as Employees } from "./Employees";
 export { default as PassportReport } from "./PassportReport";
-export { default as VacationsReport } from "./VacationsReport";
 export { default as IdRenewalReport } from "./IdRenewalReport";
 export { default as ExpiredIdReport } from "./ExpiredIdReport";
 export { default as OnDutyReport } from "./OnDutyReport";
