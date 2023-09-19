@@ -28,7 +28,8 @@ interface TransitionsModalProps {
   feedbackTitle?: string;
   feedbackFn?:
     | UseMutateAsyncFunction<AxiosResponse<any, any>, unknown, void, unknown>
-    | UseMutateAsyncFunction<void, unknown, string, unknown>;
+    | UseMutateAsyncFunction<void, unknown, string, unknown>
+    | any;
   feedbackFnLoading?: boolean;
 }
 
