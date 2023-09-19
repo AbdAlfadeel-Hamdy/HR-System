@@ -8,7 +8,7 @@ export { default as EmployeeInfoTable } from "./EmployeeInfoTable";
 export { default as VacationsHistoryTable } from "./VacationsHistoryTable";
 export { StyledTableCell, StyledTableRow } from "./StyledTable";
 export { default as Modal } from "./Modal";
-export { default as UploadFileForm } from "./UploadFileForm";
+export { default as UploadFile } from "./UploadFile";
 export { default as SectionFeedback } from "./SectionFeedback";
 export { default as IdRenewalForm } from "./IdRenewalForm";
 export { default as SponsorForm } from "./SponsorForm";
