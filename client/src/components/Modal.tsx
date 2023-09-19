@@ -3,12 +3,19 @@ import { UseMutateAsyncFunction } from "@tanstack/react-query";
 import { AxiosResponse } from "axios";
 import { Box, styled, Theme } from "@mui/system";
 import { Modal } from "@mui/base/Modal";
-import { Button, Fade, DialogTitle, DialogActions } from "@mui/material";
+import {
+  Button,
+  Fade,
+  DialogTitle,
+  DialogActions,
+  IconButton,
+} from "@mui/material";
 
 interface TransitionsModalProps {
   children?: React.ReactNode;
   btnIcon?: React.ReactNode;
-  btnText: string;
+  btnText?: string;
+  btnVariant?: "text" | "outlined" | "contained";
   btnColor?:
     | "inherit"
     | "primary"
@@ -19,12 +26,9 @@ interface TransitionsModalProps {
     | "warning";
   feedback?: boolean;
   feedbackTitle?: string;
-  feedbackFn?: UseMutateAsyncFunction<
-    AxiosResponse<any, any>,
-    unknown,
-    void,
-    unknown
-  >;
+  feedbackFn?:
+    | UseMutateAsyncFunction<AxiosResponse<any, any>, unknown, void, unknown>
+    | UseMutateAsyncFunction<void, unknown, string, unknown>;
   feedbackFnLoading?: boolean;
 }
 
@@ -32,6 +36,7 @@ const TransitionsModal: React.FC<TransitionsModalProps> = ({
   children,
   btnIcon,
   btnText,
+  btnVariant = "outlined",
   btnColor = "inherit",
   feedback,
   feedbackTitle,
@@ -48,14 +53,20 @@ const TransitionsModal: React.FC<TransitionsModalProps> = ({
 
   return (
     <div>
-      <Button
-        variant="outlined"
-        startIcon={btnIcon}
-        color={btnColor}
-        onClick={handleOpen}
-      >
-        {btnText}
-      </Button>
+      {btnText ? (
+        <Button
+          variant={btnVariant}
+          startIcon={btnIcon}
+          color={btnColor}
+          onClick={handleOpen}
+        >
+          {btnText}
+        </Button>
+      ) : (
+        <IconButton onClick={handleOpen} color={btnColor}>
+          {btnIcon}
+        </IconButton>
+      )}
       <StyledModal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"

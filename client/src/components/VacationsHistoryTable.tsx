@@ -3,7 +3,11 @@ import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 dayjs.extend(customParseFormat);
 import { Table, TableBody, TableHead, TableRow } from "@mui/material";
+import { Delete, Edit, Done } from "@mui/icons-material";
 import { StyledTableCell, StyledTableRow, VacationForm, Modal } from ".";
+import { useMutation } from "@tanstack/react-query";
+import customFetch from "../utils/customFetch";
+import { toast } from "react-toastify";
 
 interface VacationsHistoryTableProps {
   vacations: {
@@ -34,6 +38,20 @@ const VacationsHistoryTable: React.FC<VacationsHistoryTableProps> = ({
     )
   );
 
+  const { mutateAsync: deleteVacationHandler, isLoading } = useMutation({
+    mutationKey: ["employee", "vacations"],
+    mutationFn: async (vacationId: string) => {
+      await customFetch.delete(`/vacations/${vacationId}`);
+    },
+    onSuccess: () => {
+      toast.success("Deleted vacation successfully");
+      successFn();
+    },
+    onError: (err) => {
+      toast.error((err as any).response.data.message);
+    },
+  });
+
   return (
     <Table sx={{ minWidth: 700 }} aria-label="customized table">
       <TableHead>
@@ -57,8 +75,12 @@ const VacationsHistoryTable: React.FC<VacationsHistoryTableProps> = ({
             <StyledTableCell>{row.actualReturnDate}</StyledTableCell>
             <StyledTableCell>{row.actualPeriod}</StyledTableCell>
             <StyledTableCell>
-              <div className="flex gap-1">
-                <Modal btnText="edit">
+              <div className="flex gap-1 items-center">
+                <Modal
+                  btnIcon={<Edit className="flex justify-center" />}
+                  btnColor="inherit"
+                  btnVariant="text"
+                >
                   <VacationForm
                     url={`/vacations/${row._id}`}
                     method="PATCH"
@@ -88,8 +110,22 @@ const VacationsHistoryTable: React.FC<VacationsHistoryTableProps> = ({
                     formTitle="Update Vacation"
                   />
                 </Modal>
+                <Modal
+                  btnIcon={<Delete />}
+                  btnColor="error"
+                  btnVariant="text"
+                  feedback
+                  feedbackTitle="Are you sure that you want to delete this vacation?"
+                  feedbackFn={() => deleteVacationHandler(row._id)}
+                  feedbackFnLoading={isLoading}
+                />
+
                 {!index && !row.actualReturnDate && (
-                  <Modal btnText="complete">
+                  <Modal
+                    btnIcon={<Done />}
+                    btnColor="success"
+                    btnVariant="text"
+                  >
                     <VacationForm
                       url={`/vacations/${row._id}`}
                       method="PATCH"
