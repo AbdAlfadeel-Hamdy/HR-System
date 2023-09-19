@@ -46,6 +46,13 @@ const ExpiredIdReport = () => {
       };
     });
 
+  if (modifiedData.length === 0)
+    return (
+      <SectionFeedback>
+        <Alert severity="info">No employees found with this status.</Alert>
+      </SectionFeedback>
+    );
+
   return (
     <>
       <ReactVirtualizedTable

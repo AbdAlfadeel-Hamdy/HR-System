@@ -32,7 +32,7 @@ const EmployeeDetails: React.FC = () => {
   const { mutateAsync: deleteEmployeeHandler, isLoading } = useMutation({
     mutationKey: ["employees"],
     mutationFn: async () =>
-      await customFetch.delete(`/emloyees/${employee._id}`),
+      await customFetch.delete(`/employees/${employee._id}`),
     onSuccess: () => {
       toast.success("Deleted employee successfully");
       navigate("/dashboard", { replace: true });

@@ -41,6 +41,13 @@ const VacationsReport = () => {
     };
   });
 
+  if (modifiedData.length === 0)
+    return (
+      <SectionFeedback>
+        <Alert severity="info">No vacations found.</Alert>
+      </SectionFeedback>
+    );
+
   return (
     <>
       <ReactVirtualizedTable

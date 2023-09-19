@@ -74,14 +74,14 @@ const TransitionsModal: React.FC<TransitionsModalProps> = ({
                 </DialogTitle>
                 <DialogActions>
                   <Button autoFocus onClick={handleClose}>
-                    Disagree
+                    Cancel
                   </Button>
                   <Button
                     onClick={handleConfirm}
                     disabled={feedbackFnLoading}
                     autoFocus
                   >
-                    Agree
+                    Confirm
                   </Button>
                 </DialogActions>
               </div>
