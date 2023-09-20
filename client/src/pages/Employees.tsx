@@ -143,7 +143,7 @@ const Employees = () => {
   return (
     <>
       <div className="flex flex-col row-span-2">
-        <div className="bg-black h-12 flex justify-center items-center">
+        <div className="bg-black h-12 flex justify-center items-center overflow-y-scroll">
           <input
             type="text"
             className=" py-1 px-3 placeholder-gray-400 placeholder:text-sm caret-black outline-none rounded-full mt-2"

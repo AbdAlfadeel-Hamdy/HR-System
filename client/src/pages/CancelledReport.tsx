@@ -34,7 +34,9 @@ const CancelledReport = () => {
   const modifiedData = data.cancelled.map((row: any) => {
     return {
       ...row,
-      cancellationDate: new Date(row.createdAt).toLocaleDateString("en-uk"),
+      cancellationDate: new Date(row.cancellationDate).toLocaleDateString(
+        "en-uk"
+      ),
     };
   });
 

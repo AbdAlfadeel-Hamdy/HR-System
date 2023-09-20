@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import dayjs from "dayjs";
-import { CircularProgress, Box, Paper, Button } from "@mui/material";
+import { CircularProgress, Alert, Paper, Button } from "@mui/material";
 import { EditNote, AddOutlined, Delete, Download } from "@mui/icons-material";
 import customFetch from "../utils/customFetch";
 import {
@@ -10,6 +10,7 @@ import {
   EmployeeInfoTable,
   Modal,
   VacationsHistoryTable,
+  SectionFeedback,
 } from "../components";
 import { toast } from "react-toastify";
 import {
@@ -20,16 +21,11 @@ import {
 const EmployeeDetails: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const {
-    isFetching,
-    isError,
-    data: employee,
-    refetch,
-  } = useQuery({
+  const { isFetching, error, data, refetch } = useQuery({
     queryKey: ["employee"],
     queryFn: async () => {
       const { data } = await customFetch(`/employees/${id}`);
-      return data.employee;
+      return data;
     },
     staleTime: 1000 * 60 * 5,
   });
@@ -47,13 +43,18 @@ const EmployeeDetails: React.FC = () => {
 
   if (isFetching)
     return (
-      <section className="grid place-content-center h-screen">
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress />
-        </Box>
-      </section>
+      <SectionFeedback>
+        <CircularProgress />
+      </SectionFeedback>
     );
-  if (isError) return <div>err</div>;
+  if (error)
+    return (
+      <SectionFeedback>
+        <Alert severity="error">{(error as any).response.data.message}</Alert>
+      </SectionFeedback>
+    );
+
+  const { employee } = data;
 
   const initialValues = {
     ...employee,

@@ -46,6 +46,7 @@ export const deleteEmployee = async (req, res, next) => {
   await Cancelled.create({
     name: deletedEmployee.name,
     idNumber: deletedEmployee.idNumber,
+    cancellationDate: new Date(),
   });
   res
     .status(StatusCodes.OK)

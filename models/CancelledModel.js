@@ -4,6 +4,7 @@ const cancelledSchema = new Schema(
   {
     name: String,
     idNumber: Number,
+    cancellationDate: Date,
   },
   {
     timestamps: true,

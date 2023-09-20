@@ -30,6 +30,7 @@ const employeeSchema = new Schema(
         ref: "Vacation",
       },
     ],
+    note: String,
     cancellationDate: Date,
   },
   {

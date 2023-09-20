@@ -4,10 +4,6 @@ import Employee from "./EmployeeModel.js";
 
 const vacationSchema = new Schema(
   {
-    employeeId: {
-      type: Schema.ObjectId,
-      ref: "Employee",
-    },
     idNumber: Number,
     employeeName: String,
     leavingDate: Date,
@@ -33,7 +29,6 @@ vacationSchema.pre("save", async function () {
     { idNumber: this.idNumber },
     {
       $push: { vacations: this._id },
-      licenseType: "Car",
     }
   );
 });
