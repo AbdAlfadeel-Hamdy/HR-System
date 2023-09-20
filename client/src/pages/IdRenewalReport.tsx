@@ -54,7 +54,9 @@ const IdRenewalReport = () => {
       <ReactVirtualizedTable
         rows={modifiedData.map((row: any) => ({
           ...row,
-          name: <NavLink to={row._id}>{row.name}</NavLink>,
+          name: (
+            <NavLink to={`/dashboard/employees/${row._id}`}>{row.name}</NavLink>
+          ),
         }))}
         columns={idRenewalColumns}
       />

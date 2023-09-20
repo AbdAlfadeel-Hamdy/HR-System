@@ -27,7 +27,6 @@ const EmployeeDetails: React.FC = () => {
       const { data } = await customFetch(`/employees/${id}`);
       return data;
     },
-    staleTime: 1000 * 60 * 5,
   });
 
   const { mutateAsync: deleteEmployeeHandler, isLoading } = useMutation({
