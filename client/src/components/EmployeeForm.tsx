@@ -280,7 +280,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
             <DatePicker
               label="Agreement Expiration Date"
               format="DD/MM/YYYY"
-              value={formik.values.idExpirationDate}
+              value={formik.values.agreementExpirationDate}
               onChange={(value) => {
                 formik.setFieldValue("agreementExpirationDate", value, true);
               }}
@@ -330,7 +330,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
             <DatePicker
               label="License Expiration Date"
               format="DD/MM/YYYY"
-              value={formik.values.idExpirationDate}
+              value={formik.values.licenseExpirationDate}
               onChange={(value) => {
                 formik.setFieldValue("licenseExpirationDate", value, true);
               }}

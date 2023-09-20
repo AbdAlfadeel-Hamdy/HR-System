@@ -53,7 +53,7 @@ export const downloadRenewalIdPDF = (
 
 export const idRenewalColumns: ColumnData[] = [
   {
-    width: 200,
+    width: 300,
     label: "Name",
     dataKey: "name",
   },

@@ -9,7 +9,7 @@ import { SectionFeedback } from "../components";
 
 const columns: ColumnData[] = [
   {
-    width: 200,
+    width: 350,
     label: "Name",
     dataKey: "name",
   },

@@ -47,7 +47,7 @@ export const downloadSponsorPDF = (
 
 export const sponsorColumns: ColumnData[] = [
   {
-    width: 200,
+    width: 300,
     label: "Name",
     dataKey: "name",
   },
@@ -63,7 +63,7 @@ export const sponsorColumns: ColumnData[] = [
     dataKey: "idExpirationDate",
   },
   {
-    width: 200,
+    width: 150,
     label: "Status",
     dataKey: "status",
   },
@@ -73,7 +73,7 @@ export const sponsorColumns: ColumnData[] = [
     dataKey: "workIn",
   },
   {
-    width: 200,
+    width: 150,
     label: "Nationality",
     dataKey: "nationality",
   },

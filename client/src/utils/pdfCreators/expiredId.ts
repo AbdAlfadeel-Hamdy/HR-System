@@ -52,7 +52,7 @@ export const downloadExpiredIdPDF = (
 
 export const expiredIdColumns: ColumnData[] = [
   {
-    width: 200,
+    width: 300,
     label: "Name",
     dataKey: "name",
   },

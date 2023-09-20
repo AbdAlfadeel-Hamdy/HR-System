@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { Table, TableBody } from "@mui/material";
 import { AddOutlined } from "@mui/icons-material";
 import { Modal, StyledTableCell, StyledTableRow, UploadFile } from ".";
@@ -16,7 +17,9 @@ const EmployeeInfoTable: React.FC<EmployeeInfoTableProps> = ({ employee }) => {
     createData("ID", employee.idNumber),
     createData(
       "ID Expiration",
-      new Date(employee.idExpirationDate).toLocaleDateString("en-uk")
+      employee.idExpirationDate
+        ? dayjs(employee.idExpirationDate).format("DD/MM/YYYY")
+        : ""
     ),
     createData(
       "Status",
@@ -26,14 +29,24 @@ const EmployeeInfoTable: React.FC<EmployeeInfoTableProps> = ({ employee }) => {
     createData("Passport", employee.passportNumber),
     createData(
       "Passport Expiration",
-      new Date(employee.passportExpirationDate).toLocaleDateString("en-uk")
+      employee.passportExpirationDate
+        ? dayjs(employee.passportExpirationDate).format("DD/MM/YYYY")
+        : ""
     ),
     createData("Work In", employee.workIn),
     createData("Sponsor", employee.sponsor),
     createData("License", employee.licenseType),
     createData(
+      "License Expiration",
+      employee.licenseExpirationDate
+        ? dayjs(employee.licenseExpirationDate).format("DD/MM/YYYY")
+        : ""
+    ),
+    createData(
       "Agreement Expiration",
-      new Date(employee.agreementExpirationDate).toLocaleDateString("en-uk")
+      employee.agreementExpirationDate
+        ? dayjs(employee.agreementExpirationDate).format("DD/MM/YYYY")
+        : ""
     ),
   ];
   return (

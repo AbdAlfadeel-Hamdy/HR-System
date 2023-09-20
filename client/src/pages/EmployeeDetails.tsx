@@ -57,16 +57,24 @@ const EmployeeDetails: React.FC = () => {
 
   const initialValues = {
     ...employee,
-    idExpirationDate: dayjs(employee.idExpirationDate),
-    passportExpirationDate: dayjs(employee.passportExpirationDate),
-    agreementExpirationDate: dayjs(employee.agreementExpirationDate),
-    licenseExpirationDate: dayjs(employee.licenseExpirationDate),
+    idExpirationDate: employee.idExpirationDate
+      ? dayjs(employee.idExpirationDate)
+      : "",
+    passportExpirationDate: employee.passportExpirationDate
+      ? dayjs(employee.passportExpirationDate)
+      : "",
+    agreementExpirationDate: employee.agreementExpirationDate
+      ? dayjs(employee.agreementExpirationDate)
+      : "",
+    licenseExpirationDate: employee.licenseExpirationDate
+      ? dayjs(employee.licenseExpirationDate)
+      : "",
   };
 
   return (
-    <section className="grid grid-cols-[2fr,3fr] row-span-2 gap-2 p-1 ">
-      <Paper className="py-2">
-        <h2 className="text-center text-2xl font-thin mb-4">Employee Info</h2>
+    <section className="grid grid-cols-[2fr,3fr] row-span-2 gap-2 p-1 max-h-screen">
+      <Paper className="py-2 max-h-full overflow-y-scroll ">
+        <h2 className="text-center text-2xl font-thin mb-4 ">Employee Info</h2>
         <EmployeeInfoTable employee={employee} />
         <div className="flex justify-center gap-4 mt-4">
           <Modal btnIcon={<EditNote />} btnText="Edit">

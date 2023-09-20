@@ -48,15 +48,16 @@ export const downloadPassportPDF = (
 
 export const passportColumns: ColumnData[] = [
   {
+    width: 300,
+    label: "Name",
+    dataKey: "name",
+  },
+  {
     width: 200,
     label: "ID",
     dataKey: "idNumber",
   },
-  {
-    width: 200,
-    label: "Name",
-    dataKey: "name",
-  },
+
   {
     width: 200,
     label: "Nationality",

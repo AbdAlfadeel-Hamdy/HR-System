@@ -45,7 +45,7 @@ export const downloadStatusPDF = (title: string, columns: any[], data: any) => {
 
 export const statusColumns: ColumnData[] = [
   {
-    width: 200,
+    width: 300,
     label: "Name",
     dataKey: "name",
   },

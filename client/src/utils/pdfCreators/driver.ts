@@ -27,7 +27,7 @@ export const downloadDriverPDF = (title: string, columns: any[], data: any) => {
 
 export const driverColumns: ColumnData[] = [
   {
-    width: 200,
+    width: 300,
     label: "Name",
     dataKey: "name",
   },
