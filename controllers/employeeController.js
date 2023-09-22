@@ -29,6 +29,7 @@ export const getEmployee = async (req, res, next) => {
 };
 
 export const updateEmployee = async (req, res, next) => {
+  if (req.file) req.body[req.body.fieldName] = req.file.path;
   const updatedEmployee = await Employee.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -124,6 +125,7 @@ export const getIdsRenewal = async (req, res, next) => {
   ]);
   res.status(StatusCodes.OK).json({ employees });
 };
+
 export const getSponsor = async (req, res, next) => {
   const employees = await Employee.aggregate([
     {
@@ -188,8 +190,33 @@ export const getPassports = async (req, res, next) => {
 };
 
 export const getDrivers = async (req, res, next) => {
-  req.query.fields = "name,idNumber,licenseType,licenseExpirationDate";
-  next();
+  const employees = await Employee.aggregate([
+    {
+      $project: {
+        nationality: 0,
+        status: 0,
+        idExpirationDate: 0,
+        idImage: 0,
+        passportNumber: 0,
+        passportImage: 0,
+        passportExpirationDate: 0,
+        agreementExpirationDate: 0,
+        cancellationDate: 0,
+        vacations: 0,
+        note: 0,
+        createdAt: 0,
+        updatedAt: 0,
+        __v: 0,
+      },
+    },
+    {
+      $group: {
+        _id: `$${req.body.groupBy}`,
+        documents: { $push: "$$ROOT" },
+      },
+    },
+  ]);
+  res.status(StatusCodes.OK).json({ employees });
 };
 
 export const getStatus = async (req, res, next) => {

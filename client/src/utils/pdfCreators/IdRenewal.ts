@@ -40,12 +40,7 @@ export const downloadRenewalIdPDF = (
     });
   });
   autoTable(doc, {
-    foot: [
-      [
-        dayjs(new Date().toString()).format("dddd"),
-        dayjs(new Date().toString()).format("DD/MM/YYYY"),
-      ],
-    ],
+    foot: [[dayjs().format("dddd"), dayjs().format("DD/MM/YYYY")]],
   });
 
   doc.save(`${title}.pdf`);

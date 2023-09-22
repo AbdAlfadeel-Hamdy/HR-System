@@ -4,24 +4,39 @@ import autoTable from "jspdf-autotable";
 import dayjs from "dayjs";
 import { ColumnData } from "../../components/Table";
 
-export const downloadDriverPDF = (title: string, columns: any[], data: any) => {
+export const downloadDriverPDF = (
+  title: string,
+  columns: any[],
+  data: any,
+  groupBy: string
+) => {
   const doc = new jsPDF();
   doc.text(title, 15, 10);
-  autoTable(doc, {
-    columns: columns.map((col) => ({
-      dataKey: col.dataKey,
-      header: col.label,
-    })),
-    body: data,
-    foot: [
-      [
-        dayjs(new Date().toString()).format("dddd"),
-        dayjs(new Date().toString()).format("DD/MM/YYYY"),
-        `Total: ${data.length}`,
-      ],
-    ],
-    showFoot: "lastPage",
+  data.forEach((company: any) => {
+    autoTable(doc, {
+      head: [[company._id]],
+    });
+    autoTable(doc, {
+      columns: columns
+        .filter((col: any) => col.dataKey !== groupBy)
+        .map((col) => ({
+          dataKey: col.dataKey,
+          header: col.label,
+        })),
+      body: company.documents.map((row: any) => ({
+        ...row,
+        licenseExpirationDate: row.licenseExpirationDate
+          ? dayjs(row.licenseExpirationDate).format("DD/MM/YYYY")
+          : "",
+      })),
+      foot: [[`Total: ${company.documents.length}`]],
+      showFoot: "lastPage",
+    });
   });
+  autoTable(doc, {
+    foot: [[dayjs().format("dddd"), dayjs().format("DD/MM/YYYY")]],
+  });
+
   doc.save(`${title}.pdf`);
 };
 

@@ -14,3 +14,4 @@ export { default as AddEmployee } from "./AddEmployee";
 export { default as AddUser } from "./AddUser";
 export { default as EmployeeDetails } from "./EmployeeDetails";
 export { default as SponsorReport } from "./SponsorReport";
+export { default as Users } from "./Users";

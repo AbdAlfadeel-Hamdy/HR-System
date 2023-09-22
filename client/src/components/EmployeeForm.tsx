@@ -38,7 +38,6 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
       "passport",
       "duty",
       "vacation",
-      "vacations",
       "expired-id",
     ],
     mutationFn: async (employee: any) => {

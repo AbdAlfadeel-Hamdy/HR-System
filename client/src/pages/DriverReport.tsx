@@ -1,52 +1,46 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Alert, CircularProgress } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import { downloadDriverPDF, driverColumns } from "../utils/pdfCreators/driver";
 import ReactVirtualizedTable from "../components/Table";
-import { SectionFeedback, DownloadButton } from "../components";
+import { SectionFeedback, DownloadButton, DriverForm } from "../components";
+import dayjs from "dayjs";
 
 const DriverReport = () => {
-  const { isFetching, data, error } = useQuery({
-    queryKey: ["drivers"],
-    queryFn: async () => {
-      const { data } = await customFetch.get("/employees/driver");
+  const [groupBy, setGroupBy] = useState("workIn");
+  const { isLoading, data, error, mutateAsync } = useMutation({
+    mutationFn: async (values: any) => {
+      const { data } = await customFetch.post("/employees/driver", values);
       return data;
     },
-    staleTime: 1000 * 60 * 5,
   });
 
-  if (isFetching)
-    return (
+  let content;
+
+  if (isLoading)
+    content = (
       <SectionFeedback>
         <CircularProgress />
       </SectionFeedback>
     );
-  if (error)
-    return (
-      <SectionFeedback>
-        <Alert severity="error">{(error as any).response.data.message}</Alert>
-      </SectionFeedback>
+  else if (error)
+    content = (
+      <Alert severity="error">{(error as any).response.data.message}</Alert>
     );
-
-  const modifiedData = data.employees.map((row: any) => {
-    return {
-      ...row,
-      licenseExpirationDate: new Date(
-        row.licenseExpirationDate
-      ).toLocaleDateString("en-uk"),
-    };
-  });
-
-  if (modifiedData.length === 0)
-    return (
-      <SectionFeedback>
-        <Alert severity="info">No employees were found.</Alert>
-      </SectionFeedback>
-    );
-
-  return (
-    <>
+  else if (data?.employees.length > 0) {
+    const modifiedData = data.employees
+      .flatMap((company: any) => company.documents)
+      .map((row: any) => {
+        return {
+          ...row,
+          licenseExpirationDate: row.licenseExpirationDate
+            ? dayjs(row.licenseExpirationDate).format("DD/MM/YYYY")
+            : "",
+        };
+      });
+    content = (
       <ReactVirtualizedTable
         rows={modifiedData.map((row: any) => ({
           ...row,
@@ -56,11 +50,30 @@ const DriverReport = () => {
         }))}
         columns={driverColumns}
       />
-      <DownloadButton
-        onClick={() =>
-          downloadDriverPDF("Driver Report", driverColumns, modifiedData)
-        }
-      />
+    );
+  } else if (data?.employees.length === 0)
+    content = <Alert severity="info">No drivers were found.</Alert>;
+
+  return (
+    <>
+      <div className="flex flex-col">
+        <div className="h-24">
+          <DriverForm queryFn={mutateAsync} groupByHandler={setGroupBy} />
+        </div>
+        {content}
+      </div>
+      {data?.employees.length > 0 && (
+        <DownloadButton
+          onClick={() =>
+            downloadDriverPDF(
+              "Driver Report",
+              driverColumns,
+              data.employees,
+              groupBy
+            )
+          }
+        />
+      )}
     </>
   );
 };

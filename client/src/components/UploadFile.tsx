@@ -1,6 +1,15 @@
-interface IUploadFile {}
+interface UploadFileProps {
+  onChange: (file: File | null) => void;
+}
 
-const UploadFile: React.FC<IUploadFile> = () => {
+const UploadFile: React.FC<UploadFileProps> = ({ onChange }) => {
+  const changeFileHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length === 1) {
+      const file = e.target.files[0];
+      onChange(file);
+    }
+  };
+
   return (
     <div className="flex w-full items-center justify-center bg-grey-lighter py-8">
       <label className="w-64 flex flex-col items-center px-4 py-6 bg-white text-blue-600 rounded-lg shadow-lg tracking-wide uppercase border border-blue-600 cursor-pointer hover:bg-blue-600 hover:text-white">
@@ -13,7 +22,12 @@ const UploadFile: React.FC<IUploadFile> = () => {
           <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
         </svg>
         <span className="mt-2 text-base leading-normal">Select a file</span>
-        <input type="file" className="hidden" />
+        <input
+          type="file"
+          className="hidden"
+          // accept=".jpg,.jpeg,.png"
+          onChange={changeFileHandler}
+        />
       </label>
     </div>
   );

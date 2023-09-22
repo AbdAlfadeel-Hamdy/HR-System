@@ -13,6 +13,18 @@ export const register = async (req, res, next) => {
   res.status(StatusCodes.CREATED).json({ message: "User created." });
 };
 
+export const getAllUsers = async (req, res, next) => {
+  const users = await User.find();
+  res.status(StatusCodes.OK).json({ users });
+};
+
+export const updateUser = async (req, res, next) => {
+  const { name, email } = req.body;
+
+  await User.findByIdAndUpdate(req.params.id, { name, email });
+  res.status(StatusCodes.OK).json({ message: "User updated." });
+};
+
 export const login = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
 

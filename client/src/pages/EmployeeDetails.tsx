@@ -22,11 +22,12 @@ const EmployeeDetails: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { isFetching, error, data, refetch } = useQuery({
-    queryKey: ["employee"],
+    queryKey: [`employees/${id}`],
     queryFn: async () => {
       const { data } = await customFetch(`/employees/${id}`);
       return data;
     },
+    staleTime: 1000 * 60 * 5,
   });
 
   const { mutateAsync: deleteEmployeeHandler, isLoading } = useMutation({

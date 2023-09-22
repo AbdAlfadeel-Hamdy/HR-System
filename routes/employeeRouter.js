@@ -13,6 +13,7 @@ import {
   getSponsor,
 } from "../controllers/employeeController.js";
 import { validateEmployeeInput } from "../middlewares/validationMiddleware.js";
+import upload from "../middlewares/multerMiddleware.js";
 
 const router = Router();
 
@@ -21,7 +22,7 @@ router.route("/expired-id").get(getExpiredIds);
 router.route("/id-renewal").post(getIdsRenewal);
 router.route("/sponsor").post(getSponsor);
 router.route("/passport").get(getPassports);
-router.route("/driver").get(getDrivers, getAllEmployees);
+router.route("/driver").post(getDrivers);
 router.route("/status").get(getStatus);
 
 router
@@ -32,7 +33,7 @@ router
 router
   .route("/:id")
   .get(getEmployee)
-  .patch(updateEmployee)
+  .patch(upload.single("uploadedFile"), updateEmployee)
   .delete(deleteEmployee);
 
 export default router;

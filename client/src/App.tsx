@@ -17,6 +17,7 @@ import {
   SponsorReport,
   CancelledReport,
   ErrorPage,
+  Users,
 } from "./pages";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
           {
             path: "employees/:id",
             element: <EmployeeDetails />,
+          },
+          {
+            path: "users",
+            element: <Users />,
           },
           {
             path: "reports",
