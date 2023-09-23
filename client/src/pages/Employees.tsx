@@ -5,6 +5,7 @@ import { CircularProgress, Alert } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import ReactVirtualizedTable, { ColumnData } from "../components/Table";
 import { SectionFeedback } from "../components";
+import dayjs from "dayjs";
 
 const columns: ColumnData[] = [
   {
@@ -115,18 +116,18 @@ const Employees = () => {
     return {
       ...row,
       name: <NavLink to={`employees/${row._id}`}>{row.name}</NavLink>,
-      idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
-        "en-uk"
-      ),
-      passportExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
-        "en-uk"
-      ),
-      agreementExpirationDate: new Date(
-        row.idExpirationDate
-      ).toLocaleDateString("en-uk"),
-      licenseExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
-        "en-uk"
-      ),
+      idExpirationDate: row.idExpirationDate
+        ? dayjs(row.idExpirationDate).format("DD/MM/YYYY")
+        : "",
+      passportExpirationDate: row.passportExpirationDate
+        ? dayjs(row.passportExpirationDate).format("DD/MM/YYYY")
+        : "",
+      agreementExpirationDate: row.agreementExpirationDate
+        ? dayjs(row.agreementExpirationDate).format("DD/MM/YYYY")
+        : "",
+      licenseExpirationDate: row.licenseExpirationDate
+        ? dayjs(row.licenseExpirationDate).format("DD/MM/YYYY")
+        : "",
       status:
         row.status === "duty" ? "\uD83D\uDFE2 Duty" : "\uD83D\uDFE1 Vacation",
     };
