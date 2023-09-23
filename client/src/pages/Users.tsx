@@ -37,10 +37,9 @@ const Users = () => {
   const { isFetching, data, error, refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
-      const { data } = await customFetch.get("auth/users");
+      const { data } = await customFetch.get("/auth/users");
       return data;
     },
-    staleTime: 1000 * 60 * 5,
   });
 
   const { mutateAsync: deleteUserHandler, isLoading } = useMutation({
