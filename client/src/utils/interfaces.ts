@@ -13,5 +13,5 @@ export interface Employee {
   status: "duty" | "vacation" | "cancelled";
   licenseExpirationDate: Dayjs;
   licenseType: "Car" | "Truck" | "Car&Truck";
-  note: string;
+  note?: string;
 }
