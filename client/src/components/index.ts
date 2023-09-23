@@ -14,4 +14,5 @@ export { default as IdRenewalForm } from "./IdRenewalForm";
 export { default as DriverForm } from "./DriverForm";
 export { default as SponsorForm } from "./SponsorForm";
 export { default as PassportForm } from "./PassportForm";
+export { default as StatusForm } from "./StatusForm";
 export { default as DownloadButton } from "./DownloadButton";

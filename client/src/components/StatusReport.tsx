@@ -1,8 +1,9 @@
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import ReactVirtualizedTable from "../components/Table";
 import { CircularProgress, Alert } from "@mui/material";
-import { DownloadButton, SectionFeedback } from ".";
+import { DownloadButton, SectionFeedback, StatusForm } from ".";
 import customFetch from "../utils/customFetch";
 import { downloadStatusPDF, statusColumns } from "../utils/pdfCreators/status";
 
@@ -11,52 +12,44 @@ interface StatusReportProps {
 }
 
 const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
-  const { isFetching, data, error } = useQuery({
-    queryKey: [status],
-    queryFn: async () => {
+  const [groupBy, setGroupBy] = useState("workIn");
+
+  const { isLoading, data, error, mutateAsync } = useMutation({
+    mutationFn: async (values: { groupBy: string }) => {
       const { data } = await customFetch.get("/employees/status", {
         params: {
           status,
+          groupBy: values.groupBy,
         },
       });
       return data;
     },
-    staleTime: 1000 * 60 * 5,
   });
 
-  if (isFetching)
-    return (
+  let content;
+
+  if (isLoading)
+    content = (
       <SectionFeedback>
         <CircularProgress />
       </SectionFeedback>
     );
-  if (error)
-    return (
-      <SectionFeedback>
-        <Alert severity="error">{(error as any).response.data.message}</Alert>
-      </SectionFeedback>
+  else if (error)
+    content = (
+      <Alert severity="error">{(error as any).response.data.message}</Alert>
     );
-
-  const modifiedData = data.employees
-    .flatMap((company: any) => company.documents)
-    .map((row: any) => {
-      return {
-        ...row,
-        idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
-          "en-uk"
-        ),
-      };
-    });
-
-  if (modifiedData.length === 0)
-    return (
-      <SectionFeedback>
-        <Alert severity="info">No employees were found with this status.</Alert>
-      </SectionFeedback>
-    );
-
-  return (
-    <>
+  else if (data?.employees.length > 0) {
+    const modifiedData = data.employees
+      .flatMap((company: any) => company.documents)
+      .map((row: any) => {
+        return {
+          ...row,
+          idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
+            "en-uk"
+          ),
+        };
+      });
+    content = (
       <ReactVirtualizedTable
         rows={modifiedData.map((row: any) => ({
           ...row,
@@ -66,11 +59,32 @@ const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
         }))}
         columns={statusColumns}
       />
-      <DownloadButton
-        onClick={() =>
-          downloadStatusPDF(`${status} Report`, statusColumns, data.employees)
-        }
-      />
+    );
+  } else if (data?.employees.length === 0)
+    content = (
+      <Alert severity="info">No employees were found with this status.</Alert>
+    );
+
+  return (
+    <>
+      <div className="flex flex-col">
+        <div className="h-24">
+          <StatusForm queryFn={mutateAsync} groupByHandler={setGroupBy} />
+        </div>
+        {content}
+      </div>
+      {data?.employees.length > 0 && (
+        <DownloadButton
+          onClick={() =>
+            downloadStatusPDF(
+              `${status.toUpperCase()} Report`,
+              statusColumns,
+              data.employees,
+              groupBy
+            )
+          }
+        />
+      )}
     </>
   );
 };

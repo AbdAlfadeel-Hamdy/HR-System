@@ -225,7 +225,7 @@ export const getDrivers = async (req, res, next) => {
 };
 
 export const getStatus = async (req, res, next) => {
-  const { status } = req.query;
+  const { status, groupBy } = req.query;
   const employees = await Employee.aggregate([
     {
       $match: {
@@ -250,7 +250,7 @@ export const getStatus = async (req, res, next) => {
     },
     {
       $group: {
-        _id: "$workIn",
+        _id: `$${groupBy}`,
         documents: { $push: "$$ROOT" },
       },
     },
