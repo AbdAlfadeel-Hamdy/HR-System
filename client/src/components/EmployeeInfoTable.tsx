@@ -141,4 +141,5 @@ const createRows = (employee: any) => [
       ? dayjs(employee.agreementExpirationDate).format("DD/MM/YYYY")
       : ""
   ),
+  createData("Note", employee.note),
 ];

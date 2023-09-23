@@ -51,7 +51,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
 
   const formik = useFormik({
     initialValues,
-    validationSchema: employeeValidationSchema,
+    validationSchema: method === "POST" ? employeeValidationSchema : null,
     onSubmit: async (values, { resetForm }) => {
       try {
         await mutateAsync({
@@ -348,6 +348,21 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                 },
               }}
             />
+            {method === "PATCH" && (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="note"
+                label="Note"
+                name="note"
+                value={formik.values.note}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.note && Boolean(formik.errors.note)}
+                helperText={formik.touched.note && formik.errors.note}
+              />
+            )}
             <LoadingButton
               type="submit"
               fullWidth

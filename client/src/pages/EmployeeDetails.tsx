@@ -70,6 +70,7 @@ const EmployeeDetails: React.FC = () => {
     licenseExpirationDate: employee.licenseExpirationDate
       ? dayjs(employee.licenseExpirationDate)
       : "",
+    note: employee.note || "",
   };
 
   return (
