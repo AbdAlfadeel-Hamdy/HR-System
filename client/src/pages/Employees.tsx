@@ -69,6 +69,11 @@ const columns: ColumnData[] = [
     label: "Status",
     dataKey: "status",
   },
+  {
+    width: 200,
+    label: "Note",
+    dataKey: "note",
+  },
 ];
 
 let renderTimes = 0;

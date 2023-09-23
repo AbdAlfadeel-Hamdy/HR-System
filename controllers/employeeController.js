@@ -23,7 +23,7 @@ export const getAllEmployees = async (req, res, next) => {
 export const createEmployee = async (req, res, next) => {
   const createdEmployee = await Employee.create(req.body);
   await Activity.create({
-    userName: user.name,
+    userName: req.user.name,
     activity: "Created Employee",
     timeStamp: Date.now(),
   });
@@ -53,7 +53,7 @@ export const updateEmployee = async (req, res, next) => {
     );
 
   await Activity.create({
-    userName: user.name,
+    userName: req.user.name,
     activity: "Updated Employee",
     timeStamp: Date.now(),
   });
@@ -71,7 +71,7 @@ export const deleteEmployee = async (req, res, next) => {
     cancellationDate: new Date(),
   });
   await Activity.create({
-    userName: user.name,
+    userName: req.user.name,
     activity: "Deleted Employee",
     timeStamp: Date.now(),
   });
@@ -234,7 +234,6 @@ export const getDrivers = async (req, res, next) => {
         agreementExpirationDate: 0,
         cancellationDate: 0,
         vacations: 0,
-        note: 0,
         createdAt: 0,
         updatedAt: 0,
         __v: 0,

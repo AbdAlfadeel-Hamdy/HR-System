@@ -11,7 +11,7 @@ export const createVacation = async (req, res, next) => {
   const createdVacation = await Vacation.create(req.body);
 
   await Activity.create({
-    userName: user.name,
+    userName: req.user.name,
     activity: "Created Vacation",
     timeStamp: Date.now(),
   });
@@ -35,7 +35,7 @@ export const updateVacation = async (req, res, next) => {
   );
 
   await Activity.create({
-    userName: user.name,
+    userName: req.user.name,
     activity: "Updated Vacation",
     timeStamp: Date.now(),
   });
@@ -47,7 +47,7 @@ export const updateVacation = async (req, res, next) => {
 export const deleteVacation = async (req, res, next) => {
   const deletedVacation = await Vacation.findByIdAndDelete(req.params.id);
   await Activity.create({
-    userName: user.name,
+    userName: req.user.name,
     activity: "Deleted Vacation",
     timeStamp: Date.now(),
   });

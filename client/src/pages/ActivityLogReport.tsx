@@ -43,7 +43,10 @@ const ActivityLogReport = () => {
 
   return (
     <>
-      <ReactVirtualizedTable rows={modifiedData} columns={activityLogColumns} />
+      <ReactVirtualizedTable
+        rows={modifiedData.reverse()}
+        columns={activityLogColumns}
+      />
       <DownloadButton
         onClick={() =>
           downloadActivityLogPDF(
