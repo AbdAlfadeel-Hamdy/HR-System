@@ -11,7 +11,7 @@ import dayjs from "dayjs";
 const DriverReport = () => {
   const [groupBy, setGroupBy] = useState("workIn");
   const { isLoading, data, error, mutateAsync } = useMutation({
-    mutationFn: async (values: any) => {
+    mutationFn: async (values: { groupBy: string }) => {
       const { data } = await customFetch.post("/employees/driver", values);
       return data;
     },

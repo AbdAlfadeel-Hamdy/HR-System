@@ -7,7 +7,8 @@ import { ColumnData } from "../../components/Table";
 export const downloadPassportPDF = (
   title: string,
   columns: any[],
-  data: any
+  data: any,
+  groupBy: string
 ) => {
   const doc = new jsPDF();
   doc.text(title, 15, 10);
@@ -17,30 +18,23 @@ export const downloadPassportPDF = (
     });
     autoTable(doc, {
       columns: columns
-        .filter((col: any) => col.dataKey !== "nationality")
+        .filter((col: any) => col.dataKey !== groupBy)
         .map((col) => ({
           dataKey: col.dataKey,
           header: col.label,
         })),
       body: company.documents.map((row: any) => ({
-        name: row.name,
-        idNumber: row.idNumber,
-        passportNumber: row.passportNumber,
-        passportExpirationDate: new Date(
-          row.passportExpirationDate
-        ).toLocaleDateString("en-uk"),
+        ...row,
+        passportExpirationDate: row.passportExpirationDate
+          ? dayjs(row.passportExpirationDate).format("DD/MM/YYYY")
+          : "",
       })),
       foot: [[`Total: ${company.documents.length}`]],
       showFoot: "lastPage",
     });
   });
   autoTable(doc, {
-    foot: [
-      [
-        dayjs(new Date().toString()).format("dddd"),
-        dayjs(new Date().toString()).format("DD/MM/YYYY"),
-      ],
-    ],
+    foot: [[dayjs().format("dddd"), dayjs().format("DD/MM/YYYY")]],
   });
 
   doc.save(`${title}.pdf`);
@@ -57,11 +51,15 @@ export const passportColumns: ColumnData[] = [
     label: "ID",
     dataKey: "idNumber",
   },
-
   {
     width: 200,
     label: "Nationality",
     dataKey: "nationality",
+  },
+  {
+    width: 200,
+    label: "Sponsor",
+    dataKey: "sponsor",
   },
   {
     width: 200,

@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 import { CircularProgress, Alert } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import {
@@ -7,51 +8,41 @@ import {
   passportColumns,
 } from "../utils/pdfCreators/passport";
 import ReactVirtualizedTable from "../components/Table";
-import { DownloadButton, SectionFeedback } from "../components";
+import { DownloadButton, SectionFeedback, PassportForm } from "../components";
 
-const ExpiredIdReport = () => {
-  const { isFetching, data, error } = useQuery({
-    queryKey: ["passport"],
-    queryFn: async () => {
-      const { data } = await customFetch.get("/employees/passport");
+const PassportReport = () => {
+  const [groupBy, setGroupBy] = useState("nationality");
+  const { isLoading, data, error, mutateAsync } = useMutation({
+    mutationFn: async (values: { groupBy: string }) => {
+      const { data } = await customFetch.post("/employees/passport", values);
       return data;
     },
-    staleTime: 1000 * 60 * 3,
   });
 
-  if (isFetching)
-    return (
+  let content;
+
+  if (isLoading)
+    content = (
       <SectionFeedback>
         <CircularProgress />
       </SectionFeedback>
     );
-  if (error)
-    return (
-      <SectionFeedback>
-        <Alert severity="error">{(error as any).response.data.message}</Alert>
-      </SectionFeedback>
+  else if (error)
+    content = (
+      <Alert severity="error">{(error as any).response.data.message}</Alert>
     );
-
-  const modifiedData = data.employees
-    .flatMap((company: any) => company.documents)
-    .map((row: any) => {
-      return {
-        ...row,
-        passportExpirationDate: new Date(
-          row.passportExpirationDate
-        ).toLocaleDateString("en-uk"),
-      };
-    });
-
-  if (modifiedData.length === 0)
-    return (
-      <SectionFeedback>
-        <Alert severity="info">No employees found.</Alert>
-      </SectionFeedback>
-    );
-
-  return (
-    <>
+  else if (data?.employees.length > 0) {
+    const modifiedData = data.employees
+      .flatMap((company: any) => company.documents)
+      .map((row: any) => {
+        return {
+          ...row,
+          passportExpirationDate: new Date(
+            row.passportExpirationDate
+          ).toLocaleDateString("en-uk"),
+        };
+      });
+    content = (
       <ReactVirtualizedTable
         rows={modifiedData.map((row: any) => ({
           ...row,
@@ -61,17 +52,32 @@ const ExpiredIdReport = () => {
         }))}
         columns={passportColumns}
       />
-      <DownloadButton
-        onClick={() =>
-          downloadPassportPDF(
-            "Passport Report",
-            passportColumns,
-            data.employees
-          )
-        }
-      />
+    );
+  } else if (data?.employees.length === 0)
+    content = <Alert severity="info">No employees found.</Alert>;
+
+  return (
+    <>
+      <div className="flex flex-col">
+        <div className="h-24">
+          <PassportForm queryFn={mutateAsync} groupByHandler={setGroupBy} />
+        </div>
+        {content}
+      </div>
+      {data?.employees.length > 0 && (
+        <DownloadButton
+          onClick={() =>
+            downloadPassportPDF(
+              "Passport Report",
+              passportColumns,
+              data.employees,
+              groupBy
+            )
+          }
+        />
+      )}
     </>
   );
 };
 
-export default ExpiredIdReport;
+export default PassportReport;

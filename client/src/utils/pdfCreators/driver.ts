@@ -61,4 +61,14 @@ export const driverColumns: ColumnData[] = [
     label: "License Expiration",
     dataKey: "licenseExpirationDate",
   },
+  {
+    width: 200,
+    label: "Work In",
+    dataKey: "workIn",
+  },
+  {
+    width: 200,
+    label: "Sponsor",
+    dataKey: "sponsor",
+  },
 ];

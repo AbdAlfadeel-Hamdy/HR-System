@@ -21,7 +21,7 @@ const router = Router();
 router.route("/expired-id").get(getExpiredIds);
 router.route("/id-renewal").post(getIdsRenewal);
 router.route("/sponsor").post(getSponsor);
-router.route("/passport").get(getPassports);
+router.route("/passport").post(getPassports);
 router.route("/driver").post(getDrivers);
 router.route("/status").get(getStatus);
 

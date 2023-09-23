@@ -160,7 +160,13 @@ export const getSponsor = async (req, res, next) => {
 };
 
 export const getPassports = async (req, res, next) => {
+  const expirationDate = new Date();
   const employees = await Employee.aggregate([
+    {
+      $match: {
+        passportExpirationDate: { $lt: expirationDate },
+      },
+    },
     {
       $project: {
         idImage: 0,
@@ -171,7 +177,6 @@ export const getPassports = async (req, res, next) => {
         licenseType: 0,
         cancellationDate: 0,
         vacations: 0,
-        sponsor: 0,
         workIn: 0,
         status: 0,
         createdAt: 0,
@@ -181,7 +186,7 @@ export const getPassports = async (req, res, next) => {
     },
     {
       $group: {
-        _id: "$nationality",
+        _id: `$${req.body.groupBy}`,
         documents: { $push: "$$ROOT" },
       },
     },
