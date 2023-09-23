@@ -46,7 +46,7 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
     },
   ];
 
-  if (user.role === "admin") {
+  if (user?.role === "admin") {
     actions.push({
       title: "Add User",
       icon: <ChevronRightIcon className="h-5 w-5" />,
@@ -62,7 +62,7 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
     <Card className=" min-h-screen overflow-y-scroll w-[20rem] max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none row-span-2">
       <div className="mb-2 p-4">
         <Typography variant="h5" color="blue-gray">
-          Welcome, {user.name}
+          Welcome, {user?.name}
         </Typography>
       </div>
 

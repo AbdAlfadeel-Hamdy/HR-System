@@ -10,6 +10,12 @@ export const getAllVacations = async (req, res, next) => {
 export const createVacation = async (req, res, next) => {
   const createdVacation = await Vacation.create(req.body);
 
+  await Activity.create({
+    userName: user.name,
+    activity: "Created Vacation",
+    timeStamp: Date.now(),
+  });
+
   res.status(StatusCodes.CREATED).json({ vacation: createdVacation });
 };
 
@@ -27,6 +33,12 @@ export const updateVacation = async (req, res, next) => {
       new: true,
     }
   );
+
+  await Activity.create({
+    userName: user.name,
+    activity: "Updated Vacation",
+    timeStamp: Date.now(),
+  });
   res
     .status(StatusCodes.OK)
     .json({ message: "Vacation modified.", vacation: updatedVacation });
@@ -34,6 +46,11 @@ export const updateVacation = async (req, res, next) => {
 
 export const deleteVacation = async (req, res, next) => {
   const deletedVacation = await Vacation.findByIdAndDelete(req.params.id);
+  await Activity.create({
+    userName: user.name,
+    activity: "Deleted Vacation",
+    timeStamp: Date.now(),
+  });
   res
     .status(StatusCodes.OK)
     .json({ message: "Vacation deleted.", vacation: deletedVacation });

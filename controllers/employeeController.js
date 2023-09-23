@@ -3,6 +3,7 @@ import cloudinary from "cloudinary";
 import { formatImage } from "../middlewares/multerMiddleware.js";
 import Employee from "../models/EmployeeModel.js";
 import Cancelled from "../models/CancelledModel.js";
+import Activity from "../models/ActivityModel.js";
 import APIFeatures from "../utils/apiFeatures.js";
 
 export const getAllEmployees = async (req, res, next) => {
@@ -21,6 +22,11 @@ export const getAllEmployees = async (req, res, next) => {
 
 export const createEmployee = async (req, res, next) => {
   const createdEmployee = await Employee.create(req.body);
+  await Activity.create({
+    userName: user.name,
+    activity: "Created Employee",
+    timeStamp: Date.now(),
+  });
 
   res.status(StatusCodes.CREATED).json({ employee: createdEmployee });
 };
@@ -41,11 +47,17 @@ export const updateEmployee = async (req, res, next) => {
     req.params.id,
     req.body
   );
-  if (req.file && updateEmployee[`${req.body.fieldName}PublicId`]) {
+  if (req.file && updateEmployee[`${req.body.fieldName}PublicId`])
     await cloudinary.v2.uploader.destroy(
       updateEmployee[`${req.body.fieldName}PublicId`]
     );
-  }
+
+  await Activity.create({
+    userName: user.name,
+    activity: "Updated Employee",
+    timeStamp: Date.now(),
+  });
+
   res
     .status(StatusCodes.OK)
     .json({ message: "Employee modified.", employee: updatedEmployee });
@@ -57,6 +69,11 @@ export const deleteEmployee = async (req, res, next) => {
     name: deletedEmployee.name,
     idNumber: deletedEmployee.idNumber,
     cancellationDate: new Date(),
+  });
+  await Activity.create({
+    userName: user.name,
+    activity: "Deleted Employee",
+    timeStamp: Date.now(),
   });
   res
     .status(StatusCodes.OK)
