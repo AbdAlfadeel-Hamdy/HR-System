@@ -13,9 +13,19 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import customFetch from "../utils/customFetch";
 import { loginValidationSchema } from "../utils/validationSchemas";
+import { useMutation } from "@tanstack/react-query";
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
+  const { mutateAsync: login } = useMutation({
+    mutationKey: ["user"],
+    mutationFn: async (values: { email: string; password: string }) => {
+      await customFetch.post("/auth/login", {
+        email: values.email,
+        password: values.password,
+      });
+    },
+  });
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -23,12 +33,8 @@ const LoginForm: React.FC = () => {
     },
     validationSchema: loginValidationSchema,
     onSubmit: async (values, { resetForm }) => {
-      const { email, password } = values;
       try {
-        await customFetch.post("/auth/login", {
-          email,
-          password,
-        });
+        await login(values);
         navigate("/dashboard", { replace: true });
         toast.success("Logged in successfully.");
         resetForm();

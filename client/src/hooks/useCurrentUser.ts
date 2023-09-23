@@ -2,15 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import customFetch from "../utils/customFetch";
 
 const useCurrentUser = () => {
-  const {
-    isFetching,
-    data: user,
-    error,
-  } = useQuery({
+  const { isFetching, data, error } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
       const { data } = await customFetch.get("/auth/current-user");
-      return data.user;
+      return data;
     },
     retry: false,
     staleTime: Infinity,
@@ -18,7 +14,7 @@ const useCurrentUser = () => {
 
   return {
     isFetching,
-    user,
+    user: data?.user,
     error,
   };
 };

@@ -38,13 +38,26 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
     },
   ];
 
-  if (user.role === "admin")
+  const auth: any[] = [
+    {
+      title: "Log Out",
+      icon: <PowerIcon className="h-5 w-5" />,
+      onClick: mutate,
+    },
+  ];
+
+  if (user.role === "admin") {
     actions.push({
       title: "Add User",
       icon: <ChevronRightIcon className="h-5 w-5" />,
       href: "actions/add-user",
     });
-
+    auth.unshift({
+      title: "Users",
+      icon: <UserIcon className="h-5 w-5" />,
+      href: "users",
+    });
+  }
   return (
     <Card className=" min-h-screen overflow-y-scroll w-[20rem] max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none row-span-2">
       <div className="mb-2 p-4">
@@ -117,18 +130,7 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
           list={actions}
         />
         <hr className="my-2 border-blue-gray-50" />
-        {[
-          {
-            title: "Users",
-            icon: <UserIcon className="h-5 w-5" />,
-            href: "users",
-          },
-          {
-            title: "Log Out",
-            icon: <PowerIcon className="h-5 w-5" />,
-            onClick: mutate,
-          },
-        ].map((item) => (
+        {auth.map((item) => (
           <SidebarListItem
             key={item.title}
             title={item.title}

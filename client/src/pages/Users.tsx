@@ -1,8 +1,11 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { Alert, CircularProgress } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import customFetch from "../utils/customFetch";
+import useCurrentUser from "../hooks/useCurrentUser";
 import ReactVirtualizedTable from "../components/Table";
 import { SectionFeedback, Modal, UserForm } from "../components";
 
@@ -24,6 +27,13 @@ const cancelledColumns = [
 ];
 
 const Users = () => {
+  const navigate = useNavigate();
+  const { user } = useCurrentUser();
+
+  useEffect(() => {
+    if (user.role !== "admin") navigate("/dashboard", { replace: true });
+  }, [user.role, navigate]);
+
   const { isFetching, data, error, refetch } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { UserForm } from "../components";
 import useCurrentUser from "../hooks/useCurrentUser";
+import { UserForm } from "../components";
 import { useEffect } from "react";
 
 const AddUser = () => {
