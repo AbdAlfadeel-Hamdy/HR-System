@@ -29,7 +29,9 @@ const PassportReport = () => {
     );
   else if (error)
     content = (
-      <Alert severity="error">{(error as any).response.data.message}</Alert>
+      <Alert severity="error" className="mx-8 mt-4">
+        {(error as any).response.data.message}
+      </Alert>
     );
   else if (data?.employees.length > 0) {
     const modifiedData = data.employees
@@ -54,7 +56,11 @@ const PassportReport = () => {
       />
     );
   } else if (data?.employees.length === 0)
-    content = <Alert severity="info">No employees found.</Alert>;
+    content = (
+      <Alert severity="info" className="mx-8 mt-4">
+        No employees found.
+      </Alert>
+    );
 
   return (
     <>

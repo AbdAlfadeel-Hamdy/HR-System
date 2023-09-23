@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { CircularProgress, Alert } from "@mui/material";
 import customFetch from "../utils/customFetch";
 import ReactVirtualizedTable, { ColumnData } from "../components/Table";
-// import BasicPagination from "../components/Pagination";
 import { SectionFeedback } from "../components";
 
 const columns: ColumnData[] = [
@@ -154,7 +153,6 @@ const Employees = () => {
         </div>
         <ReactVirtualizedTable rows={modifiedData} columns={columns} />
       </div>
-      {/* <BasicPagination count={data.employeesCount} /> */}
     </>
   );
 };

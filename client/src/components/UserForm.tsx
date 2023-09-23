@@ -10,27 +10,54 @@ import {
   Container,
 } from "@mui/material";
 import customFetch from "../utils/customFetch";
-import { userValidationSchema } from "../utils/validationSchemas";
+import {
+  createUserValidationSchema,
+  updateUserValidationSchema,
+} from "../utils/validationSchemas";
 
-export const AddUserForm = () => {
+interface UserFormProps {
+  initialValues: {
+    name: string;
+    email: string;
+    password?: string;
+    confirmPassword?: string;
+  };
+  method: "POST" | "PATCH";
+  url: string;
+  successMsg: string;
+  formTitle: string;
+  successFn?: () => void;
+}
+
+export const UserForm: React.FC<UserFormProps> = ({
+  initialValues,
+  method,
+  url,
+  successFn,
+  successMsg,
+  formTitle,
+}) => {
   const { mutateAsync } = useMutation({
+    mutationKey: ["users"],
     mutationFn: async (user: any) => {
-      await customFetch.post("/auth/register", user);
+      await customFetch(url, {
+        method,
+        data: user,
+      });
     },
+    onSuccess: successFn,
   });
 
   const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    },
-    validationSchema: userValidationSchema,
+    initialValues: initialValues,
+    validationSchema:
+      method === "POST"
+        ? createUserValidationSchema
+        : updateUserValidationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
         await mutateAsync(values);
-        toast.success("Created user successfully.");
+        toast.success(successMsg);
         resetForm();
       } catch (err) {
         toast.error((err as any)?.response?.data?.message);
@@ -50,7 +77,7 @@ export const AddUserForm = () => {
         }}
       >
         <Typography component="h1" variant="h5">
-          Add User
+          {formTitle}
         </Typography>
         <Box
           component="form"
@@ -95,39 +122,43 @@ export const AddUserForm = () => {
             error={formik.touched.email && Boolean(formik.errors.email)}
             helperText={formik.touched.email && formik.errors.email}
           />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="password"
-            label="Password"
-            name="password"
-            type="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="confirmPassword"
-            label="Confirm Password"
-            name="confirmPassword"
-            type="password"
-            value={formik.values.confirmPassword}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={
-              formik.touched.confirmPassword &&
-              Boolean(formik.errors.confirmPassword)
-            }
-            helperText={
-              formik.touched.confirmPassword && formik.errors.confirmPassword
-            }
-          />
+          {initialValues.password === "" && (
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="password"
+              label="Password"
+              name="password"
+              type="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+            />
+          )}
+          {initialValues.confirmPassword === "" && (
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="confirmPassword"
+              label="Confirm Password"
+              name="confirmPassword"
+              type="password"
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={
+                formik.touched.confirmPassword &&
+                Boolean(formik.errors.confirmPassword)
+              }
+              helperText={
+                formik.touched.confirmPassword && formik.errors.confirmPassword
+              }
+            />
+          )}
 
           <LoadingButton
             type="submit"
@@ -145,4 +176,4 @@ export const AddUserForm = () => {
   );
 };
 
-export default AddUserForm;
+export default UserForm;

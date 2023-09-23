@@ -7,6 +7,7 @@ import {
   getAllActivities,
   getAllUsers,
   updateUser,
+  deleteUser,
 } from "../controllers/authController.js";
 import {
   validateLoginInput,
@@ -27,6 +28,7 @@ router.get("/activities", getAllActivities);
 router.use(authorizePermissions("admin"));
 router.post("/register", validateUserInput, register);
 router.get("/users", getAllUsers);
-router.patch("/users:id", updateUser);
+router.patch("/users/:id", updateUser);
+router.delete("/users/:id", deleteUser);
 
 export default router;

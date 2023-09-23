@@ -27,7 +27,9 @@ const DriverReport = () => {
     );
   else if (error)
     content = (
-      <Alert severity="error">{(error as any).response.data.message}</Alert>
+      <Alert severity="error" className="mx-8 mt-4">
+        {(error as any).response.data.message}
+      </Alert>
     );
   else if (data?.employees.length > 0) {
     const modifiedData = data.employees
@@ -52,7 +54,11 @@ const DriverReport = () => {
       />
     );
   } else if (data?.employees.length === 0)
-    content = <Alert severity="info">No drivers were found.</Alert>;
+    content = (
+      <Alert severity="info" className="mx-8 mt-4">
+        No drivers were found.
+      </Alert>
+    );
 
   return (
     <>

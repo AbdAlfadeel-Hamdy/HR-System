@@ -36,7 +36,9 @@ const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
     );
   else if (error)
     content = (
-      <Alert severity="error">{(error as any).response.data.message}</Alert>
+      <Alert severity="error" className="mx-8 mt-4">
+        {(error as any).response.data.message}
+      </Alert>
     );
   else if (data?.employees.length > 0) {
     const modifiedData = data.employees
@@ -62,7 +64,9 @@ const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
     );
   } else if (data?.employees.length === 0)
     content = (
-      <Alert severity="info">No employees were found with this status.</Alert>
+      <Alert severity="info" className="mx-8 mt-4">
+        No employees were found with this status.
+      </Alert>
     );
 
   return (
@@ -77,7 +81,7 @@ const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
         <DownloadButton
           onClick={() =>
             downloadStatusPDF(
-              `${status.toUpperCase()} Report`,
+              `${status[0].toUpperCase()}${status.slice(1)} Report`,
               statusColumns,
               data.employees,
               groupBy

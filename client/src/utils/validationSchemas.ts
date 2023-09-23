@@ -41,7 +41,7 @@ export const employeeValidationSchema = yup.object({
     .required("License Type is required"),
 });
 
-export const userValidationSchema = yup.object({
+export const createUserValidationSchema = yup.object({
   name: yup.string().required("Name is required"),
   email: yup
     .string()
@@ -54,6 +54,14 @@ export const userValidationSchema = yup.object({
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("password")], "Passwords do not match"),
+});
+
+export const updateUserValidationSchema = yup.object({
+  name: yup.string().required("Name is required"),
+  email: yup
+    .string()
+    .email("Invalid email format")
+    .required("Name is required"),
 });
 
 export const loginValidationSchema = yup.object({

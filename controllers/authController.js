@@ -14,7 +14,7 @@ export const register = async (req, res, next) => {
 };
 
 export const getAllUsers = async (req, res, next) => {
-  const users = await User.find();
+  const users = await User.find({ role: "moderator" });
   res.status(StatusCodes.OK).json({ users });
 };
 
@@ -23,6 +23,11 @@ export const updateUser = async (req, res, next) => {
 
   await User.findByIdAndUpdate(req.params.id, { name, email });
   res.status(StatusCodes.OK).json({ message: "User updated." });
+};
+
+export const deleteUser = async (req, res, next) => {
+  await User.findByIdAndDelete(req.params.id);
+  res.status(StatusCodes.OK).json({ message: "User deleted." });
 };
 
 export const login = async (req, res, next) => {
