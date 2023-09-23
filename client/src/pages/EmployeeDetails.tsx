@@ -27,7 +27,7 @@ const EmployeeDetails: React.FC = () => {
       const { data } = await customFetch(`/employees/${id}`);
       return data;
     },
-    staleTime: 1000 * 60 * 5,
+    staleTime: Infinity,
   });
 
   const { mutateAsync: deleteEmployeeHandler, isLoading } = useMutation({
@@ -77,7 +77,7 @@ const EmployeeDetails: React.FC = () => {
     <section className="grid grid-cols-[2fr,3fr] row-span-2 gap-2 p-1 max-h-screen">
       <Paper className="py-2 max-h-full overflow-y-scroll ">
         <h2 className="text-center text-2xl font-thin mb-4 ">Employee Info</h2>
-        <EmployeeInfoTable employee={employee} />
+        <EmployeeInfoTable employee={employee} refetch={refetch} />
         <div className="flex justify-center gap-4 mt-4">
           <Modal btnIcon={<EditNote />} btnText="Edit">
             <EmployeeForm

@@ -15,6 +15,7 @@ const Dashboard: React.FC = () => {
       return data;
     },
     retry: false,
+    refetchOnWindowFocus: false,
   });
 
   if (isFetching)

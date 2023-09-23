@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { Table, TableBody } from "@mui/material";
-import { AddOutlined } from "@mui/icons-material";
+import { Visibility, Edit, AddPhotoAlternate } from "@mui/icons-material";
 import { Modal, StyledTableCell, StyledTableRow, UploadFile } from ".";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -9,9 +9,13 @@ import { toast } from "react-toastify";
 
 interface EmployeeInfoTableProps {
   employee: { [key: string]: any };
+  refetch: () => void;
 }
 
-const EmployeeInfoTable: React.FC<EmployeeInfoTableProps> = ({ employee }) => {
+const EmployeeInfoTable: React.FC<EmployeeInfoTableProps> = ({
+  employee,
+  refetch,
+}) => {
   const [idImageFile, setIdImageFile] = useState<File | null>(null);
   const [passportImageFile, setPassportImageFile] = useState<File | null>(null);
   const { mutateAsync } = useMutation({
@@ -28,10 +32,11 @@ const EmployeeInfoTable: React.FC<EmployeeInfoTableProps> = ({ employee }) => {
     },
     onSuccess: () => {
       toast.success("File was uploaded successfully");
+      refetch();
     },
     onError: (err: any) => {
       toast.error(
-        err.response.data.message || "Please select a file to upload"
+        err?.response?.data?.message || "Please select a file to upload"
       );
     },
   });
@@ -55,38 +60,64 @@ const EmployeeInfoTable: React.FC<EmployeeInfoTableProps> = ({ employee }) => {
             </StyledTableCell>
             <StyledTableCell>
               {row.name === "ID" ? (
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-between">
                   <span>{row.value}</span>
-                  <Modal
-                    btnIcon={<AddOutlined />}
-                    feedback
-                    feedbackFn={() =>
-                      mutateAsync({
-                        uploadedFile: idImageFile,
-                        fileName: "idImage",
-                      })
-                    }
-                  >
-                    <UploadFile onChange={changeIdImageHandler} />
-                    <div>{idImageFile?.name}</div>
-                  </Modal>
+                  <div className="flex items-center gap-1">
+                    <Modal
+                      btnIcon={
+                        employee.idImage ? <Edit /> : <AddPhotoAlternate />
+                      }
+                      feedback
+                      feedbackFn={() =>
+                        mutateAsync({
+                          uploadedFile: idImageFile,
+                          fileName: "idImage",
+                        })
+                      }
+                    >
+                      <UploadFile onChange={changeIdImageHandler} />
+                      <div>{idImageFile?.name}</div>
+                    </Modal>
+                    {employee.idImage && (
+                      <Modal btnIcon={<Visibility />}>
+                        <embed
+                          src={employee.idImage}
+                          type="application/pdf"
+                          className="w-full h-[400px]"
+                        />
+                      </Modal>
+                    )}
+                  </div>
                 </div>
               ) : row.name === "Passport" ? (
-                <div className="flex items-center gap-4">
+                <div className="flex items-center justify-between">
                   <span>{row.value}</span>
-                  <Modal
-                    btnIcon={<AddOutlined />}
-                    feedback
-                    feedbackFn={() =>
-                      mutateAsync({
-                        uploadedFile: passportImageFile,
-                        fileName: "passportImage",
-                      })
-                    }
-                  >
-                    <UploadFile onChange={changePassportImageHandler} />
-                    <div>{passportImageFile?.name}</div>
-                  </Modal>
+                  <div className="flex items-center gap-1">
+                    <Modal
+                      btnIcon={
+                        employee.idImage ? <Edit /> : <AddPhotoAlternate />
+                      }
+                      feedback
+                      feedbackFn={() =>
+                        mutateAsync({
+                          uploadedFile: passportImageFile,
+                          fileName: "passportImage",
+                        })
+                      }
+                    >
+                      <UploadFile onChange={changePassportImageHandler} />
+                      <div>{passportImageFile?.name}</div>
+                    </Modal>
+                    {employee.passportImage && (
+                      <Modal btnIcon={<Visibility />}>
+                        <embed
+                          src={employee.passportImage}
+                          type="application/pdf"
+                          className="w-full h-[400px]"
+                        />
+                      </Modal>
+                    )}
+                  </div>
                 </div>
               ) : (
                 row.value

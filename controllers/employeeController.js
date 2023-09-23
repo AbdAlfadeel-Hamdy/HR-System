@@ -1,4 +1,6 @@
 import { StatusCodes } from "http-status-codes";
+import cloudinary from "cloudinary";
+import { formatImage } from "../middlewares/multerMiddleware.js";
 import Employee from "../models/EmployeeModel.js";
 import Cancelled from "../models/CancelledModel.js";
 import APIFeatures from "../utils/apiFeatures.js";
@@ -29,14 +31,21 @@ export const getEmployee = async (req, res, next) => {
 };
 
 export const updateEmployee = async (req, res, next) => {
-  if (req.file) req.body[req.body.fieldName] = req.file.path;
+  if (req.file) {
+    const file = formatImage(req.file);
+    const response = await cloudinary.v2.uploader.upload(file);
+    req.body[req.body.fieldName] = response.secure_url;
+    req.body[`${req.body.fieldName}PublicId`] = response.public_id;
+  }
   const updatedEmployee = await Employee.findByIdAndUpdate(
     req.params.id,
-    req.body,
-    {
-      new: true,
-    }
+    req.body
   );
+  if (req.file && updateEmployee[`${req.body.fieldName}PublicId`]) {
+    await cloudinary.v2.uploader.destroy(
+      updateEmployee[`${req.body.fieldName}PublicId`]
+    );
+  }
   res
     .status(StatusCodes.OK)
     .json({ message: "Employee modified.", employee: updatedEmployee });
