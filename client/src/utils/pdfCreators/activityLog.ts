@@ -3,6 +3,7 @@ import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import dayjs from "dayjs";
 import { ColumnData } from "../../components/Table";
+import { addReportFont } from "./font";
 
 export const downloadActivityLogPDF = (
   title: string,
@@ -10,6 +11,7 @@ export const downloadActivityLogPDF = (
   data: any
 ) => {
   const doc = new jsPDF();
+  addReportFont(doc);
   doc.text(title, 15, 10);
   autoTable(doc, {
     columns: columns.map((col) => ({
@@ -25,6 +27,10 @@ export const downloadActivityLogPDF = (
       ],
     ],
     showFoot: "lastPage",
+    styles: {
+      halign: "justify",
+      font: "Cairo-Regular",
+    },
   });
   doc.save(`${title}.pdf`);
 };

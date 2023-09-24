@@ -82,7 +82,6 @@ const StatusReport: React.FC<StatusReportProps> = ({ status }) => {
           onClick={() =>
             downloadStatusPDF(
               `${status[0].toUpperCase()}${status.slice(1)} Report`,
-              statusColumns,
               data.employees,
               groupBy
             )

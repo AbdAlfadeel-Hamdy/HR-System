@@ -71,12 +71,7 @@ const DriverReport = () => {
       {data?.employees.length > 0 && (
         <DownloadButton
           onClick={() =>
-            downloadDriverPDF(
-              "Driver Report",
-              driverColumns,
-              data.employees,
-              groupBy
-            )
+            downloadDriverPDF("Driver Report", data.employees, groupBy)
           }
         />
       )}

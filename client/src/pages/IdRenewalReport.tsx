@@ -12,6 +12,7 @@ import { useState } from "react";
 
 const IdRenewalReport = () => {
   const [groupBy, setGroupBy] = useState("workIn");
+  const [renewalDate, setRenewalDate] = useState("");
   const { isLoading, error, data, mutateAsync } = useMutation({
     mutationFn: async (values: any) => {
       const { data } = await customFetch.post("/employees/id-renewal", values);
@@ -72,7 +73,11 @@ const IdRenewalReport = () => {
     <>
       <div className="flex flex-col">
         <div className="h-24">
-          <IdRenewalForm queryFn={mutateAsync} groupByHandler={setGroupBy} />
+          <IdRenewalForm
+            queryFn={mutateAsync}
+            groupByHandler={setGroupBy}
+            renewalDateHandler={setRenewalDate}
+          />
         </div>
         {content}
       </div>
@@ -81,9 +86,9 @@ const IdRenewalReport = () => {
           onClick={() =>
             downloadRenewalIdPDF(
               "ID Renewal Report",
-              idRenewalColumns,
               data.employees,
-              groupBy
+              groupBy,
+              renewalDate
             )
           }
         />

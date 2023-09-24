@@ -3,6 +3,7 @@ import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import dayjs from "dayjs";
 import { ColumnData } from "../../components/Table";
+import { addReportFont } from "./font";
 
 export const downloadVacationsHistoryPDF = (
   title: string,
@@ -11,10 +12,15 @@ export const downloadVacationsHistoryPDF = (
   name: string,
   idNumber: number
 ) => {
-  const doc = new jsPDF();
+  const doc = new jsPDF({ orientation: "l" });
+  addReportFont(doc);
   doc.text(title, 15, 10);
   autoTable(doc, {
-    head: [[name, idNumber]],
+    head: [[name, "", idNumber, "", ""]],
+    styles: {
+      halign: "justify",
+      font: "Cairo-Regular",
+    },
   });
   autoTable(doc, {
     columns: columns.map((col) => ({
@@ -39,6 +45,12 @@ export const downloadVacationsHistoryPDF = (
       ],
     ],
     showFoot: "lastPage",
+    styles: {
+      halign: "justify",
+      font: "Cairo-Regular",
+    },
+    startY: (doc as any).lastAutoTable.finalY,
+    tableWidth: "auto",
   });
   doc.save(`${title}.pdf`);
 };

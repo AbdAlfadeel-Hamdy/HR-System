@@ -12,11 +12,13 @@ import {
 interface SponsorFormProps {
   queryFn: UseMutateAsyncFunction<any, unknown, any, unknown>;
   groupByHandler: (groupBy: string) => void;
+  sponsorHandler: (sponsor: string) => void;
 }
 
 export const SponsorForm: React.FC<SponsorFormProps> = ({
   queryFn,
   groupByHandler,
+  sponsorHandler,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -27,6 +29,7 @@ export const SponsorForm: React.FC<SponsorFormProps> = ({
       try {
         await queryFn(values);
         groupByHandler(values.groupBy);
+        sponsorHandler(values.sponsor);
       } catch (err) {
         // toast.error((err as any)?.response?.data?.message);
       }

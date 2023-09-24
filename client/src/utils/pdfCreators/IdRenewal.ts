@@ -3,46 +3,65 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import { ColumnData } from "../../components/Table";
+import { addReportFont } from "./font";
 
 export const downloadRenewalIdPDF = (
   title: string,
-  columns: any[],
   data: any,
-  groupBy: string
+  groupBy: string,
+  renewalDate: string
 ) => {
-  const doc = new jsPDF();
-  doc.text(title, 15, 10);
+  const doc = new jsPDF({
+    orientation: "l",
+  });
+  addReportFont(doc);
+
+  doc.text(`${title} of ${renewalDate}`, 15, 10);
   data.forEach((company: any) => {
     autoTable(doc, {
-      head: [[company._id]],
-    });
-    autoTable(doc, {
-      columns: columns
-        .filter((col: any) => col.dataKey !== groupBy)
-        .map((col) => ({
-          dataKey: col.dataKey,
-          header: col.label,
-        })),
-      body: company.documents.map((row: any) => ({
-        ...row,
-        idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
-          "en-uk"
-        ),
-        passportExpirationDate: new Date(
-          row.passportExpirationDate
-        ).toLocaleDateString("en-uk"),
-        agreementExpirationDate: new Date(
-          row.agreementExpirationDate
-        ).toLocaleDateString("en-uk"),
-      })),
-      foot: [[`Total: ${company.documents.length}`]],
-      showFoot: "lastPage",
+      head: [
+        [company._id, "", "", "", "", `Total: ${company.documents.length}`, ""],
+        [
+          "Name",
+          "ID",
+          "ID Expiration",
+          "Passport Expiration",
+          "Agreement Expiration",
+          groupBy === "sponsor" ? "Work In" : "Sponsor",
+          "Note",
+        ],
+      ],
+      showHead: "firstPage",
+      body: company.documents.map((row: any) => [
+        row.name,
+        row.idNumber,
+        row.idExpirationDate
+          ? dayjs(row.idExpirationDate).format("DD/MM/YYYY")
+          : "",
+        row.passportExpirationDate
+          ? dayjs(row.passportExpirationDate).format("DD/MM/YYYY")
+          : "",
+        row.agreementExpirationDate
+          ? dayjs(row.agreementExpirationDate).format("DD/MM/YYYY")
+          : "",
+        groupBy === "sponsor" ? row.workIn : row.sponsor,
+        row.note,
+      ]),
+
+      styles: {
+        halign: "justify",
+        font: "Cairo-Regular",
+      },
     });
   });
   autoTable(doc, {
     foot: [[dayjs().format("dddd"), dayjs().format("DD/MM/YYYY")]],
+    styles: {
+      halign: "justify",
+      font: "Cairo-Regular",
+    },
+    startY: (doc as any).lastAutoTable.finalY,
   });
-
   doc.save(`${title}.pdf`);
 };
 
@@ -82,5 +101,10 @@ export const idRenewalColumns: ColumnData[] = [
     width: 200,
     label: "Work In",
     dataKey: "workIn",
+  },
+  {
+    width: 200,
+    label: "Note",
+    dataKey: "note",
   },
 ];

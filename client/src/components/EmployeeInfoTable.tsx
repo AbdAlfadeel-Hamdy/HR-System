@@ -147,7 +147,11 @@ const createRows = (employee: any) => [
   ),
   createData(
     "Status",
-    employee.status === "duty" ? "\uD83D\uDFE2 Duty" : "\uD83D\uDFE1 Vacation"
+    employee.status === "duty"
+      ? "🟢 Duty"
+      : employee.status === "vacation"
+      ? "🟡 Vacation"
+      : "🔴 Cancelled"
   ),
   createData("Nationality", employee.nationality),
   createData("Passport", employee.passportNumber),

@@ -53,6 +53,8 @@ const ExpiredIdReport = () => {
       </SectionFeedback>
     );
 
+  console.log(data);
+
   return (
     <>
       <ReactVirtualizedTable
@@ -63,18 +65,16 @@ const ExpiredIdReport = () => {
           ),
           status:
             row.status === "duty"
-              ? "\uD83D\uDFE2 Duty"
-              : "\uD83D\uDFE1 Vacation",
+              ? "🟢 Duty"
+              : row.status === "vacation"
+              ? "🟡 Vacation"
+              : "🔴 Cancelled",
         }))}
         columns={expiredIdColumns}
       />
       <DownloadButton
         onClick={() =>
-          downloadExpiredIdPDF(
-            "Expired ID Report",
-            expiredIdColumns,
-            data.employees
-          )
+          downloadExpiredIdPDF("Expired ID Report", data.employees)
         }
       />
     </>

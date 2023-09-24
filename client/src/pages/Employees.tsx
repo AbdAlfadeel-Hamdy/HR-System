@@ -88,7 +88,6 @@ const Employees = () => {
       );
       return data;
     },
-    // staleTime: 1000 * 60 * 5,
   });
 
   useEffect(() => {
@@ -134,7 +133,11 @@ const Employees = () => {
         ? dayjs(row.licenseExpirationDate).format("DD/MM/YYYY")
         : "",
       status:
-        row.status === "duty" ? "\uD83D\uDFE2 Duty" : "\uD83D\uDFE1 Vacation",
+        row.status === "duty"
+          ? "🟢 Duty"
+          : row.status === "vacation"
+          ? "🟡 Vacation"
+          : "🔴 Cancelled",
     };
   });
 

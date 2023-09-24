@@ -3,34 +3,43 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import { ColumnData } from "../../components/Table";
+import { addReportFont } from "./font";
 
 export const downloadSponsorPDF = (
   title: string,
-  columns: any[],
   data: any,
-  groupBy: string
+  groupBy: string,
+  sponsor: string
 ) => {
-  const doc = new jsPDF();
-  doc.text(title, 15, 10);
+  const doc = new jsPDF({ orientation: "l" });
+  addReportFont(doc);
+  doc.text(`${title} For ${sponsor}`, 15, 10);
   data.forEach((company: any) => {
     autoTable(doc, {
-      head: [[company._id]],
-    });
-    autoTable(doc, {
-      columns: columns
-        .filter((col: any) => col.dataKey !== groupBy)
-        .map((col) => ({
-          dataKey: col.dataKey,
-          header: col.label,
-        })),
-      body: company.documents.map((row: any) => ({
-        ...row,
-        idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
-          "en-uk"
-        ),
-      })),
-      foot: [[`Total: ${company.documents.length}`]],
-      showFoot: "lastPage",
+      head: [
+        [company._id, "", "", `Total: ${company.documents.length}`, ""],
+        [
+          "Name",
+          "ID",
+          "ID Expiration",
+          "Status",
+          groupBy === "nationality" ? "Work In" : "Nationality",
+        ],
+      ],
+      showHead: "firstPage",
+      body: company.documents.map((row: any) => [
+        row.name,
+        row.idNumber,
+        row.idExpirationDate
+          ? dayjs(row.idExpirationDate).format("DD/MM/YYYY")
+          : "",
+        row.status === "duty" ? "On Duty" : "In Vacation",
+        groupBy === "nationality" ? row.workIn : row.nationality,
+      ]),
+      styles: {
+        halign: "justify",
+        font: "Cairo-Regular",
+      },
     });
   });
   autoTable(doc, {
@@ -40,6 +49,11 @@ export const downloadSponsorPDF = (
         dayjs(new Date().toString()).format("DD/MM/YYYY"),
       ],
     ],
+    styles: {
+      halign: "justify",
+      font: "Cairo-Regular",
+    },
+    startY: (doc as any).lastAutoTable.finalY,
   });
 
   doc.save(`${title}.pdf`);

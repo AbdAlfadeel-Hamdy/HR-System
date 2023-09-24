@@ -73,12 +73,7 @@ const PassportReport = () => {
       {data?.employees.length > 0 && (
         <DownloadButton
           onClick={() =>
-            downloadPassportPDF(
-              "Passport Report",
-              passportColumns,
-              data.employees,
-              groupBy
-            )
+            downloadPassportPDF("Passport Report", data.employees, groupBy)
           }
         />
       )}

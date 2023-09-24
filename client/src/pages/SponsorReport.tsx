@@ -11,7 +11,8 @@ import {
 import { useState } from "react";
 
 const SponsorReport = () => {
-  const [groupBy, setGroupBy] = useState("workIn");
+  const [groupBy, setGroupBy] = useState("");
+  const [sponsor, setSponsor] = useState("");
   const { isLoading, error, data, mutateAsync } = useMutation({
     mutationFn: async (values: any) => {
       const { data } = await customFetch.post("/employees/sponsor", values);
@@ -41,8 +42,10 @@ const SponsorReport = () => {
           ...row,
           status:
             row.status === "duty"
-              ? "\uD83D\uDFE2 Duty"
-              : "\uD83D\uDFE1 Vacation",
+              ? "🟢 Duty"
+              : row.status === "vacation"
+              ? "🟡 Vacation"
+              : "🔴 Cancelled",
           idExpirationDate: new Date(row.idExpirationDate).toLocaleDateString(
             "en-uk"
           ),
@@ -70,7 +73,11 @@ const SponsorReport = () => {
     <>
       <div className="flex flex-col">
         <div className="h-24">
-          <SponsorForm queryFn={mutateAsync} groupByHandler={setGroupBy} />
+          <SponsorForm
+            queryFn={mutateAsync}
+            groupByHandler={setGroupBy}
+            sponsorHandler={setSponsor}
+          />
         </div>
         {content}
       </div>
@@ -78,10 +85,10 @@ const SponsorReport = () => {
         <DownloadButton
           onClick={() =>
             downloadSponsorPDF(
-              "Sponsor Report",
-              sponsorColumns,
+              "Employees Report",
               data.employees,
-              groupBy
+              groupBy,
+              sponsor
             )
           }
         />

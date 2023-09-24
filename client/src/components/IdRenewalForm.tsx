@@ -8,15 +8,18 @@ import {
   Container,
   CssBaseline,
 } from "@mui/material";
+import { months } from "../utils/constants";
 
 interface IdRenewalFormProps {
   queryFn: UseMutateAsyncFunction<any, unknown, any, unknown>;
   groupByHandler: (groupBy: string) => void;
+  renewalDateHandler: (renewalDate: string) => void;
 }
 
 export const IdRenewalForm: React.FC<IdRenewalFormProps> = ({
   queryFn,
   groupByHandler,
+  renewalDateHandler,
 }) => {
   const formik = useFormik({
     initialValues: {
@@ -28,6 +31,7 @@ export const IdRenewalForm: React.FC<IdRenewalFormProps> = ({
       try {
         await queryFn(values);
         groupByHandler(values.groupBy);
+        renewalDateHandler(`${months[values.month - 1].label} ${values.year}`);
       } catch (err) {
         // toast.error((err as any)?.response?.data?.message);
       }
@@ -71,20 +75,7 @@ export const IdRenewalForm: React.FC<IdRenewalFormProps> = ({
           helperText={formik.touched.month && formik.errors.month}
           className="bg-white"
         >
-          {[
-            { value: 1, label: "January" },
-            { value: 2, label: "February" },
-            { value: 3, label: "March" },
-            { value: 4, label: "April" },
-            { value: 5, label: "May" },
-            { value: 6, label: "June" },
-            { value: 7, label: "July" },
-            { value: 8, label: "August" },
-            { value: 9, label: "September" },
-            { value: 10, label: "October" },
-            { value: 11, label: "November" },
-            { value: 12, label: "December" },
-          ].map((option) => (
+          {months.map((option) => (
             <MenuItem key={option.value} value={option.value}>
               {option.label}
             </MenuItem>

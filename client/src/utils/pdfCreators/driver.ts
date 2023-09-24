@@ -3,38 +3,53 @@ import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 import dayjs from "dayjs";
 import { ColumnData } from "../../components/Table";
+import { addReportFont } from "./font";
 
 export const downloadDriverPDF = (
   title: string,
-  columns: any[],
   data: any,
   groupBy: string
 ) => {
-  const doc = new jsPDF();
+  const doc = new jsPDF({ orientation: "l" });
+  addReportFont(doc);
+
   doc.text(title, 15, 10);
   data.forEach((company: any) => {
     autoTable(doc, {
-      head: [[company._id]],
-    });
-    autoTable(doc, {
-      columns: columns
-        .filter((col: any) => col.dataKey !== groupBy)
-        .map((col) => ({
-          dataKey: col.dataKey,
-          header: col.label,
-        })),
-      body: company.documents.map((row: any) => ({
-        ...row,
-        licenseExpirationDate: row.licenseExpirationDate
+      head: [
+        [company._id, "", "", `Total: ${company.documents.length}`, ""],
+        [
+          "Name",
+          "ID",
+          "License",
+          "License Expiration",
+          groupBy === "sponsor" ? "Work In" : "Sponsor",
+        ],
+      ],
+      showHead: "firstPage",
+      body: company.documents.map((row: any) => [
+        row.name,
+        row.idNumber,
+        row.licenseType,
+        row.licenseExpirationDate
           ? dayjs(row.licenseExpirationDate).format("DD/MM/YYYY")
           : "",
-      })),
-      foot: [[`Total: ${company.documents.length}`]],
-      showFoot: "lastPage",
+        groupBy === "sponsor" ? row.workIn : row.sponsor,
+      ]),
+
+      styles: {
+        halign: "justify",
+        font: "Cairo-Regular",
+      },
     });
   });
   autoTable(doc, {
     foot: [[dayjs().format("dddd"), dayjs().format("DD/MM/YYYY")]],
+    styles: {
+      halign: "justify",
+      font: "Cairo-Regular",
+    },
+    startY: (doc as any).lastAutoTable.finalY,
   });
 
   doc.save(`${title}.pdf`);
