@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import Vacation from "../models/VacationModel.js";
+import Activity from "../models/ActivityModel.js";
 
 export const getAllVacations = async (req, res, next) => {
   const vacations = await Vacation.find();
