@@ -59,7 +59,7 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
     });
   }
   return (
-    <Card className=" min-h-screen overflow-y-scroll w-[20rem] max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none row-span-2">
+    <Card className="min-h-screen overflow-y-scroll w-[20rem] max-w-[20rem] p-4 shadow-xl shadow-blue-gray-900/5 rounded-none row-span-2">
       <div className="mb-2 p-4">
         <Typography variant="h5" color="blue-gray">
           Welcome, {user?.name}

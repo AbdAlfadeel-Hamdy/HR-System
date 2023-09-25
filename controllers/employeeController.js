@@ -87,6 +87,7 @@ export const getExpiredIds = async (req, res, next) => {
     {
       $match: {
         idExpirationDate: { $lt: expirationDate },
+        status: { $nin: ["cancelled"] },
       },
     },
     {
@@ -157,6 +158,7 @@ export const getSponsor = async (req, res, next) => {
     {
       $match: {
         sponsor: req.body.sponsor,
+        status: { $nin: ["cancelled"] },
       },
     },
     {

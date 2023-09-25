@@ -4,7 +4,6 @@ import autoTable from "jspdf-autotable";
 import dayjs from "dayjs";
 import { ColumnData } from "../../components/Table";
 import { addReportFont } from "./font";
-
 export const downloadExpiredIdPDF = (title: string, data: any) => {
   const doc = new jsPDF({ orientation: "l" });
   addReportFont(doc);

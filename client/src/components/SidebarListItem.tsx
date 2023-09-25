@@ -17,13 +17,13 @@ const SidebarListItem: React.FC<SidebarListItemProps> = ({
 }) => {
   if (!href)
     return (
-      <ListItem onClick={onClick}>
+      <ListItem onClick={onClick} className={"font-cairo"}>
         <ListItemPrefix>{icon}</ListItemPrefix>
         {title}
       </ListItem>
     );
   return (
-    <NavLink to={href}>
+    <NavLink to={href} className={"font-cairo"}>
       <ListItem>
         <ListItemPrefix>{icon}</ListItemPrefix>
         {title}
