@@ -138,7 +138,7 @@ const style = (theme: Theme) => ({
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 600,
+  width: 620,
   borderRadius: "12px",
   padding: "16px 32px 24px 32px",
   backgroundColor: theme.palette.mode === "dark" ? "#0A1929" : "white",

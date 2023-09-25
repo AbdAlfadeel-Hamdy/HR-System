@@ -13,32 +13,32 @@ export const vacationValidationSchema = yup.object({
 
 export const employeeValidationSchema = yup.object({
   idNumber: yup.string().required("ID Number is required"),
-  idExpirationDate: yup
-    .date()
-    .required("ID Expiration Date is required")
-    .typeError("Invalid format"),
+  // idExpirationDate: yup
+  //   .date()
+  //   .required("ID Expiration Date is required")
+  //   .typeError("Invalid format"),
   name: yup.string().required("Name is required"),
-  nationality: yup.string().required("Nationality is required"),
-  passportNumber: yup.string().required("Passport Number is required"),
-  passportExpirationDate: yup
-    .date()
-    .required("Expiration Date is required")
-    .typeError("Invalid date format"),
-  sponsor: yup.string().required("Sponsor is required"),
-  workIn: yup.string().required("Work In is required"),
-  agreementExpirationDate: yup
-    .date()
-    .required("Expiration Date is required")
-    .typeError("Invalid format"),
-  status: yup
-    .string()
-    .oneOf(["duty", "vacation", "cancelled"])
-    .required("Status is required"),
-  licenseExpirationDate: yup.date().required("Expiration Date is required"),
-  licenseType: yup
-    .string()
-    .oneOf(["Car", "Truck", "Car&Truck"])
-    .required("License Type is required"),
+  // nationality: yup.string().required("Nationality is required"),
+  // passportNumber: yup.string().required("Passport Number is required"),
+  // passportExpirationDate: yup
+  //   .date()
+  //   .required("Expiration Date is required")
+  //   .typeError("Invalid date format"),
+  // sponsor: yup.string().required("Sponsor is required"),
+  // workIn: yup.string().required("Work In is required"),
+  // agreementExpirationDate: yup
+  //   .date()
+  //   .required("Expiration Date is required")
+  //   .typeError("Invalid format"),
+  // status: yup
+  //   .string()
+  //   .oneOf(["duty", "vacation", "cancelled"])
+  //   .required("Status is required"),
+  // licenseExpirationDate: yup.date().required("Expiration Date is required"),
+  // licenseType: yup
+  //   .string()
+  //   .oneOf(["Car", "Truck", "Car&Truck"])
+  //   .required("License Type is required"),
 });
 
 export const createUserValidationSchema = yup.object({

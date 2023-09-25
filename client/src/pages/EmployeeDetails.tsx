@@ -60,16 +60,16 @@ const EmployeeDetails: React.FC = () => {
     ...employee,
     idExpirationDate: employee.idExpirationDate
       ? dayjs(employee.idExpirationDate)
-      : "",
+      : null,
     passportExpirationDate: employee.passportExpirationDate
       ? dayjs(employee.passportExpirationDate)
-      : "",
+      : null,
     agreementExpirationDate: employee.agreementExpirationDate
       ? dayjs(employee.agreementExpirationDate)
-      : "",
+      : null,
     licenseExpirationDate: employee.licenseExpirationDate
       ? dayjs(employee.licenseExpirationDate)
-      : "",
+      : null,
     note: employee.note || "",
   };
 

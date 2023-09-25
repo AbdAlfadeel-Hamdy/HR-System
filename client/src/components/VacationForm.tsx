@@ -14,9 +14,9 @@ interface VacationFormProps {
   initialValues: {
     idNumber?: number;
     employeeName?: string;
-    leavingDate?: Dayjs;
-    expectedReturnDate?: Dayjs;
-    actualReturnDate?: Dayjs;
+    leavingDate?: Dayjs | null;
+    expectedReturnDate?: Dayjs | null;
+    actualReturnDate?: Dayjs | null;
   };
   method: "POST" | "PATCH";
   url: string;

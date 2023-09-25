@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import { EmployeeForm } from "../components";
 
 const AddEmployee = () => {
@@ -8,17 +7,17 @@ const AddEmployee = () => {
       method="POST"
       initialValues={{
         idNumber: "",
-        idExpirationDate: dayjs(),
+        idExpirationDate: null,
         name: "",
         nationality: "",
         passportNumber: "",
-        passportExpirationDate: dayjs(),
+        passportExpirationDate: null,
         sponsor: "",
         workIn: "",
-        agreementExpirationDate: dayjs(),
+        agreementExpirationDate: null,
         status: "duty",
-        licenseExpirationDate: dayjs(),
-        licenseType: "Car",
+        licenseExpirationDate: null,
+        licenseType: null,
       }}
     />
   );

@@ -2,16 +2,16 @@ import { Dayjs } from "dayjs";
 
 export interface Employee {
   idNumber: string;
-  idExpirationDate: Dayjs;
+  idExpirationDate: Dayjs | null;
   name: string;
   nationality: string;
   passportNumber: string;
-  passportExpirationDate: Dayjs;
+  passportExpirationDate: Dayjs | null;
   sponsor: string;
   workIn: string;
-  agreementExpirationDate: Dayjs;
+  agreementExpirationDate: Dayjs | null;
   status: "duty" | "vacation" | "cancelled";
-  licenseExpirationDate: Dayjs;
-  licenseType: "Car" | "Truck" | "Car&Truck";
+  licenseExpirationDate: Dayjs | null;
+  licenseType: "Car" | "Truck" | "Car&Truck" | null;
   note?: string;
 }
