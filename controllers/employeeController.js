@@ -9,7 +9,10 @@ import APIFeatures from "../utils/apiFeatures.js";
 export const getAllEmployees = async (req, res, next) => {
   const employeesCount = await Employee.countDocuments();
   // BUILD Query
-  const features = new APIFeatures(Employee.find({}), req.query)
+  const features = new APIFeatures(
+    Employee.find({ status: { $nin: ["cancelled"] } }),
+    req.query
+  )
     .filter()
     .sort()
     .limitFields()
@@ -82,7 +85,7 @@ export const deleteEmployee = async (req, res, next) => {
 
 // Special Controllers
 export const getExpiredIds = async (req, res, next) => {
-  const expirationDate = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30);
+  const expirationDate = new Date(Date.now());
   const employees = await Employee.aggregate([
     {
       $match: {
@@ -125,6 +128,7 @@ export const getIdsRenewal = async (req, res, next) => {
             { $eq: [{ $year: "$idExpirationDate" }, req.body.year] },
           ],
         },
+        status: { $nin: ["cancelled"] },
       },
     },
     {
@@ -193,6 +197,7 @@ export const getPassports = async (req, res, next) => {
     {
       $match: {
         passportExpirationDate: { $lt: expirationDate },
+        status: { $nin: ["cancelled"] },
       },
     },
     {
@@ -224,6 +229,11 @@ export const getPassports = async (req, res, next) => {
 
 export const getDrivers = async (req, res, next) => {
   const employees = await Employee.aggregate([
+    {
+      $match: {
+        status: { $nin: ["cancelled"] },
+      },
+    },
     {
       $project: {
         nationality: 0,

@@ -30,6 +30,49 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
     },
   });
 
+  const reports = [
+    {
+      title: "Drivers",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "reports/driver",
+    },
+    {
+      title: "ID",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "reports/id",
+    },
+    {
+      title: "Sponsor",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "reports/sponsor",
+    },
+    {
+      title: "Expired ID",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "reports/expired-id",
+    },
+    {
+      title: "Passport",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "reports/passport",
+    },
+    {
+      title: "On Duty",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "reports/on-duty",
+    },
+    {
+      title: "On Vacation",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "reports/on-vacation",
+    },
+    {
+      title: "Cancelled",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "reports/cancelled",
+    },
+  ];
+
   const actions = [
     {
       title: "Add Employee",
@@ -47,6 +90,11 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
   ];
 
   if (user?.role === "admin") {
+    reports.unshift({
+      title: "Activity Log",
+      icon: <ChevronRightIcon className="h-5 w-5" />,
+      href: "reports/activity-log",
+    });
     actions.push({
       title: "Add User",
       icon: <ChevronRightIcon className="h-5 w-5" />,
@@ -76,53 +124,7 @@ export default function SidebarWithContentSeparator({ user }: { user: any }) {
         <SidebarAccordion
           title="Reports"
           icon={<DocumentDuplicateIcon className="h-5 w-5" />}
-          list={[
-            {
-              title: "Activity Log",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/activity-log",
-            },
-            {
-              title: "Drivers",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/driver",
-            },
-            {
-              title: "ID",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/id",
-            },
-            {
-              title: "Sponsor",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/sponsor",
-            },
-            {
-              title: "Expired ID",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/expired-id",
-            },
-            {
-              title: "Passport",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/passport",
-            },
-            {
-              title: "On Duty",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/on-duty",
-            },
-            {
-              title: "On Vacation",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/on-vacation",
-            },
-            {
-              title: "Cancelled",
-              icon: <ChevronRightIcon className="h-5 w-5" />,
-              href: "reports/cancelled",
-            },
-          ]}
+          list={reports}
         />
         <SidebarAccordion
           title="Actions"

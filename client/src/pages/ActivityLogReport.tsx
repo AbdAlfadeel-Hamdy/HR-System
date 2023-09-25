@@ -1,7 +1,10 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { Alert, CircularProgress } from "@mui/material";
 import customFetch from "../utils/customFetch";
+import useCurrentUser from "../hooks/useCurrentUser";
 import {
   activityLogColumns,
   downloadActivityLogPDF,
@@ -10,13 +13,19 @@ import ReactVirtualizedTable from "../components/Table";
 import { SectionFeedback, DownloadButton } from "../components";
 
 const ActivityLogReport = () => {
+  const navigate = useNavigate();
+  const { user } = useCurrentUser();
+
+  useEffect(() => {
+    if (user.role !== "admin") navigate("/dashboard", { replace: true });
+  }, [user.role, navigate]);
+
   const { isFetching, data, error } = useQuery({
     queryKey: ["activities"],
     queryFn: async () => {
       const { data } = await customFetch.get("/auth/activities");
       return data;
     },
-    staleTime: 1000 * 60 * 5,
   });
 
   if (isFetching)
