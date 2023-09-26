@@ -317,6 +317,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               }
             >
               {[
+                { value: "", label: "Undefined" },
                 { value: "Car", label: "Car" },
                 { value: "Truck", label: "Truck" },
                 { value: "Car&Truck", label: "Car & Truck" },
