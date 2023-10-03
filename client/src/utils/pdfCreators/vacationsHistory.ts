@@ -29,13 +29,15 @@ export const downloadVacationsHistoryPDF = (
     })),
     body: data.map((row: any) => ({
       ...row,
-      leavingDate: new Date(row.leavingDate).toLocaleDateString("en-uk"),
-      expectedReturnDate: new Date(row.expectedReturnDate).toLocaleDateString(
-        "en-uk"
-      ),
-      actualReturnDate: new Date(row.actualReturnDate).toLocaleDateString(
-        "en-uk"
-      ),
+      leavingDate: row.leavingDate
+        ? dayjs(row.leavingDate).format("DD/MM/YYYY")
+        : "",
+      expectedReturnDate: row.expectedReturnDate
+        ? dayjs(row.expectedReturnDate).format("DD/MM/YYYY")
+        : "",
+      actualReturnDate: row.actualReturnDate
+        ? dayjs(row.actualReturnDate).format("DD/MM/YYYY")
+        : "",
     })),
     foot: [
       [
