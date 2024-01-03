@@ -37,7 +37,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
 
 // Serve static files from the 'client/dist' directory
-app.use(express.static(path.resolve(__dirname, './client/dist')));
+app.use(express.static(path.resolve(__dirname, './../client/dist')));
 
 // Set up middleware for parsing JSON and cookies
 app.use(express.json());
@@ -52,7 +52,7 @@ app.use('/api/v1/cancelled', cancelledRouter);
 
 // Serve the main HTML file for all other routes
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, './client/dist', 'index.html'));
+  res.sendFile(path.resolve(__dirname, './../client/dist', 'index.html'));
 });
 
 // Handle 404 errors
