@@ -28,7 +28,7 @@ router.route('/status').get(getStatus);
 router
   .route('/')
   .get(getAllEmployees)
-  .post(validateEmployeeInput, createEmployee);
+  .post(validateEmployeeInput as any, createEmployee);
 
 router
   .route('/:id')

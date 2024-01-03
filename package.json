@@ -2,7 +2,7 @@
   "name": "hr-system",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "dist/app.js",
   "type": "module",
   "scripts": {
     "setup-project": "npm i && npx tsc && cd client && npm i",

@@ -1,4 +1,9 @@
-import { Request, Response } from 'express';
+import {
+  Request,
+  RequestHandler,
+  RequestParamHandler,
+  Response,
+} from 'express';
 import { StatusCodes } from 'http-status-codes';
 import User from '../models/UserModel.js';
 import Activity from '../models/ActivityModel.js';
@@ -7,18 +12,18 @@ import { comparePassword, hashPassword } from '../utils/passwordUtils.js';
 import { createJWT } from '../utils/tokenUtils.js';
 
 // Extend the Request interface to include the user property
-interface CustomRequest extends Request {
-  user: {
-    name: string;
-    id: string;
-  };
-  params: {
-    id: string;
-  };
-}
+// interface CustomRequest extends RequestParamHandler {
+//   user: {
+//     name: string;
+//     id: string;
+//   };
+//   params: {
+//     id: string;
+//   };
+// }
 
 // Register a new user
-export const register = async (req: Request, res: Response) => {
+export const register: RequestHandler = async (req, res) => {
   req.body.password = await hashPassword(req.body.password);
   req.body.role = 'moderator';
 
@@ -27,13 +32,13 @@ export const register = async (req: Request, res: Response) => {
 };
 
 // Get all users with the 'moderator' role
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsers: RequestHandler = async (req, res) => {
   const users = await User.find({ role: 'moderator' });
   res.status(StatusCodes.OK).json({ users });
 };
 
 // Update a user's name and email
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUser: RequestHandler = async (req, res) => {
   const { name, email } = req.body;
 
   await User.findByIdAndUpdate(req.params.id, { name, email });
@@ -41,13 +46,13 @@ export const updateUser = async (req: Request, res: Response) => {
 };
 
 // Delete a user
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser: RequestHandler = async (req, res) => {
   await User.findByIdAndDelete(req.params.id);
   res.status(StatusCodes.OK).json({ message: 'User deleted.' });
 };
 
 // Log in a user
-export const login = async (req: Request, res: Response) => {
+export const login: RequestHandler = async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
 
   const isValidUser =
@@ -75,7 +80,7 @@ export const login = async (req: Request, res: Response) => {
 };
 
 // Log out a user
-export const logout = async (req: CustomRequest, res: Response) => {
+export const logout: RequestHandler = async (req: any, res) => {
   res.cookie('token', 'logout', {
     httpOnly: true,
     expires: new Date(Date.now()),
@@ -89,7 +94,10 @@ export const logout = async (req: CustomRequest, res: Response) => {
 };
 
 // Get the current user's details
-export const getCurrentUser = async (req: CustomRequest, res: Response) => {
+export const getCurrentUser: RequestHandler = async (
+  req: any,
+  res: Response
+) => {
   const user = await User.findById(req.user.id);
   const userWithoutPassword = user?.toJSON();
   res.status(StatusCodes.OK).json({ user: userWithoutPassword });

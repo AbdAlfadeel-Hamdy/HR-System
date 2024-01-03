@@ -1,4 +1,3 @@
-import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { v2 as cloudinary } from 'cloudinary';
 import { formatImage } from '../middlewares/multerMiddleware.js';
@@ -7,22 +6,23 @@ import Cancelled from '../models/CancelledModel.js';
 import Activity from '../models/ActivityModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
 import { BadRequestError } from '../errors/customErrors.js';
+import { RequestHandler } from 'express';
 
 // Extend the Request interface to include the user property
-interface CustomRequest extends Request {
-  user: {
-    name: string;
-    id: string;
-  };
-  params: {
-    id: string;
-  };
-  file: Express.Multer.File;
-  filedName: string;
-}
+// interface CustomRequest extends Request {
+//   user: {
+//     name: string;
+//     id: string;
+//   };
+//   params: {
+//     id: string;
+//   };
+//   file: Express.Multer.File;
+//   filedName: string;
+// }
 
 // Get all employees
-export const getAllEmployees = async (req: Request, res: Response) => {
+export const getAllEmployees: RequestHandler = async (req, res) => {
   const employeesCount = await Employee.countDocuments();
   // BUILD Query
   const features = new APIFeatures(
@@ -40,7 +40,7 @@ export const getAllEmployees = async (req: Request, res: Response) => {
 };
 
 // Create a new employee
-export const createEmployee = async (req: CustomRequest, res: Response) => {
+export const createEmployee: RequestHandler = async (req: any, res) => {
   const createdEmployee = await Employee.create(req.body);
   await Activity.create({
     userName: req.user.name,
@@ -52,17 +52,13 @@ export const createEmployee = async (req: CustomRequest, res: Response) => {
 };
 
 // Get a specific employee by ID
-export const getEmployee = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const getEmployee: RequestHandler = async (req, res) => {
   const employee = await Employee.findById(req.params.id).populate('vacations');
   res.status(StatusCodes.CREATED).json({ employee });
 };
 
 // Update an employee
-export const updateEmployee = async (req: CustomRequest, res: Response) => {
+export const updateEmployee: RequestHandler = async (req: any, res) => {
   if (req.file) {
     const file = formatImage(req.file);
     if (!file) throw new BadRequestError('cannot upload the image');
@@ -74,10 +70,10 @@ export const updateEmployee = async (req: CustomRequest, res: Response) => {
     req.params.id,
     req.body
   );
-  if (req.file && updatedEmployee[`${req.body.fieldName}PublicId`])
-    await cloudinary.uploader.destroy(
-      updatedEmployee[`${req.body.fieldName}PublicId`]
-    );
+  // if (req.file && updatedEmployee[`${req.body.fieldName}PublicId`])
+  //   await cloudinary.uploader.destroy(
+  //     updatedEmployee[`${req.body.fieldName}PublicId`]
+  //   );
 
   await Activity.create({
     userName: req.user.name,
@@ -91,7 +87,7 @@ export const updateEmployee = async (req: CustomRequest, res: Response) => {
 };
 
 // Delete an employee
-export const deleteEmployee = async (req: CustomRequest, res: Response) => {
+export const deleteEmployee: RequestHandler = async (req: any, res) => {
   const deletedEmployee = await Employee.findByIdAndDelete(req.params.id);
   if (!deletedEmployee) throw new BadRequestError('Failed delete employee');
   await Cancelled.create({
@@ -112,7 +108,7 @@ export const deleteEmployee = async (req: CustomRequest, res: Response) => {
 // Special Controllers
 
 // Get employees with expired IDs
-export const getExpiredIds = async (req: Request, res: Response) => {
+export const getExpiredIds: RequestHandler = async (req, res) => {
   const expirationDate = new Date(Date.now());
   const employees = await Employee.aggregate([
     {
@@ -148,7 +144,7 @@ export const getExpiredIds = async (req: Request, res: Response) => {
 };
 
 // Get employees with IDs up for renewal
-export const getIdsRenewal = async (req: Request, res: Response) => {
+export const getIdsRenewal: RequestHandler = async (req, res) => {
   const employees = await Employee.aggregate([
     {
       $match: {
@@ -188,7 +184,7 @@ export const getIdsRenewal = async (req: Request, res: Response) => {
 };
 
 // Get employees by sponsor
-export const getSponsor = async (req: Request, res: Response) => {
+export const getSponsor: RequestHandler = async (req, res) => {
   const employees = await Employee.aggregate([
     {
       $match: {
@@ -223,7 +219,7 @@ export const getSponsor = async (req: Request, res: Response) => {
 };
 
 // Get employees with expired passports
-export const getPassports = async (req: Request, res: Response) => {
+export const getPassports: RequestHandler = async (req, res) => {
   const expirationDate = new Date();
   const employees = await Employee.aggregate([
     {
@@ -260,7 +256,7 @@ export const getPassports = async (req: Request, res: Response) => {
 };
 
 // Get employees with driver status
-export const getDrivers = async (req: Request, res: Response) => {
+export const getDrivers: RequestHandler = async (req, res) => {
   const employees = await Employee.aggregate([
     {
       $match: {
@@ -295,7 +291,7 @@ export const getDrivers = async (req: Request, res: Response) => {
 };
 
 // Get employees by status
-export const getStatus = async (req: Request, res: Response) => {
+export const getStatus: RequestHandler = async (req, res) => {
   const { status, groupBy } = req.query;
   const employees = await Employee.aggregate([
     {

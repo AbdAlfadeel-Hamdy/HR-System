@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
 import {
   UnauthenticatedError,
   UnauthorizedError,
@@ -6,19 +6,15 @@ import {
 import { verifyJWT } from '../utils/tokenUtils.js';
 
 // Extend the Request interface to include the user property
-interface CustomRequest extends Request {
-  user: {
-    id: string;
-    role: string;
-    name: string;
-  };
-}
+// interface CustomRequest extends Request {
+//   user: {
+//     id: string;
+//     role: string;
+//     name: string;
+//   };
+// }
 
-export const authenticateUser = (
-  req: CustomRequest,
-  res: Response,
-  next: NextFunction
-) => {
+export const authenticateUser: RequestHandler = (req: any, res, next) => {
   const { token } = req.cookies;
   if (!token) throw new UnauthenticatedError('Authentication failed.');
 
@@ -34,8 +30,8 @@ export const authenticateUser = (
   }
 };
 
-export const authorizePermissions = (...roles: string[]) => {
-  return (req: CustomRequest, res: Response, next: NextFunction) => {
+export const authorizePermissions = (...roles: string[]): RequestHandler => {
+  return (req: any, res, next) => {
     if (!roles.includes(req.user.role))
       throw new UnauthorizedError('Unauthorized to access this route.');
     next();

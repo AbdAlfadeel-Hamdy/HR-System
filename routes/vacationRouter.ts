@@ -1,22 +1,22 @@
-import { Router } from "express";
+import { Router } from 'express';
 import {
   getAllVacations,
   createVacation,
   getVacation,
   updateVacation,
   deleteVacation,
-} from "../controllers/vacationController.js";
-import { validateVacationInput } from "../middlewares/validationMiddleware.js";
+} from '../controllers/vacationController.js';
+import { validateVacationInput } from '../middlewares/validationMiddleware.js';
 
 const router = Router();
 
 router
-  .route("/")
+  .route('/')
   .get(getAllVacations)
-  .post(validateVacationInput, createVacation);
+  .post(validateVacationInput as any, createVacation);
 
 router
-  .route("/:id")
+  .route('/:id')
   .get(getVacation)
   .patch(updateVacation)
   .delete(deleteVacation);

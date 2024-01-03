@@ -1,20 +1,21 @@
-import { body, validationResult } from "express-validator";
-import { BadRequestError } from "../errors/customErrors.js";
-import {
-  EMPLOYEE_STATUS,
-  LICENSE_TYPE,
-  USER_ROLES,
-} from "../utils/constants.js";
-import User from "../models/UserModel.js";
+import { ValidationChain, body, validationResult } from 'express-validator';
+import { BadRequestError } from '../errors/customErrors.js';
+// import {
+//   EMPLOYEE_STATUS,
+//   LICENSE_TYPE,
+//   USER_ROLES,
+// } from '../utils/constants.js';
+import User from '../models/UserModel.js';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
 
-const withValidationErrors = (validateValues) => {
+const withValidationErrors = (validateValues: ValidationChain[]) => {
   return [
     validateValues,
-    (req, res, next) => {
+    (req: Request, res: Response, next: NextFunction) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         const errorMessages = errors.array().map((err) => err.msg);
-        throw new BadRequestError(errorMessages.join(" "));
+        throw new BadRequestError(errorMessages.join(' '));
       }
       next();
     },
@@ -22,9 +23,9 @@ const withValidationErrors = (validateValues) => {
 };
 
 export const validateEmployeeInput = withValidationErrors([
-  body("name").notEmpty().withMessage("Name is required."),
+  body('name').notEmpty().withMessage('Name is required.'),
   // body("nationality").notEmpty().withMessage("Nationality is required."),
-  body("idNumber").notEmpty().withMessage("ID number is required."),
+  body('idNumber').notEmpty().withMessage('ID number is required.'),
   // body("idExpirationDate")
   //   .notEmpty()
   //   .withMessage("ID expiration date is required."),
@@ -51,55 +52,55 @@ export const validateEmployeeInput = withValidationErrors([
 ]);
 
 export const validateUserInput = withValidationErrors([
-  body("name").notEmpty().withMessage("Name is required."),
-  body("email")
+  body('name').notEmpty().withMessage('Name is required.'),
+  body('email')
     .notEmpty()
-    .withMessage("Email is required.")
+    .withMessage('Email is required.')
     .isEmail()
-    .withMessage("Invalid email format.")
+    .withMessage('Invalid email format.')
     .custom(async (email) => {
       const user = await User.findOne({ email });
-      if (user) throw new BadRequestError("Email already exists.");
+      if (user) throw new BadRequestError('Email already exists.');
     }),
-  body("password")
+  body('password')
     .notEmpty()
-    .withMessage("Password is required.")
+    .withMessage('Password is required.')
     .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 characters long."),
+    .withMessage('Password must be at least 8 characters long.'),
 ]);
 
 export const validateLoginInput = withValidationErrors([
-  body("email")
+  body('email')
     .notEmpty()
-    .withMessage("Email is required.")
+    .withMessage('Email is required.')
     .isEmail()
-    .withMessage("Invalid email format."),
-  body("password")
+    .withMessage('Invalid email format.'),
+  body('password')
     .notEmpty()
-    .withMessage("Password is required.")
+    .withMessage('Password is required.')
     .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 characters long."),
+    .withMessage('Password must be at least 8 characters long.'),
 ]);
 
 export const validateUpdateUserInput = withValidationErrors([
-  body("name").notEmpty().withMessage("Name is required."),
-  body("email")
+  body('name').notEmpty().withMessage('Name is required.'),
+  body('email')
     .notEmpty()
-    .withMessage("Email is required.")
+    .withMessage('Email is required.')
     .isEmail()
-    .withMessage("Invalid email format.")
+    .withMessage('Invalid email format.')
     .custom(async (email, { req }) => {
       const user = await User.findOne({ email });
       if (user && user._id.toString() !== req.user.id)
-        throw new BadRequestError("Email already exists.");
+        throw new BadRequestError('Email already exists.');
     }),
 ]);
 
 export const validateVacationInput = withValidationErrors([
-  body("idNumber").notEmpty().withMessage("ID number is required."),
-  body("employeeName").notEmpty().withMessage("Employee Name is required."),
-  body("leavingDate").notEmpty().withMessage("Leaving Date is required."),
-  body("expectedReturnDate")
+  body('idNumber').notEmpty().withMessage('ID number is required.'),
+  body('employeeName').notEmpty().withMessage('Employee Name is required.'),
+  body('leavingDate').notEmpty().withMessage('Leaving Date is required.'),
+  body('expectedReturnDate')
     .notEmpty()
-    .withMessage("Expected return date is required."),
+    .withMessage('Expected return date is required.'),
 ]);

@@ -1,5 +1,5 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   Dashboard,
   LoginPage,
@@ -18,13 +18,16 @@ import {
   CancelledReport,
   ErrorPage,
   Users,
-} from "./pages";
+} from './pages';
+import { Suspense } from 'react';
+import { SectionFeedback } from './components';
+import { CircularProgress } from '@mui/material';
 
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     errorElement: <ErrorPage />,
     children: [
       {
@@ -32,37 +35,37 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
-        path: "dashboard",
+        path: 'dashboard',
         element: <Dashboard />,
         children: [
           { index: true, element: <Employees /> },
           {
-            path: "employees/:id",
+            path: 'employees/:id',
             element: <EmployeeDetails />,
           },
           {
-            path: "users",
+            path: 'users',
             element: <Users />,
           },
           {
-            path: "reports",
+            path: 'reports',
             children: [
-              { path: "activity-log", element: <ActivityLogReport /> },
-              { path: "driver", element: <DriverReport /> },
-              { path: "id", element: <IdRenewalReport /> },
-              { path: "expired-id", element: <ExpiredIdReport /> },
-              { path: "passport", element: <PassportReport /> },
-              { path: "on-duty", element: <OnDutyReport /> },
-              { path: "on-vacation", element: <OnVacationReport /> },
-              { path: "sponsor", element: <SponsorReport /> },
-              { path: "cancelled", element: <CancelledReport /> },
+              { path: 'activity-log', element: <ActivityLogReport /> },
+              { path: 'driver', element: <DriverReport /> },
+              { path: 'id', element: <IdRenewalReport /> },
+              { path: 'expired-id', element: <ExpiredIdReport /> },
+              { path: 'passport', element: <PassportReport /> },
+              { path: 'on-duty', element: <OnDutyReport /> },
+              { path: 'on-vacation', element: <OnVacationReport /> },
+              { path: 'sponsor', element: <SponsorReport /> },
+              { path: 'cancelled', element: <CancelledReport /> },
             ],
           },
           {
-            path: "actions",
+            path: 'actions',
             children: [
-              { path: "add-employee", element: <AddEmployee /> },
-              { path: "add-user", element: <AddUser /> },
+              { path: 'add-employee', element: <AddEmployee /> },
+              { path: 'add-user', element: <AddUser /> },
             ],
           },
         ],
@@ -74,7 +77,15 @@ const router = createBrowserRouter([
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <Suspense
+        fallback={
+          <SectionFeedback>
+            <CircularProgress />
+          </SectionFeedback>
+        }
+      >
+        <RouterProvider router={router} />
+      </Suspense>
     </QueryClientProvider>
   );
 };
