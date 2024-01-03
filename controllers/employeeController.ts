@@ -1,11 +1,25 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import cloudinary from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 import { formatImage } from '../middlewares/multerMiddleware.js';
 import Employee from '../models/EmployeeModel.js';
 import Cancelled from '../models/CancelledModel.js';
 import Activity from '../models/ActivityModel.js';
 import APIFeatures from '../utils/apiFeatures.js';
+import { BadRequestError } from '../errors/customErrors.js';
+
+// Extend the Request interface to include the user property
+interface CustomRequest extends Request {
+  user: {
+    name: string;
+    id: string;
+  };
+  params: {
+    id: string;
+  };
+  file: Express.Multer.File;
+  filedName: string;
+}
 
 // Get all employees
 export const getAllEmployees = async (req: Request, res: Response) => {
@@ -26,7 +40,7 @@ export const getAllEmployees = async (req: Request, res: Response) => {
 };
 
 // Create a new employee
-export const createEmployee = async (req: Request, res: Response) => {
+export const createEmployee = async (req: CustomRequest, res: Response) => {
   const createdEmployee = await Employee.create(req.body);
   await Activity.create({
     userName: req.user.name,
@@ -48,10 +62,11 @@ export const getEmployee = async (
 };
 
 // Update an employee
-export const updateEmployee = async (req: Request, res: Response) => {
+export const updateEmployee = async (req: CustomRequest, res: Response) => {
   if (req.file) {
     const file = formatImage(req.file);
-    const response = await cloudinary.v2.uploader.upload(file);
+    if (!file) throw new BadRequestError('cannot upload the image');
+    const response = await cloudinary.uploader.upload(file);
     req.body[req.body.fieldName] = response.secure_url;
     req.body[`${req.body.fieldName}PublicId`] = response.public_id;
   }
@@ -60,7 +75,7 @@ export const updateEmployee = async (req: Request, res: Response) => {
     req.body
   );
   if (req.file && updatedEmployee[`${req.body.fieldName}PublicId`])
-    await cloudinary.v2.uploader.destroy(
+    await cloudinary.uploader.destroy(
       updatedEmployee[`${req.body.fieldName}PublicId`]
     );
 
@@ -76,8 +91,9 @@ export const updateEmployee = async (req: Request, res: Response) => {
 };
 
 // Delete an employee
-export const deleteEmployee = async (req: Request, res: Response) => {
+export const deleteEmployee = async (req: CustomRequest, res: Response) => {
   const deletedEmployee = await Employee.findByIdAndDelete(req.params.id);
+  if (!deletedEmployee) throw new BadRequestError('Failed delete employee');
   await Cancelled.create({
     name: deletedEmployee.name,
     idNumber: deletedEmployee.idNumber,

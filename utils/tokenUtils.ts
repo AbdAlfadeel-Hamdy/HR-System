@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-type TokenPayload = {
+export type TokenPayload = {
   id: string;
   name: string;
   role: string;
@@ -16,10 +16,10 @@ export const createJWT = async (payload: TokenPayload) => {
   return token;
 };
 
-export const verifyJWT = (token: string) => {
+export const verifyJWT = (token: string): TokenPayload | undefined => {
   if (!process.env.JWT_SECRET) return;
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  const decoded = jwt.verify(token, process.env.JWT_SECRET) as TokenPayload;
 
   return decoded;
 };
