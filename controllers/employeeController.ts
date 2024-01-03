@@ -1,16 +1,18 @@
-import { StatusCodes } from "http-status-codes";
-import cloudinary from "cloudinary";
-import { formatImage } from "../middlewares/multerMiddleware.js";
-import Employee from "../models/EmployeeModel.js";
-import Cancelled from "../models/CancelledModel.js";
-import Activity from "../models/ActivityModel.js";
-import APIFeatures from "../utils/apiFeatures.js";
+import { Request, Response, NextFunction } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import cloudinary from 'cloudinary';
+import { formatImage } from '../middlewares/multerMiddleware.js';
+import Employee from '../models/EmployeeModel.js';
+import Cancelled from '../models/CancelledModel.js';
+import Activity from '../models/ActivityModel.js';
+import APIFeatures from '../utils/apiFeatures.js';
 
-export const getAllEmployees = async (req, res, next) => {
+// Get all employees
+export const getAllEmployees = async (req: Request, res: Response) => {
   const employeesCount = await Employee.countDocuments();
   // BUILD Query
   const features = new APIFeatures(
-    Employee.find({ status: { $nin: ["cancelled"] } }),
+    Employee.find({ status: { $nin: ['cancelled'] } }),
     req.query
   )
     .filter()
@@ -23,23 +25,30 @@ export const getAllEmployees = async (req, res, next) => {
   res.status(StatusCodes.OK).json({ employees, employeesCount });
 };
 
-export const createEmployee = async (req, res, next) => {
+// Create a new employee
+export const createEmployee = async (req: Request, res: Response) => {
   const createdEmployee = await Employee.create(req.body);
   await Activity.create({
     userName: req.user.name,
-    activity: "Created Employee",
+    activity: 'Created Employee',
     timeStamp: Date.now(),
   });
 
   res.status(StatusCodes.CREATED).json({ employee: createdEmployee });
 };
 
-export const getEmployee = async (req, res, next) => {
-  const employee = await Employee.findById(req.params.id).populate("vacations");
+// Get a specific employee by ID
+export const getEmployee = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const employee = await Employee.findById(req.params.id).populate('vacations');
   res.status(StatusCodes.CREATED).json({ employee });
 };
 
-export const updateEmployee = async (req, res, next) => {
+// Update an employee
+export const updateEmployee = async (req: Request, res: Response) => {
   if (req.file) {
     const file = formatImage(req.file);
     const response = await cloudinary.v2.uploader.upload(file);
@@ -50,23 +59,24 @@ export const updateEmployee = async (req, res, next) => {
     req.params.id,
     req.body
   );
-  if (req.file && updateEmployee[`${req.body.fieldName}PublicId`])
+  if (req.file && updatedEmployee[`${req.body.fieldName}PublicId`])
     await cloudinary.v2.uploader.destroy(
-      updateEmployee[`${req.body.fieldName}PublicId`]
+      updatedEmployee[`${req.body.fieldName}PublicId`]
     );
 
   await Activity.create({
     userName: req.user.name,
-    activity: "Updated Employee",
+    activity: 'Updated Employee',
     timeStamp: Date.now(),
   });
 
   res
     .status(StatusCodes.OK)
-    .json({ message: "Employee modified.", employee: updatedEmployee });
+    .json({ message: 'Employee modified.', employee: updatedEmployee });
 };
 
-export const deleteEmployee = async (req, res, next) => {
+// Delete an employee
+export const deleteEmployee = async (req: Request, res: Response) => {
   const deletedEmployee = await Employee.findByIdAndDelete(req.params.id);
   await Cancelled.create({
     name: deletedEmployee.name,
@@ -75,22 +85,24 @@ export const deleteEmployee = async (req, res, next) => {
   });
   await Activity.create({
     userName: req.user.name,
-    activity: "Deleted Employee",
+    activity: 'Deleted Employee',
     timeStamp: Date.now(),
   });
   res
     .status(StatusCodes.OK)
-    .json({ message: "Employee deleted.", employee: deletedEmployee });
+    .json({ message: 'Employee deleted.', employee: deletedEmployee });
 };
 
 // Special Controllers
-export const getExpiredIds = async (req, res, next) => {
+
+// Get employees with expired IDs
+export const getExpiredIds = async (req: Request, res: Response) => {
   const expirationDate = new Date(Date.now());
   const employees = await Employee.aggregate([
     {
       $match: {
         idExpirationDate: { $lt: expirationDate },
-        status: { $nin: ["cancelled"] },
+        status: { $nin: ['cancelled'] },
       },
     },
     {
@@ -111,24 +123,26 @@ export const getExpiredIds = async (req, res, next) => {
     },
     {
       $group: {
-        _id: "$workIn",
-        documents: { $push: "$$ROOT" },
+        _id: '$workIn',
+        documents: { $push: '$$ROOT' },
       },
     },
   ]);
   res.status(StatusCodes.OK).json({ employees });
 };
-export const getIdsRenewal = async (req, res, next) => {
+
+// Get employees with IDs up for renewal
+export const getIdsRenewal = async (req: Request, res: Response) => {
   const employees = await Employee.aggregate([
     {
       $match: {
         $expr: {
           $and: [
-            { $eq: [{ $month: "$idExpirationDate" }, req.body.month] },
-            { $eq: [{ $year: "$idExpirationDate" }, req.body.year] },
+            { $eq: [{ $month: '$idExpirationDate' }, req.body.month] },
+            { $eq: [{ $year: '$idExpirationDate' }, req.body.year] },
           ],
         },
-        status: { $nin: ["cancelled"] },
+        status: { $nin: ['cancelled'] },
       },
     },
     {
@@ -150,19 +164,20 @@ export const getIdsRenewal = async (req, res, next) => {
     {
       $group: {
         _id: `$${req.body.groupBy}`,
-        documents: { $push: "$$ROOT" },
+        documents: { $push: '$$ROOT' },
       },
     },
   ]);
   res.status(StatusCodes.OK).json({ employees });
 };
 
-export const getSponsor = async (req, res, next) => {
+// Get employees by sponsor
+export const getSponsor = async (req: Request, res: Response) => {
   const employees = await Employee.aggregate([
     {
       $match: {
         sponsor: req.body.sponsor,
-        status: { $nin: ["cancelled"] },
+        status: { $nin: ['cancelled'] },
       },
     },
     {
@@ -184,20 +199,21 @@ export const getSponsor = async (req, res, next) => {
     {
       $group: {
         _id: `$${req.body.groupBy}`,
-        documents: { $push: "$$ROOT" },
+        documents: { $push: '$$ROOT' },
       },
     },
   ]);
   res.status(StatusCodes.OK).json({ employees });
 };
 
-export const getPassports = async (req, res, next) => {
+// Get employees with expired passports
+export const getPassports = async (req: Request, res: Response) => {
   const expirationDate = new Date();
   const employees = await Employee.aggregate([
     {
       $match: {
         passportExpirationDate: { $lt: expirationDate },
-        status: { $nin: ["cancelled"] },
+        status: { $nin: ['cancelled'] },
       },
     },
     {
@@ -220,18 +236,19 @@ export const getPassports = async (req, res, next) => {
     {
       $group: {
         _id: `$${req.body.groupBy}`,
-        documents: { $push: "$$ROOT" },
+        documents: { $push: '$$ROOT' },
       },
     },
   ]);
   res.status(StatusCodes.OK).json({ employees });
 };
 
-export const getDrivers = async (req, res, next) => {
+// Get employees with driver status
+export const getDrivers = async (req: Request, res: Response) => {
   const employees = await Employee.aggregate([
     {
       $match: {
-        status: { $nin: ["cancelled"] },
+        status: { $nin: ['cancelled'] },
       },
     },
     {
@@ -254,14 +271,15 @@ export const getDrivers = async (req, res, next) => {
     {
       $group: {
         _id: `$${req.body.groupBy}`,
-        documents: { $push: "$$ROOT" },
+        documents: { $push: '$$ROOT' },
       },
     },
   ]);
   res.status(StatusCodes.OK).json({ employees });
 };
 
-export const getStatus = async (req, res, next) => {
+// Get employees by status
+export const getStatus = async (req: Request, res: Response) => {
   const { status, groupBy } = req.query;
   const employees = await Employee.aggregate([
     {
@@ -288,7 +306,7 @@ export const getStatus = async (req, res, next) => {
     {
       $group: {
         _id: `$${groupBy}`,
-        documents: { $push: "$$ROOT" },
+        documents: { $push: '$$ROOT' },
       },
     },
   ]);
