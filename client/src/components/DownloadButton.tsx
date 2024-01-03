@@ -1,13 +1,13 @@
-import { Button } from "@mui/material";
-import { Download } from "@mui/icons-material";
+import { Button } from '@mui/material';
+import { Download } from '@mui/icons-material';
 
 interface DownloadButtonProps {
   onClick: () => void;
 }
 
-const DownloadButton: React.FC<DownloadButtonProps> = ({ onClick }) => {
+const DownloadButton = ({ onClick }: DownloadButtonProps) => {
   return (
-    <div className="flex justify-center items-center">
+    <div className='flex justify-center items-center'>
       <Button startIcon={<Download />} onClick={onClick}>
         Download
       </Button>

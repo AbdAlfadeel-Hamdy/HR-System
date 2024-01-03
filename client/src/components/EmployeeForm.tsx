@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
-import { useFormik } from "formik";
-import { toast } from "react-toastify";
-import { useMutation } from "@tanstack/react-query";
-import LoadingButton from "@mui/lab/LoadingButton";
+import { ReactNode } from 'react';
+import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
+import { useMutation } from '@tanstack/react-query';
+import LoadingButton from '@mui/lab/LoadingButton';
 import {
   CssBaseline,
   TextField,
@@ -10,35 +10,35 @@ import {
   Box,
   Typography,
   Container,
-} from "@mui/material";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import customFetch from "../utils/customFetch";
-import { employeeValidationSchema } from "../utils/validationSchemas";
-import { Employee } from "../utils/interfaces";
-import { companies, countries } from "../utils/constants";
+} from '@mui/material';
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import customFetch from '../utils/customFetch';
+import { employeeValidationSchema } from '../utils/validationSchemas';
+import { Employee } from '../utils/interfaces';
+import { companies, countries } from '../utils/constants';
 
 interface EmployeeFormProps {
   initialValues: Employee;
-  method: "POST" | "PATCH";
+  method: 'POST' | 'PATCH';
   url: string;
   successFn?: () => void;
 }
 
-export const EmployeeForm: React.FC<EmployeeFormProps> = ({
+export const EmployeeForm = ({
   initialValues,
   method,
   url,
   successFn,
-}) => {
+}: EmployeeFormProps) => {
   const { mutateAsync } = useMutation({
     mutationKey: [
-      "employees",
-      "drivers",
-      "passport",
-      "duty",
-      "vacation",
-      "expired-id",
+      'employees',
+      'drivers',
+      'passport',
+      'duty',
+      'vacation',
+      'expired-id',
     ],
     mutationFn: async (employee: any) => {
       await customFetch(url, {
@@ -51,7 +51,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
 
   const formik = useFormik({
     initialValues,
-    validationSchema: method === "POST" ? employeeValidationSchema : null,
+    validationSchema: method === 'POST' ? employeeValidationSchema : null,
     onSubmit: async (values, { resetForm }) => {
       try {
         await mutateAsync({
@@ -59,7 +59,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
           idNumber: +values.idNumber,
         });
         toast.success(
-          `${method === "POST" ? "Created" : "Updated"} employee successfully.`
+          `${method === 'POST' ? 'Created' : 'Updated'} employee successfully.`
         );
         resetForm();
       } catch (err) {
@@ -70,21 +70,21 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Container component="main" maxWidth="lg">
+      <Container component='main' maxWidth='lg'>
         <CssBaseline />
         <Box
           sx={{
             marginTop: 3.5,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}
         >
-          <Typography component="h1" variant="h5">
-            {method === "POST" ? "Add" : "Update"} Employee
+          <Typography component='h1' variant='h5'>
+            {method === 'POST' ? 'Add' : 'Update'} Employee
           </Typography>
           <Box
-            component="form"
+            component='form'
             onSubmit={(e) => {
               e.preventDefault();
               formik.handleSubmit(e);
@@ -92,20 +92,20 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
             noValidate
             sx={{
               mt: 1,
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
               columnGap: 3,
               rowGap: 0,
             }}
           >
             <TextField
-              margin="normal"
+              margin='normal'
               required
               fullWidth
-              id="idNumber"
-              label="ID Number"
-              name="idNumber"
-              type="number"
+              id='idNumber'
+              label='ID Number'
+              name='idNumber'
+              type='number'
               autoFocus
               value={formik.values.idNumber}
               onChange={formik.handleChange}
@@ -114,18 +114,18 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               helperText={formik.touched.idNumber && formik.errors.idNumber}
             />
             <DatePicker
-              label="ID Expiration Date"
-              format="DD/MM/YYYY"
+              label='ID Expiration Date'
+              format='DD/MM/YYYY'
               value={formik.values.idExpirationDate}
               onChange={(value) => {
-                formik.setFieldValue("idExpirationDate", value, true);
+                formik.setFieldValue('idExpirationDate', value, true);
               }}
               slotProps={{
                 textField: {
-                  margin: "normal",
-                  variant: "outlined",
+                  margin: 'normal',
+                  variant: 'outlined',
                   onBlur: () =>
-                    formik.setFieldTouched("idExpirationDate", true),
+                    formik.setFieldTouched('idExpirationDate', true),
                   error:
                     formik.touched.idExpirationDate &&
                     Boolean(formik.errors.idExpirationDate),
@@ -136,12 +136,12 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               }}
             />
             <TextField
-              margin="normal"
+              margin='normal'
               required
               fullWidth
-              id="name"
-              label="Name"
-              name="name"
+              id='name'
+              label='Name'
+              name='name'
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -149,13 +149,13 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               helperText={formik.touched.name && formik.errors.name}
             />
             <TextField
-              margin="normal"
+              margin='normal'
               required
               fullWidth
               select
-              id="nationality"
-              label="Nationality"
-              name="nationality"
+              id='nationality'
+              label='Nationality'
+              name='nationality'
               value={formik.values.nationality}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -173,12 +173,12 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               ))}
             </TextField>
             <TextField
-              margin="normal"
+              margin='normal'
               required
               fullWidth
-              id="passportNumber"
-              label="Passport Number"
-              name="passportNumber"
+              id='passportNumber'
+              label='Passport Number'
+              name='passportNumber'
               value={formik.values.passportNumber}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -191,18 +191,18 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               }
             />
             <DatePicker
-              label="Passport Expiration Date"
-              format="DD/MM/YYYY"
+              label='Passport Expiration Date'
+              format='DD/MM/YYYY'
               value={formik.values.idExpirationDate}
               onChange={(value) => {
-                formik.setFieldValue("passportExpirationDate", value, true);
+                formik.setFieldValue('passportExpirationDate', value, true);
               }}
               slotProps={{
                 textField: {
-                  margin: "normal",
-                  variant: "outlined",
+                  margin: 'normal',
+                  variant: 'outlined',
                   onBlur: () =>
-                    formik.setFieldTouched("passportExpirationDate", true),
+                    formik.setFieldTouched('passportExpirationDate', true),
                   error:
                     formik.touched.passportExpirationDate &&
                     Boolean(formik.errors.passportExpirationDate),
@@ -213,13 +213,13 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               }}
             />
             <TextField
-              margin="normal"
+              margin='normal'
               required
               fullWidth
               select
-              id="sponsor"
-              label="Sponsor"
-              name="sponsor"
+              id='sponsor'
+              label='Sponsor'
+              name='sponsor'
               value={formik.values.sponsor}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -233,13 +233,13 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               ))}
             </TextField>
             <TextField
-              margin="normal"
+              margin='normal'
               required
               fullWidth
               select
-              id="workIn"
-              label="Work In"
-              name="workIn"
+              id='workIn'
+              label='Work In'
+              name='workIn'
               value={formik.values.workIn}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -253,13 +253,13 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               ))}
             </TextField>
             <TextField
-              margin="normal"
+              margin='normal'
               required
               fullWidth
               select
-              name="status"
-              label="Status"
-              id="status"
+              name='status'
+              label='Status'
+              id='status'
               value={formik.values.status}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -267,9 +267,9 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               helperText={formik.touched.status && formik.errors.status}
             >
               {[
-                { value: "duty", label: "On Duty" },
-                { value: "vacation", label: "On Vacation" },
-                { value: "cancelled", label: "Cancelled" },
+                { value: 'duty', label: 'On Duty' },
+                { value: 'vacation', label: 'On Vacation' },
+                { value: 'cancelled', label: 'Cancelled' },
               ].map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -277,18 +277,18 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               ))}
             </TextField>
             <DatePicker
-              label="Agreement Expiration Date"
-              format="DD/MM/YYYY"
+              label='Agreement Expiration Date'
+              format='DD/MM/YYYY'
               value={formik.values.agreementExpirationDate}
               onChange={(value) => {
-                formik.setFieldValue("agreementExpirationDate", value, true);
+                formik.setFieldValue('agreementExpirationDate', value, true);
               }}
               slotProps={{
                 textField: {
-                  margin: "normal",
-                  variant: "outlined",
+                  margin: 'normal',
+                  variant: 'outlined',
                   onBlur: () =>
-                    formik.setFieldTouched("agreementExpirationDate", true),
+                    formik.setFieldTouched('agreementExpirationDate', true),
                   error:
                     formik.touched.agreementExpirationDate &&
                     Boolean(formik.errors.agreementExpirationDate),
@@ -299,13 +299,13 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               }}
             />
             <TextField
-              margin="normal"
+              margin='normal'
               required
               fullWidth
               select
-              name="licenseType"
-              label="License"
-              id="licenseType"
+              name='licenseType'
+              label='License'
+              id='licenseType'
               value={formik.values.licenseType}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -317,10 +317,10 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               }
             >
               {[
-                { value: "", label: "Undefined" },
-                { value: "Car", label: "Car" },
-                { value: "Truck", label: "Truck" },
-                { value: "Car&Truck", label: "Car & Truck" },
+                { value: '', label: 'Undefined' },
+                { value: 'Car', label: 'Car' },
+                { value: 'Truck', label: 'Truck' },
+                { value: 'Car&Truck', label: 'Car & Truck' },
               ].map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
@@ -328,18 +328,18 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               ))}
             </TextField>
             <DatePicker
-              label="License Expiration Date"
-              format="DD/MM/YYYY"
+              label='License Expiration Date'
+              format='DD/MM/YYYY'
               value={formik.values.licenseExpirationDate}
               onChange={(value) => {
-                formik.setFieldValue("licenseExpirationDate", value, true);
+                formik.setFieldValue('licenseExpirationDate', value, true);
               }}
               slotProps={{
                 textField: {
-                  margin: "normal",
-                  variant: "outlined",
+                  margin: 'normal',
+                  variant: 'outlined',
                   onBlur: () =>
-                    formik.setFieldTouched("licenseExpirationDate", true),
+                    formik.setFieldTouched('licenseExpirationDate', true),
                   error:
                     formik.touched.licenseExpirationDate &&
                     Boolean(formik.errors.licenseExpirationDate),
@@ -349,14 +349,14 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
                 },
               }}
             />
-            {method === "PATCH" && (
+            {method === 'PATCH' && (
               <TextField
-                margin="normal"
+                margin='normal'
                 required
                 fullWidth
-                id="note"
-                label="Note"
-                name="note"
+                id='note'
+                label='Note'
+                name='note'
                 value={formik.values.note}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -365,9 +365,9 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({
               />
             )}
             <LoadingButton
-              type="submit"
+              type='submit'
               fullWidth
-              variant="contained"
+              variant='contained'
               sx={{ mt: 3, mb: 2 }}
               disabled={formik.isSubmitting}
               loading={formik.isSubmitting}
